@@ -2,8 +2,6 @@ import React from "react";
 
 import Table from "../components/table/Table";
 
-import customerList from "../assets/JsonData/customers-list.json";
-
 const customerTableHead = [
   "",
   "name",
@@ -40,7 +38,6 @@ const Customers = () => {
                 limit="10"
                 headData={customerTableHead}
                 renderHead={(item, index) => renderHead(item, index)}
-                bodyData={customerList}
                 renderBody={(item, index) => renderBody(item, index)}
               />
             </div>
