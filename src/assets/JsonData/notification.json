@@ -14,9 +14,6 @@
     {
         "icon": "bx bx-error",
         "content": "In gravida mauris et nisi"
-    },
-    {
-        "icon": "bx bx-cart",
-        "content": "Curabitur id eros quis nunc suscipit blandit"
     }
+    
 ]

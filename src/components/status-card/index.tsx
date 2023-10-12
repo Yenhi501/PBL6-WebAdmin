@@ -1,8 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import "./statuscard.css";
+import './index.scss';
 
-const StatusCard = (props) => {
+interface StatusCardProps {
+  icon: string;
+  count: string;
+  title: string;
+}
+
+export const StatusCard: React.FC<StatusCardProps> = (props) => {
   return (
     <div className="status-card">
       <div className="status-card__icon">
@@ -15,5 +21,3 @@ const StatusCard = (props) => {
     </div>
   );
 };
-
-export default StatusCard;

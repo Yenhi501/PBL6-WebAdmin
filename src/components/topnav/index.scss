@@ -1,14 +1,14 @@
 .topnav {
-  padding: 0 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--topnav-height);
+  margin-right: 20px;
+  
 }
 
 .topnav__search {
   position: relative;
-  height: 50px;
+  height: 64px;
   background-color: var(--main-bg);
   display: flex;
   align-items: center;
@@ -72,6 +72,7 @@
 
 .topnav__right-user__image > img {
   width: 100%;
+  height: 100%;
 }
 
 .topnav__right-user__name {
