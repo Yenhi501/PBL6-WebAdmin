@@ -36,7 +36,7 @@ export const LayoutAdmin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [selectedItem, setSelectedItem] = useState('Movies');
+  const [selectedItem, setSelectedItem] = useState('Dashboard');
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>

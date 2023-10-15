@@ -1,6 +1,19 @@
 .layout {
   color: var(--txt-color);
+  
+  .ant-layout-content {
+    height: 84vh;
+    overflow: auto;
+  }
+
 }
+
+html {
+  overflow: hidden;
+}
+
+
+
 
 .layout__content {
   padding-left: var(--sidebar-width);

@@ -18,6 +18,36 @@ const topCustomers = {
       order: '250',
       price: '$12,251',
     },
+    {
+      username: 'john',
+      order: '490',
+      price: '$15,870',
+    },
+    {
+      username: 'iva',
+      order: '250',
+      price: '$12,251',
+    },
+    {
+      username: 'john',
+      order: '490',
+      price: '$15,870',
+    },
+    {
+      username: 'iva',
+      order: '250',
+      price: '$12,251',
+    },
+    {
+      username: 'john',
+      order: '490',
+      price: '$15,870',
+    },
+    {
+      username: 'iva',
+      order: '250',
+      price: '$12,251',
+    },
   ],
 };
 
