@@ -1,5 +1,5 @@
 .status-card {
-  padding: 14px;
+  padding: 10px;
   display: flex;
   align-items: center;
   background-color: var(--main-bg);
@@ -33,6 +33,11 @@
 .status-card__info > h4 {
   font-size: 1.6rem;
   margin-bottom: 10px;
+  font-weight: 600;
+}
+.status-card__info > span{
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .status-card::before {
@@ -43,13 +48,13 @@
   background-image: linear-gradient(
     to top right,
     var(--main-color),
-    var(--second-color)
+    var(--primary-color)
   );
   position: absolute;
   left: -50%;
   top: 0;
   transform: scale(0);
-  transition: transform 0.6s ease 0s;
+  transition: transform 0.4s ease 0s;
 }
 
 .status-card:hover::before {

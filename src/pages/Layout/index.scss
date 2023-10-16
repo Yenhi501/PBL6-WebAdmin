@@ -1,19 +1,84 @@
 .layout {
+  background: var(--contrast-color);
   color: var(--txt-color);
+  position: relative;
+  .ant-layout-sider{
+    .ant-layout-sider-children{
+      background: var(--contrast-color);
+    }
+    .ant-menu{
+      background: var(--contrast-color);
+    }
+    .ant-menu-item{
+      padding: 35px 0;
+      margin: 5px;
+      font-weight: 600;
+      font-size:1.2rem;
+      .ant-menu-item-selected{
+        color:var(--primary-color);
+      }
+      .ant-menu-item-icon{
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      }
+    }
+
+  }
   
   .ant-layout-content {
     height: 84vh;
     overflow: auto;
   }
-
+  .ant-btn-icon{
+    color:var(--txt-color);
+  }
+  .menu-title{
+    height: 60px;
+    margin: 20px 0;
+    margin-bottom: 20px;
+    padding:30px;
+    font-weight: 700;
+    font-size:1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ant-layout-sider-collapsed{
+    .ant-menu-item-icon{
+      margin-top: -8px;
+    }
+    .ant-menu-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login{
+      .ant-menu-item{
+        padding-left: 0px !important;
+      }
+      .ant-menu-title-content{
+        display: none;
+      }
+    }
+  }
+  .login{
+    position: absolute;
+    bottom:0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .ant-menu-item{
+      padding-left: 24px !important;
+    }
+  }
 }
 
 html {
   overflow: hidden;
 }
-
-
-
 
 .layout__content {
   padding-left: var(--sidebar-width);

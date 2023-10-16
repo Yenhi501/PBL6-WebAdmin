@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,6 +10,9 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  MenuOutlined,
+  LogoutOutlined,
+  LoginOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Movies } from '../movies';
@@ -32,6 +35,7 @@ export const LayoutAdmin: React.FC = () => {
     dispatch(ThemeAction.setColor(colorClass));
   }, [dispatch]);
 
+  const [isLogin, setIsLogin] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -42,7 +46,10 @@ export const LayoutAdmin: React.FC = () => {
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu mode="inline" defaultSelectedKeys={['1']}>
+            <div className="menu-title">
+              {collapsed ? <MenuOutlined rev="" /> : <p>CATEGORY</p>}
+            </div>
             <Menu.Item
               key="1"
               icon={<UserOutlined rev="" />}
@@ -79,6 +86,20 @@ export const LayoutAdmin: React.FC = () => {
             >
               <Link to="/user">User</Link>
             </Menu.Item>
+
+            {isLogin ? (
+              <div className="login">
+                <Menu.Item icon={<LogoutOutlined rev="" />}>
+                  <Link to="/">Log out</Link>
+                </Menu.Item>
+              </div>
+            ) : (
+              <div className="login">
+                <Menu.Item icon={<LoginOutlined rev="" />}>
+                  <Link to="/login">Log in</Link>
+                </Menu.Item>
+              </div>
+            )}
           </Menu>
         </Sider>
         <Layout>

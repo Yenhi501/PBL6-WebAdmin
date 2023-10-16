@@ -79,9 +79,6 @@ input {
   outline: 0;
 }
 
-input:focus {
-  border: 2px solid var(--main-color);
-}
 
 .page-header {
   margin-bottom: 20px;

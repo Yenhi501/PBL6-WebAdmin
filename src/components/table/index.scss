@@ -1,0 +1,68 @@
+.ant-table-pagination > .ant-pagination-options{
+    display: none;
+}
+.ant-table-wrapper .ant-table-thead >tr>th{
+    background-color:var(--primary-color);
+    color: var(--txt-color);
+}
+.ant-table-tbody{
+    background-color: #f6fcff;
+    color: var(--txt-color);
+
+    .ant-table-row >.ant-table-cell-row-hover{
+        background-color: var(--secondary-color) !important;
+        cursor: pointer;
+        color:var(--main-color-blue);
+    }
+}
+table{
+    border-collapse:collapse;
+    text-align: center;
+    .ant-table-thead tr{
+        border-top-width: 0px;
+    }
+    tr{
+        
+        border-color:#0f0f0f;
+        border-top-width: 2px;
+        border-bottom-width: 0px;
+    }
+    
+}
+.btn-operation{
+    display: flex;
+    justify-content: space-between;
+    padding:0 5px;
+    a{
+        color:var(--main-color-red);
+        &:hover{
+            color:var(--main-color-red);
+        }
+    }
+    .btn-edit{
+        color:var(--main-color-green) !important;
+    }
+    .btn-delete{
+        color:var(--main-color-red);
+        &:hover{
+            color:var(--main-color-red);
+        }
+    }
+}
+
+.btn-action{
+    display: flex;
+    justify-content: flex-end;
+    .anticon .anticon-delete{
+        font-size: 1.2rem !important;
+        color: var(--txt-color) !important;
+    }
+    .btn-delete-all{
+        margin-bottom: 10px;
+        &:hover{
+            color:var(--txt-color) !important;
+        }
+    }
+}
+
+
