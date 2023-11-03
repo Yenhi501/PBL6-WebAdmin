@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Popconfirm, Table, Typography } from 'antd';
 import './index.scss';
 import { DeleteOutlined } from '@ant-design/icons';
-import { ItemColumn, ItemVIPPackage } from '../../pages/dashboard/Item';
+import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
 
 type ItemType = ItemVIPPackage | ItemMovies;
@@ -87,7 +87,7 @@ export const TableResult = ({
       {
         title: 'Operation',
         dataIndex: 'operation',
-        width: '17%',
+        width: '10%',
         render: (_: any, record: ItemVIPPackage | ItemMovies) => {
           return (
             <span className="btn-operation">
@@ -154,6 +154,7 @@ export const TableResult = ({
               }
             : false
         }
+        scroll={{ x: 'max-content' }}
         rowSelection={{
           ...rowSelection,
         }}

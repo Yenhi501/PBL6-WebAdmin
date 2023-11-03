@@ -4,11 +4,12 @@ import { TableResult } from '../../components/table/index';
 import statusCards from '../../assets/JsonData/status-card-data.json';
 import './index.scss';
 import { Search } from '../../components/search/index';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { DatePicker, Form, Input, Select } from 'antd';
-import { ItemVIPPackage } from '../dashboard/Item';
-import moment from 'moment';
+import { ItemVIPPackage } from '../Item';
 import dayjs from 'dayjs';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { PosterUpload } from '../../components/upload-poster';
 
 export interface ItemMovies {
   key: number;
@@ -21,6 +22,7 @@ export interface ItemMovies {
   year: string;
   performer: string;
   language: string;
+  url?: string;
 }
 
 const dataOrigin: Array<ItemMovies> = [
@@ -186,6 +188,7 @@ const columns = [
   {
     title: 'POSTER',
     dataIndex: 'poster',
+
     render: (poster: string) => (
       <img
         src={poster}
@@ -193,6 +196,11 @@ const columns = [
         style={{ width: '50px', height: '50px', borderRadius: '50%' }}
       />
     ),
+  },
+  {
+    title: 'URL',
+    dataIndex: 'url',
+    width: '10',
   },
   {
     title: 'NAME MOVIES',
@@ -219,8 +227,11 @@ const columns = [
     dataIndex: 'performer',
   },
 ];
+
 export const Movies: React.FC = () => {
+  const timestamp = Date.now();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<
     ItemMovies | ItemVIPPackage | null
   >(null);
@@ -241,10 +252,56 @@ export const Movies: React.FC = () => {
       setIsModalOpen(false);
     }
   };
+  const [newPoster, setNewPoster] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newDirector, setNewDirector] = useState('');
+  const [newCountry, setNewCountry] = useState('');
+  const [newCategory, setNewCategory] = useState('');
+  const [newPerformer, setNewPerformer] = useState('');
+  const [newYear, setNewYear] = useState('');
+  const [newLanguage, setNewLanguage] = useState('');
+  const [newURL, setNewURL] = useState('');
+  const handleAddOk = () => {
+    const newMovie = {
+      key: timestamp,
+      id: String(timestamp),
+      poster: newPoster,
+      namemovies: newName,
+      director: newDirector,
+      country: newCountry,
+      category: newCategory,
+      year: dayjs(newYear).startOf('day').format('YYYY-MM-DD'),
+      performer: newPerformer,
+      language: newLanguage,
+      url: newURL,
+    };
+
+    setData((prevData) => [newMovie, ...prevData]);
+    setTableKey((prevKey) => prevKey + 1);
+
+    // setNewPoster('');
+    setNewName('');
+    setNewDirector('');
+    setNewCountry('');
+    setNewCategory('');
+    setNewPerformer('');
+    setNewYear('');
+    setNewLanguage('');
+    setNewURL('');
+    setIsModalAddOpen(false);
+  };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsModalAddOpen(false);
   };
+
+  const handleAdd = () => {
+    setIsModalAddOpen(true);
+  };
+  //
+  console.log(newPoster);
+
   return (
     <div>
       <h2 className="movies-header">Movies</h2>
@@ -266,6 +323,15 @@ export const Movies: React.FC = () => {
             </div>
           </div>
           <div className="card__body">
+            <Button
+              type="primary"
+              size="large"
+              className="btn-new"
+              icon={<PlusOutlined rev="" />}
+              onClick={() => handleAdd()}
+            >
+              New Item
+            </Button>
             <TableResult
               key={tableKey}
               originData={data}
@@ -352,6 +418,19 @@ export const Movies: React.FC = () => {
                     </Select>
                   </Form.Item>
                 </div>
+                <Form.Item label="URL">
+                  <Input
+                    value={(editedItem && editedItem.url) || ''}
+                    onChange={(e) => {
+                      if (editedItem) {
+                        setEditedItem({
+                          ...editedItem,
+                          url: e.target.value,
+                        });
+                      }
+                    }}
+                  />
+                </Form.Item>
                 <Form.Item label="Performer">
                   <Input
                     value={(editedItem && editedItem.performer) || ''}
@@ -397,6 +476,91 @@ export const Movies: React.FC = () => {
               </div>
             </>
           )}
+        </div>
+      </Modal>
+      <Modal
+        title="Add New Movies"
+        open={isModalAddOpen}
+        onOk={handleAddOk}
+        onCancel={handleCancel}
+      >
+        <div className="content-edit">
+          <>
+            <div className="poster">
+              <PosterUpload
+                value={newPoster}
+                onChange={(url) => setNewPoster(url)}
+              />
+            </div>
+            <div className="content">
+              <div className="item">
+                <Form.Item label="Name Movie">
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item label="Director">
+                  <Input
+                    value={newDirector}
+                    onChange={(e) => setNewDirector(e.target.value)}
+                  />
+                </Form.Item>
+              </div>
+              <div className="item">
+                <Form.Item label="Country">
+                  <Select
+                    value={newCountry}
+                    onChange={(value) => setNewCountry(value)}
+                  >
+                    <Select.Option value="demo">Demo</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Category">
+                  <Select
+                    value={newCategory}
+                    onChange={(value) => setNewCategory(value)}
+                  >
+                    <Select.Option value="Tình cảm">Tình cảm</Select.Option>
+                    <Select.Option value="Hành động ">Hành động</Select.Option>
+                    <Select.Option value="Giải trí">Giải trí</Select.Option>
+                    <Select.Option value="Thể thao">Thể thao</Select.Option>
+                  </Select>
+                </Form.Item>
+              </div>
+              <Form.Item label="URL">
+                <Input
+                  value={newURL}
+                  onChange={(e) => setNewURL(e.target.value)}
+                />
+              </Form.Item>
+              <Form.Item label="Performer">
+                <Input
+                  value={newPerformer}
+                  onChange={(e) => setNewPerformer(e.target.value)}
+                />
+              </Form.Item>
+              <div className="item">
+                <Form.Item label="Year of manufacture">
+                  <DatePicker
+                    value={newYear ? dayjs(newYear) : null}
+                    onChange={(date, dateString) => setNewYear(dateString)}
+                  />
+                </Form.Item>
+                <Form.Item label="Language">
+                  <Select
+                    value={newLanguage}
+                    onChange={(value) => setNewLanguage(value)}
+                  >
+                    <Select.Option value="demo">Demo</Select.Option>
+                  </Select>
+                </Form.Item>
+              </div>
+              <Form.Item label="Plot Summary">
+                <Input.TextArea showCount maxLength={100} />
+              </Form.Item>
+            </div>
+          </>
         </div>
       </Modal>
     </div>

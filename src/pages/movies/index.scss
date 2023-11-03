@@ -6,6 +6,13 @@
     display: flex;
     justify-content: flex-end;
 }
+.card__body{
+    position: relative;
+    .btn-new{
+        position: absolute;
+        right: 120px;
+    }
+}
 .ant-modal{
     width:65% !important;
     // height: 500px !important;

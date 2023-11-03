@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { StatusCard } from '../../components/status-card/index';
 import { TableResult } from '../../components/table/index';
 import statusCards from '../../assets/JsonData/status-card-data.json';
 import './index.scss';
 import { Search } from '../../components/search/index';
-import { ItemVIPPackage } from './Item';
+import { ItemVIPPackage } from '../Item';
 import { Modal, Tag } from 'antd';
 
 const data: Array<ItemVIPPackage> = [
