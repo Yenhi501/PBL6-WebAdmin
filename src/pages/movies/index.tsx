@@ -1,15 +1,16 @@
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
 import statusCards from '../../assets/JsonData/status-card-data.json';
-import './index.scss';
 import { Search } from '../../components/search/index';
-import { Button, Modal } from 'antd';
-import { DatePicker, Form, Input, Select } from 'antd';
-import { ItemVIPPackage } from '../Item';
-import dayjs from 'dayjs';
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { StatusCard } from '../../components/status-card/index';
+import { TableResult } from '../../components/table/index';
 import { PosterUpload } from '../../components/upload-poster';
+import { ItemVIPPackage } from '../Item';
+import './index.scss';
 
 export interface ItemMovies {
   key: number;
@@ -186,7 +187,7 @@ const dataOrigin: Array<ItemMovies> = [
 
 const columns = [
   {
-    title: 'POSTER',
+    title: 'Poster',
     dataIndex: 'poster',
 
     render: (poster: string) => (
@@ -198,32 +199,32 @@ const columns = [
     ),
   },
   {
-    title: 'URL',
+    title: 'Url',
     dataIndex: 'url',
     width: '10',
   },
   {
-    title: 'NAME MOVIES',
+    title: 'Name Movies',
     dataIndex: 'namemovies',
   },
   {
-    title: 'DIRECTOR',
+    title: 'Director',
     dataIndex: 'director',
   },
   {
-    title: 'COUNTRY',
+    title: 'Country',
     dataIndex: 'country',
   },
   {
-    title: 'CATEGORY',
+    title: 'Category',
     dataIndex: 'category',
   },
   {
-    title: 'YEAR OF MANUFACTURE',
+    title: 'Year of Manufacture',
     dataIndex: 'year',
   },
   {
-    title: 'PERFORMER',
+    title: 'Performer',
     dataIndex: 'performer',
   },
 ];
@@ -322,7 +323,7 @@ export const Movies: React.FC = () => {
               type="primary"
               size="large"
               className="btn-new"
-              icon={<PlusOutlined rev="" />}
+              icon={<PlusOutlined rev="" style={{ color: 'white' }} />}
               onClick={() => handleAdd()}
             >
               New Item

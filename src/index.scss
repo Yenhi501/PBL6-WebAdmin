@@ -1,155 +1,155 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
+
 :root {
-    /*spacing*/
-    --spacing-sm: 2px;
-    --spacing-sm-1: 5px;
-    --spacing-sm-2: 10px;
-    --spacing-md: 20px;
-    --spacing-md-1: 30px;
-    --spacing-lg: 40px;
-    --spacing-lg-1: 60px;
-    --spacing-lg-2: 80px;
+  /*spacing*/
+  --spacing-sm: 2px;
+  --spacing-sm-1: 5px;
+  --spacing-sm-2: 10px;
+  --spacing-md: 20px;
+  --spacing-md-1: 30px;
+  --spacing-lg: 40px;
+  --spacing-lg-1: 60px;
+  --spacing-lg-2: 80px;
 
-    /*color*/
-    --primary-color: #59afff;
-    --secondary-color: #e6f4ff;
-    --contrast-color: #fafafb;
-    --txt-color:#000000;
+  /*color*/
+  --primary-color: #59afff;
+  --secondary-color: #e6f4ff;
+  --contrast-color: #fafafa;
+  --txt-color: #000000;
 
-    /*font size*/
-    --font-s-sm: 0.6rem;
-    --font-s-sm-1: 0.8rem;
-    --font-s-md: 1rem;
-    --font-s-md-1: 1.2rem;
-    --font-s-lg: 1.4rem;
-    --font-s-lg-1: 1.6rem;
-    --font-s-lg-2: 1.8rem;
+  /*font size*/
+  --font-s-sm: 0.6rem;
+  --font-s-sm-1: 0.8rem;
+  --font-s-md: 1rem;
+  --font-s-md-1: 1.2rem;
+  --font-s-lg: 1.4rem;
+  --font-s-lg-1: 1.6rem;
+  --font-s-lg-2: 1.8rem;
 
-    /* border radius */
-    --border-r-sm: 5px;
-    --border-r-md: 10px;
-    --border-r-mch: 9999px;
+  /* border radius */
+  --border-r-sm: 5px;
+  --border-r-md: 10px;
+  --border-r-mch: 9999px;
 
-    /* z-index */
-    --z-highest: 99;
-    --z-higher: 9;
-    --z-high: 1;
+  /* z-index */
+  --z-highest: 99;
+  --z-higher: 9;
+  --z-high: 1;
 }
 
 * {
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
 html {
-    font-size: 87.5%;
-    height: 100%;
+  font-size: 87.5%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    height: 100%;
-    color: var(--contrast-color);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  color: var(--contrast-color);
 }
 
 #root {
-    height: 100%;
+  height: 100%;
 }
 
 button {
-    border: none;
+  border: none;
 }
 
 a,
 Link {
-    color: var(--contrast-color);
-    text-decoration: none;
+  color: var(--contrast-color);
+  text-decoration: none;
 }
 
 button,
 input,
 textarea {
-    outline: none;
+  outline: none;
 }
 
 input {
-    color: var(--contrast-color);
+  color: var(--contrast-color);
 }
 
 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .ant-btn-default {
-    background-color: var(--contrast-color);
+  background-color: var(--contrast-color);
 
-    &:hover {
-        color: var(--sub-primary-color) !important;
-        border: 1px solid var(--sub-primary-color) !important;
-    }
+  &:hover {
+    color: var(--sub-primary-color) !important;
+    border: 1px solid var(--sub-primary-color) !important;
+  }
 }
 
 .ant-btn-dashed {
-    background-color: var(--contrast-color);
+  background-color: var(--contrast-color);
 
-    &:hover {
-        color: var(--sub-primary-color) !important;
-        border: 1px dashed var(--sub-primary-color) !important;
-    }
+  &:hover {
+    color: var(--sub-primary-color) !important;
+    border: 1px dashed var(--sub-primary-color) !important;
+  }
 }
 
 .ant-btn-primary {
-    background-color: var(--primary-color);
+  background-color: var(--primary-color);
 
-    &:hover {
-        background-color: var(--secondary-color) !important;
-        color: var(--contrast-color) !important;
-        border: 1px solid var(--secondary-color) !important;
-    }
+  &:hover {
+    background-color: var(--secondary-color) !important;
+    color: var(--contrast-color) !important;
+    border: 1px solid var(--secondary-color) !important;
+  }
 }
 
 .ant-btn-text {
-    color: var(--contrast-color);
+  color: var(--contrast-color);
 
-    &:hover {
-        color: var(--sub-contrast-color) !important;
-    }
+  &:hover {
+    color: var(--sub-contrast-color) !important;
+  }
 }
 
 .ant-btn-link {
-    color: var(--primary-color);
+  color: var(--primary-color);
 
-    &:hover {
-        color: var(--sub-primary-color) !important;
-    }
+  &:hover {
+    color: var(--sub-primary-color) !important;
+  }
 }
 
-.ant-modal-content{
-    padding:0px !important;
-    .ant-modal-header {
-        padding:16px 20px;
-        background-color: var(--primary-color) !important;
-        color: var(--contrast-color) !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .ant-modal-body,.ant-modal-footer{
-        padding:20px 26px;
-    }
-    .ant-modal-footer{
-        padding-top: 0px;
-    }
+.ant-modal-content {
+  padding: 0px !important;
+  .ant-modal-header {
+    padding: 16px 20px;
+    background-color: var(--primary-color) !important;
+    color: var(--contrast-color) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ant-modal-body,
+  .ant-modal-footer {
+    padding: 20px 26px;
+  }
+  .ant-modal-footer {
+    padding-top: 0px;
+  }
 }
-
-
 
 // .ant-modal-title,
 // .ant-modal-close {
@@ -210,5 +210,5 @@ ul {
 // }
 
 .ant-table {
-    background-color: var(--main-color) !important;
+  background-color: var(--main-color) !important;
 }

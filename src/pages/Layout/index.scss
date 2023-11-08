@@ -2,75 +2,74 @@
   background: var(--contrast-color);
   color: var(--txt-color);
   position: relative;
-  .ant-layout-sider{
-    .ant-layout-sider-children{
+  .ant-layout-sider {
+    .ant-layout-sider-children {
       background: var(--contrast-color);
     }
-    .ant-menu{
+    .ant-menu {
       background: var(--contrast-color);
     }
-    .ant-menu-item{
+    .ant-menu-item {
       padding: 35px 0;
       margin: 5px;
       font-weight: 600;
-      font-size:1.2rem;
-      .ant-menu-item-selected{
-        color:var(--primary-color);
+      font-size: 1.2rem;
+      .ant-menu-item-selected {
+        color: var(--primary-color);
       }
-      .ant-menu-item-icon{
+      .ant-menu-item-icon {
         font-size: 18px !important;
         font-weight: 700 !important;
       }
     }
-
   }
-  
+
   .ant-layout-content {
     height: 84vh;
     overflow: auto;
   }
-  .ant-btn-icon{
-    color:var(--txt-color);
+  .ant-btn-icon {
+    color: var(--txt-color);
   }
-  .menu-title{
-    height: 60px;
+  .menu-title {
+    height: 140px;
     margin: 20px 0;
     margin-bottom: 20px;
-    padding:30px;
+    padding: 30px;
     font-weight: 700;
-    font-size:1.6rem;
+    font-size: 1.6rem;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
-  .ant-layout-sider-collapsed{
-    .ant-menu-item-icon{
+
+  .ant-layout-sider-collapsed {
+    .ant-menu-item-icon {
       margin-top: -8px;
     }
-    .ant-menu-item{
+    .ant-menu-item {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-    .login{
-      .ant-menu-item{
+    .login {
+      .ant-menu-item {
         padding-left: 0px !important;
       }
-      .ant-menu-title-content{
+      .ant-menu-title-content {
         display: none;
       }
     }
   }
-  .login{
+  .login {
     position: absolute;
-    bottom:0px;
+    bottom: 0px;
     left: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    .ant-menu-item{
+    .ant-menu-item {
       padding-left: 24px !important;
     }
   }
@@ -89,10 +88,22 @@ html {
 .layout__content-main {
   padding: 0 20px;
 }
-.header-layout{
+.header-layout {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   height: 70px;
+}
+
+:where(.css-dev-only-do-not-override-amq5gd).ant-layout .ant-layout-sider {
+  flex: 0 0 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+}
+
+.ant-menu-title-content {
+  font-weight: 600 !important;
+  margin-left: 20px !important;
 }
