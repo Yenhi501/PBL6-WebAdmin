@@ -19,7 +19,6 @@ import { Movies } from '../movies';
 import { User } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
-import { Dashboard } from '../dashboard';
 
 const { Header, Sider, Content } = Layout;
 
@@ -40,7 +39,7 @@ export const LayoutAdmin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [selectedItem, setSelectedItem] = useState('Dashboard');
+  const [selectedItem, setSelectedItem] = useState('Movies');
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>
@@ -50,37 +49,30 @@ export const LayoutAdmin: React.FC = () => {
             <div className="menu-title">
               {collapsed ? <MenuOutlined rev="" /> : <p>CATEGORY</p>}
             </div>
-            <Menu.Item
-              key="1"
-              icon={<UserOutlined rev="" />}
-              onClick={() => setSelectedItem('Dashboard')}
-            >
-              <Link to="/">Dashboard</Link>
-            </Menu.Item>
 
             <Menu.Item
-              key="2"
+              key="1"
               icon={<UserOutlined rev="" />}
               onClick={() => setSelectedItem('Movies')}
             >
               <Link to="/movies">Movies</Link>
             </Menu.Item>
             <Menu.Item
-              key="3"
+              key="2"
               icon={<VideoCameraOutlined rev="" />}
               onClick={() => setSelectedItem('Revenues')}
             >
               <Link to="/revenues">Revenues</Link>
             </Menu.Item>
             <Menu.Item
-              key="4"
+              key="3"
               icon={<UploadOutlined rev="" />}
               onClick={() => setSelectedItem('VIPPackages')}
             >
               <Link to="/vip-packages">VIP packages</Link>
             </Menu.Item>
             <Menu.Item
-              key="5"
+              key="4"
               icon={<UserOutlined rev="" />}
               onClick={() => setSelectedItem('User')}
             >
@@ -134,7 +126,6 @@ export const LayoutAdmin: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            {selectedItem === 'Dashboard' && <Dashboard />}
             {selectedItem === 'Movies' && <Movies />}
             {selectedItem === 'Revenues' && <Revenues />}
             {selectedItem === 'VIPPackages' && <VIPPackages />}

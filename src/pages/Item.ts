@@ -1,11 +1,12 @@
 export interface ItemVIPPackage {
-    key:number;
-    id: string
-    name: string;
-    user:number;
-    time:string;
-    status:string;
-    price:string;
+  key: string;
+    id: string,
+    name: string,
+    user:number,
+    time: number,
+    status: string,
+    discount: number,
+    price: number,
   }
 
   export interface ItemColumn {

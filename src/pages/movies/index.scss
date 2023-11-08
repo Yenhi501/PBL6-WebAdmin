@@ -8,6 +8,11 @@
 }
 .card__body{
     position: relative;
+
+    .search-bar {
+        position: absolute;
+    }
+
     .btn-new{
         position: absolute;
         right: 120px;
