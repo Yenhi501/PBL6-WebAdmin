@@ -21,7 +21,6 @@ import { Movies } from '../movies';
 import { User } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
-import { Dashboard } from '../dashboard';
 
 const { Header, Sider, Content } = Layout;
 
@@ -42,7 +41,7 @@ export const LayoutAdmin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [selectedItem, setSelectedItem] = useState('Dashboard');
+  const [selectedItem, setSelectedItem] = useState('Movies');
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>
@@ -62,6 +61,7 @@ export const LayoutAdmin: React.FC = () => {
                 </div>
               )}
             </div>
+
 
             <Menu.Item
               key="1"
@@ -86,6 +86,7 @@ export const LayoutAdmin: React.FC = () => {
               <Link to="/revenues">Doanh thu</Link>
             </Menu.Item>
             <Menu.Item
+
               key="4"
               icon={<SketchOutlined rev="" />}
               onClick={() => setSelectedItem('VIPPackages')}
@@ -93,7 +94,7 @@ export const LayoutAdmin: React.FC = () => {
               <Link to="/vip-packages">Gói Vip</Link>
             </Menu.Item>
             <Menu.Item
-              key="5"
+              key="4"
               icon={<UserOutlined rev="" />}
               onClick={() => setSelectedItem('User')}
             >
@@ -147,7 +148,6 @@ export const LayoutAdmin: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            {selectedItem === 'Dashboard' && <Dashboard />}
             {selectedItem === 'Movies' && <Movies />}
             {selectedItem === 'Revenues' && <Revenues />}
             {selectedItem === 'VIPPackages' && <VIPPackages />}
