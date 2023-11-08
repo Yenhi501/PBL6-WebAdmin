@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: space-between;
   margin-right: 20px;
-  
 }
 
 .topnav__search {
@@ -36,10 +35,12 @@
 .topnav__right {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .topnav__right-item ~ .topnav__right-item {
   margin-left: 30px;
+  margin-top: 15px;
 }
 
 .notification-item {
@@ -60,14 +61,16 @@
 .topnav__right-user {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .topnav__right-user__image {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   overflow: hidden;
   margin-right: 10px;
+  border: 1px solid #b7dafa;
 }
 
 .topnav__right-user__image > img {

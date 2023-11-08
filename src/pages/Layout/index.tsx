@@ -7,14 +7,16 @@ import ThemeAction from '../../redux/actions/ThemeAction';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
+  SketchOutlined,
   UserOutlined,
   VideoCameraOutlined,
   MenuOutlined,
   LogoutOutlined,
   LoginOutlined,
+  ShoppingCartOutlined,
+  HomeOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, Avatar } from 'antd';
 import { Movies } from '../movies';
 import { User } from '../user';
 import { Revenues } from '../revenues';
@@ -48,55 +50,66 @@ export const LayoutAdmin: React.FC = () => {
           <div className="demo-logo-vertical" />
           <Menu mode="inline" defaultSelectedKeys={['1']}>
             <div className="menu-title">
-              {collapsed ? <MenuOutlined rev="" /> : <p>CATEGORY</p>}
+              {collapsed ? (
+                <MenuOutlined rev="" />
+              ) : (
+                <div>
+                  <Avatar
+                    shape="square"
+                    size={64}
+                    icon={<UserOutlined rev={undefined} />}
+                  />
+                </div>
+              )}
             </div>
+
             <Menu.Item
               key="1"
-              icon={<UserOutlined rev="" />}
+              icon={<HomeOutlined rev="" />}
               onClick={() => setSelectedItem('Dashboard')}
             >
-              <Link to="/">Dashboard</Link>
+              <Link to="/">Tổng quan</Link>
             </Menu.Item>
 
             <Menu.Item
               key="2"
-              icon={<UserOutlined rev="" />}
+              icon={<VideoCameraOutlined rev="" />}
               onClick={() => setSelectedItem('Movies')}
             >
-              <Link to="/movies">Movies</Link>
+              <Link to="/movies">Phim</Link>
             </Menu.Item>
             <Menu.Item
               key="3"
-              icon={<VideoCameraOutlined rev="" />}
+              icon={<ShoppingCartOutlined rev="" />}
               onClick={() => setSelectedItem('Revenues')}
             >
-              <Link to="/revenues">Revenues</Link>
+              <Link to="/revenues">Doanh thu</Link>
             </Menu.Item>
             <Menu.Item
               key="4"
-              icon={<UploadOutlined rev="" />}
+              icon={<SketchOutlined rev="" />}
               onClick={() => setSelectedItem('VIPPackages')}
             >
-              <Link to="/vip-packages">VIP packages</Link>
+              <Link to="/vip-packages">Gói Vip</Link>
             </Menu.Item>
             <Menu.Item
               key="5"
               icon={<UserOutlined rev="" />}
               onClick={() => setSelectedItem('User')}
             >
-              <Link to="/user">User</Link>
+              <Link to="/user">Người dùng</Link>
             </Menu.Item>
 
             {isLogin ? (
               <div className="login">
                 <Menu.Item icon={<LogoutOutlined rev="" />}>
-                  <Link to="/">Log out</Link>
+                  <Link to="/">Đăng xuất</Link>
                 </Menu.Item>
               </div>
             ) : (
               <div className="login">
                 <Menu.Item icon={<LoginOutlined rev="" />}>
-                  <Link to="/login">Log in</Link>
+                  <Link to="/login">Đăng nhập</Link>
                 </Menu.Item>
               </div>
             )}
