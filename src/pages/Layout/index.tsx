@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import './index.scss';
-import { TopNav } from '../../components/topnav/index';
-import { useSelector, useDispatch } from 'react-redux';
-import ThemeAction from '../../redux/actions/ThemeAction';
 import {
+  LoginOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
+  MenuOutlined,
   MenuUnfoldOutlined,
+  ShoppingCartOutlined,
   SketchOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  MenuOutlined,
-  LogoutOutlined,
-  LoginOutlined,
-  ShoppingCartOutlined,
-  HomeOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme, Avatar } from 'antd';
-import { Movies } from '../movies';
-import { User } from '../user';
-import { Revenues } from '../revenues';
+import { Avatar, Button, Layout, Menu, theme } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { TopNav } from '../../components/topnav/index';
+import ThemeAction from '../../redux/actions/ThemeAction';
 import { VIPPackages } from '../VIPPackages';
+import { Movies } from '../movies';
+import { Revenues } from '../revenues';
+import { User } from '../user';
+import './index.scss';
 
 const { Header, Sider, Content } = Layout;
 
@@ -62,32 +61,22 @@ export const LayoutAdmin: React.FC = () => {
               )}
             </div>
 
-
             <Menu.Item
               key="1"
-              icon={<HomeOutlined rev="" />}
-              onClick={() => setSelectedItem('Dashboard')}
-            >
-              <Link to="/">Tổng quan</Link>
-            </Menu.Item>
-
-            <Menu.Item
-              key="2"
               icon={<VideoCameraOutlined rev="" />}
               onClick={() => setSelectedItem('Movies')}
             >
               <Link to="/movies">Phim</Link>
             </Menu.Item>
             <Menu.Item
-              key="3"
+              key="2"
               icon={<ShoppingCartOutlined rev="" />}
               onClick={() => setSelectedItem('Revenues')}
             >
               <Link to="/revenues">Doanh thu</Link>
             </Menu.Item>
             <Menu.Item
-
-              key="4"
+              key="3"
               icon={<SketchOutlined rev="" />}
               onClick={() => setSelectedItem('VIPPackages')}
             >

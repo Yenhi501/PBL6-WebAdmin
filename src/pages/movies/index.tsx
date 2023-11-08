@@ -2,14 +2,12 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { StatusCard } from '../../components/status-card/index';
-import { ItemType, TableResult } from '../../components/table/index';
 import statusCards from '../../assets/JsonData/status-card-data.json';
 import { Search } from '../../components/search/index';
 import { StatusCard } from '../../components/status-card/index';
-import { TableResult } from '../../components/table/index';
+import { ItemType, TableResult } from '../../components/table/index';
+
 import { PosterUpload } from '../../components/upload-poster';
-import { ItemVIPPackage } from '../Item';
 import './index.scss';
 
 export interface ItemMovies {

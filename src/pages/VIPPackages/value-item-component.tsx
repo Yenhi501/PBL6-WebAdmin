@@ -1,4 +1,3 @@
-import { TabsProps } from 'antd';
 import { UserInfo } from '../../components/userInfo';
 
 export const columnTables = [
