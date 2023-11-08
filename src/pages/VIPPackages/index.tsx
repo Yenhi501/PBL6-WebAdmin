@@ -1,189 +1,160 @@
 import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { TableResult } from '../../components/table/index';
-import statusCards from '../../assets/JsonData/status-card-data.json';
+import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
 import { Search } from '../../components/search/index';
+import { Button, Modal, Tabs, TabsProps } from 'antd';
+import { DatePicker, Form, Input, Select } from 'antd';
 import { ItemVIPPackage } from '../Item';
-import { Modal, Tag } from 'antd';
+import dayjs from 'dayjs';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { PosterUpload } from '../../components/upload-poster';
+import {
+  VIPUser,
+  columnTables,
+  columnTablesUserVIP,
+} from './value-item-component';
+import { ItemMovies } from '../movies';
+import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
+import { TableVIPPackage } from '../../components/table-VIP';
 
-const data: Array<ItemVIPPackage> = [
+const dataOrigin: Array<ItemVIPPackage> = [
   {
-    key: 1,
-    id: 'ID1',
-    name: 'VIP1',
+    key: '1',
+    id: 'VM',
+    name: 'VIP by 1 month',
     user: 20,
-    time: '1 tháng',
+    time: 30,
     status: 'active',
-    price: '79000 ₫',
+    discount: 10,
+    price: 19,
   },
   {
-    key: 2,
-    id: 'ID11',
-    name: 'VIP1',
+    key: '1',
+    id: 'VHY',
+    name: 'VIP by 6 month',
     user: 20,
-    time: '1 tháng',
-    status: 'inactive',
-    price: '79000 ₫',
-  },
-  {
-    key: 3,
-    id: 'ID12',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
+    time: 133,
     status: 'active',
-    price: '79000 ₫',
+    discount: 0,
+    price: 19,
   },
   {
-    key: 4,
-    id: 'ID13',
-    name: 'VIP1',
+    key: '1',
+    id: 'VM',
+    name: 'VIP by 1 month',
     user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 6,
-    id: 'ID14',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 180,
-    id: 'ID21',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'inactive',
-    price: '79000 ₫',
-  },
-  {
-    key: 168,
-    id: 'ID31',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 185,
-    id: 'ID41',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'inactive',
-    price: '79000 ₫',
-  },
-  {
-    key: 182,
-    id: 'ID111',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 181,
-    id: 'ID61',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 132,
-    id: 'ID71',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
-  },
-  {
-    key: 123,
-    id: 'ID81',
-    name: 'VIP1',
-    user: 20,
-    time: '1 tháng',
-    status: 'active',
-    price: '79000 ₫',
+    time: 365,
+    status: 'pending',
+    discount: 20,
+    price: 19,
   },
 ];
 
-const columns = [
+const dataOriginVIPUser: Array<VIPUser> = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    editable: true,
+    key: '1',
+    id: '1',
+    package: 'VIP by 1 month',
+    expireDate: '20/10/2023',
+    dayLeft: 30,
   },
   {
-    title: 'Name',
-    dataIndex: 'name',
-    editable: true,
+    key: '1',
+    id: '2',
+    package: 'VIP by 1 month',
+    expireDate: '20/10/2023',
+    dayLeft: 30,
   },
   {
-    title: 'User',
-    dataIndex: 'user',
-    editable: true,
+    key: '1',
+    id: '3',
+    package: 'VIP by 1 month',
+    expireDate: '20/10/2023',
+    dayLeft: 30,
+  },
+];
+
+export const statusCard = [
+  {
+    icon: 'bx bx-shopping-bag',
+    count: '3',
+    title: 'VIP packages',
   },
   {
-    title: 'Time',
-    dataIndex: 'time',
-    editable: true,
+    icon: 'bx bx-cart',
+    count: '200',
+    title: 'VIP user',
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    editable: true,
-    key: 'status',
-    render: (_: string, { status }: { status: string }) => {
-      let color;
-      if (status === 'inactive') {
-        color = 'volcano';
-      } else {
-        color = 'green';
-      }
-      return (
-        <Tag color={color} key={status}>
-          {status.toUpperCase()}
-        </Tag>
-      );
-    },
+    icon: 'bx bx-dollar-circle',
+    count: '50',
+    title: 'Expire user',
   },
   {
-    title: 'Price',
-    dataIndex: 'price',
-    editable: true,
+    icon: 'bx bx-receipt',
+    count: '20',
+    title: 'Renew user in month',
   },
 ];
 
 export const VIPPackages: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
+  const [editedItem, setEditedItem] = useState<ItemVIPPackage | null>(null);
+  const [data, setData] = useState<Array<ItemVIPPackage>>(dataOrigin);
+  const [dataVIPUser, setDataVIPUser] =
+    useState<Array<VIPUser>>(dataOriginVIPUser);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const itemTabs: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'VIP packages',
+      children: (
+        <TableVIPPackage
+          originData={data}
+          columns={columnTables}
+          needOperationColumn={true}
+          onEdit={(record: ItemType | null) => {
+            setSelectedItem(record);
+            setEditedItem(record ? ({ ...record } as ItemVIPPackage) : null);
+            setIsModalOpen(true);
+          }}
+          onNewBtnClick={() => setIsModalOpen(true)}
+        />
+      ),
+    },
+    {
+      key: '2',
+      label: 'VIP user',
+      children: (
+        <TableVIPPackage
+          originData={dataVIPUser}
+          columns={columnTablesUserVIP}
+          needOperationColumn={true}
+          onEdit={(record: ItemType | null) => {
+            setSelectedItem(record);
+            setEditedItem(record ? ({ ...record } as ItemVIPPackage) : null);
+            setIsModalOpen(true);
+          }}
+        />
+      ),
+    },
+  ];
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   return (
     <div>
-      <h2 className="page-header">Dashboard</h2>
+      <FormAddEditVIPPackage
+        isOpen={isModalOpen}
+        handleCancel={() => {
+          setIsModalOpen(false);
+          setEditedItem(null);
+        }}
+        editItem={editedItem}
+      />
+      <h2 className="movies-header">VIP Packages</h2>
       <div className="row">
-        {statusCards.map((item, index) => (
+        {statusCard.map((item, index) => (
           <div className="col-3" key={index}>
             <StatusCard
               icon={item.icon}
@@ -192,33 +163,12 @@ export const VIPPackages: React.FC = () => {
             />
           </div>
         ))}
-
         <div className="col-12">
-          <div className="card">
-            <div className="search-bar">
-              <Search />
-            </div>
-          </div>
           <div className="card__body">
-            <TableResult
-              originData={data}
-              columns={columns}
-              needOperationColumn={true}
-              onEdit={showModal}
-            />
+            <Tabs defaultActiveKey="1" items={itemTabs} />
           </div>
         </div>
       </div>
-      <Modal
-        title="Basic Modal"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
     </div>
   );
 };

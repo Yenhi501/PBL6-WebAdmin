@@ -1,0 +1,15 @@
+.user-info-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .user-info {
+        .user-name {
+            font-weight: bold;
+        }
+
+        .user-email {
+            color: #909090,
+        }
+    }
+}

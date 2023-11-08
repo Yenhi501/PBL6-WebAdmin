@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { TableResult } from '../../components/table/index';
+import { ItemType, TableResult } from '../../components/table/index';
 import statusCards from '../../assets/JsonData/status-card-data.json';
 import './index.scss';
 import { Search } from '../../components/search/index';
@@ -232,9 +232,7 @@ export const Movies: React.FC = () => {
   const timestamp = Date.now();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<
-    ItemMovies | ItemVIPPackage | null
-  >(null);
+  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
   const [editedItem, setEditedItem] = useState<ItemMovies | null>(null);
   const [data, setData] = useState<Array<ItemMovies>>(dataOrigin);
   const [tableKey, setTableKey] = useState(0);
@@ -300,7 +298,6 @@ export const Movies: React.FC = () => {
     setIsModalAddOpen(true);
   };
   //
-  console.log(newPoster);
 
   return (
     <div>
@@ -317,10 +314,8 @@ export const Movies: React.FC = () => {
         ))}
 
         <div className="col-12">
-          <div className="card">
-            <div className="search-bar">
-              <Search />
-            </div>
+          <div className="search-bar">
+            <Search />
           </div>
           <div className="card__body">
             <Button
@@ -337,7 +332,7 @@ export const Movies: React.FC = () => {
               originData={data}
               columns={columns}
               needOperationColumn={true}
-              onEdit={(record: ItemMovies | ItemVIPPackage | null) => {
+              onEdit={(record: ItemType | null) => {
                 setSelectedItem(record);
                 setEditedItem(record ? ({ ...record } as ItemMovies) : null);
                 setIsModalOpen(true);

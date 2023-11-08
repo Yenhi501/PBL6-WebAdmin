@@ -4,8 +4,9 @@ import './index.scss';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
+import { VIPUser } from '../../pages/VIPPackages/value-item-component';
 
-type ItemType = ItemVIPPackage | ItemMovies;
+export type ItemType = ItemVIPPackage | ItemMovies | VIPUser;
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;
@@ -77,7 +78,7 @@ export const TableResult = ({
     });
   };
   //edit
-  const handleEdit = (record: ItemVIPPackage | ItemMovies) => {
+  const handleEdit = (record: ItemType) => {
     onEdit(record);
   };
 
@@ -88,7 +89,7 @@ export const TableResult = ({
         title: 'Operation',
         dataIndex: 'operation',
         width: '10%',
-        render: (_: any, record: ItemVIPPackage | ItemMovies) => {
+        render: (_: any, record: ItemType) => {
           return (
             <span className="btn-operation">
               <Typography.Link
