@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form, Popconfirm, Table, Typography } from 'antd';
-import './index.scss';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
-import { ItemMovies } from '../../pages/movies';
+import { Button, Form, Popconfirm, Table, Typography } from 'antd';
+import React, { useState } from 'react';
+import { ItemColumn, ItemRevenues, ItemVIPPackage } from '../../pages/Item';
 import { VIPUser } from '../../pages/VIPPackages/value-item-component';
-
-export type ItemType = ItemVIPPackage | ItemMovies | VIPUser;
+import { ItemMovies } from '../../pages/movies';
+import './index.scss';
+export type ItemType = ItemVIPPackage | ItemMovies | VIPUser | ItemRevenues;
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;

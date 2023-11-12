@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  LoadingOutlined,
   CloseOutlined,
+  LoadingOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.scss';
 
 export const Search = () => {

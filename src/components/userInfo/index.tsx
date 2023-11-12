@@ -10,7 +10,7 @@ export type UserInfo = {
 };
 export const UserInfo = ({ id }: UserInfoComponent) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    avt: 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2020/04/elderscrolls-online.jpg',
+    avt: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
     name: 'Nguyen Ngoc Bao Long',
     email: '28072002long@gmail.com',
   });
