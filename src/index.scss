@@ -116,6 +116,10 @@ ul {
   }
 }
 
+table tr {
+  border-color: #fafafa;
+}
+
 .ant-btn-text {
   color: var(--contrast-color);
 
@@ -208,7 +212,3 @@ ul {
 //         color: var(--sub-color) !important;
 //     }
 // }
-
-.ant-table {
-  background-color: var(--main-color) !important;
-}

@@ -1,0 +1,21 @@
+.revenues-detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+
+  h1 {
+    margin-right: 20px;
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+  :where(.css-dev-only-do-not-override-amq5gd).ant-picker {
+    height: 50px;
+  }
+}
+
+:where(.css-dev-only-do-not-override-amq5gd).ant-picker
+  .ant-picker-input
+  > input {
+  color: #989898;
+}

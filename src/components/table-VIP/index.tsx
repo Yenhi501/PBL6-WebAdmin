@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Search } from '../search';
-import { Button } from 'antd';
-import { ItemTable, ItemType, TableResult } from '../table';
 import { PlusOutlined } from '@ant-design/icons';
-import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
+import { Button } from 'antd';
+import { useState } from 'react';
+import { Search } from '../search';
+import { ItemTable, TableResult } from '../table';
 
 export type TableVIPPackage = {
   onSearch?: (props: any) => void;

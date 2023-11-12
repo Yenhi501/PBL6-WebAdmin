@@ -1,33 +1,100 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import statusCards from '../../assets/JsonData/status-card-data.json';
-import { StatusCard } from '../../components/status-card';
 import './index.scss';
-import { DatePicker } from 'antd';
+import { RevenuesHeader } from '../../components/revenues/revenues-header';
+import { RevenuesDetail } from '../../components/revenues/revenues-detail';
+import { RevenuesChooseBody } from '../../components/revenues/revenues-choose-body';
+import { RevenuesContent } from '../../components/revenues/revenues-content';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-export const Revenues = () => {
-  dayjs.extend(customParseFormat);
+import { StatusCardRevenues } from '../../components/revenues/revenues-card';
 
-  const { RangePicker } = DatePicker;
+export const Revenues: React.FC = () => {
+  dayjs.extend(customParseFormat);
   const dateFormat = 'YYYY/MM/DD';
 
-  const [selectedButton, setSelectedButton] = useState<'button1' | 'button2'>(
-    'button1',
-  );
+  const [selectedView, setSelectedView] = useState<'Week' | 'Month'>('Week');
+  const [selectedContent, setSelectedContent] = useState<'VIP' | 'ADS'>('VIP');
+  const [selectedDateRange, setSelectedDateRange] = useState<
+    [dayjs.Dayjs | null, dayjs.Dayjs | null]
+  >([dayjs('2023/01/01', dateFormat), dayjs('2023/07/01', dateFormat)]);
 
-  const handleButtonClick = (button: 'button1' | 'button2') => {
-    setSelectedButton(button);
+  const handleViewChange = (view: 'Week' | 'Month') => {
+    setSelectedView(view);
   };
+
+  const handleContentChange = (content: 'VIP' | 'ADS') => {
+    setSelectedContent(content);
+  };
+
+  const handleDateRangeChange = (
+    dates: [dayjs.Dayjs | null, dayjs.Dayjs | null],
+  ) => {
+    setSelectedDateRange(dates);
+  };
+
+  const statusCardWeek = [
+    {
+      icon: 'bx bx-shopping-bag',
+      count: '$2,632',
+      title: 'From Vip',
+    },
+    {
+      icon: 'bx bx-cart',
+      count: '$4,629',
+      title: 'From ADS',
+    },
+    {
+      icon: 'bx bx-dollar-circle',
+      count: '$70,328',
+      title: 'Total Week',
+    },
+    {
+      icon: 'bx bx-receipt',
+      count: '$20,454',
+      title: 'All',
+    },
+  ];
+
+  const statusCardMonth = [
+    {
+      icon: 'bx bx-shopping-bag',
+      count: '$23,632',
+      title: 'From Vip',
+    },
+    {
+      icon: 'bx bx-cart',
+      count: '$43,629',
+      title: 'From ADS',
+    },
+    {
+      icon: 'bx bx-dollar-circle',
+      count: '$50,328',
+      title: 'Total Week',
+    },
+    {
+      icon: 'bx bx-receipt',
+      count: '$32,454',
+      title: 'All',
+    },
+  ];
+
+  const statusCard = selectedView === 'Week' ? statusCardWeek : statusCardMonth;
+
   return (
     <div className="revenues">
-      <h2 className="revenues-header">Overview</h2>
+      <RevenuesHeader
+        selectedView={selectedView}
+        handleViewChange={handleViewChange}
+      />
+
       <div className="row">
-        {statusCards.map((item, index) => (
+        {statusCard.map((item, index) => (
           <div className="col-3" key={index}>
-            <StatusCard
+            <StatusCardRevenues
               icon={item.icon}
               count={item.count}
               title={item.title}
+              selectedView={selectedView}
             />
           </div>
         ))}
@@ -35,37 +102,24 @@ export const Revenues = () => {
         <div className="col-12">
           <div className="revenues-card card">
             <div>
-              <RangePicker
-                defaultValue={[
-                  dayjs('2015/01/01', dateFormat),
-                  dayjs('2015/01/01', dateFormat),
-                ]}
-                format={dateFormat}
+              <RevenuesDetail
+                dateFormat={dateFormat}
+                onDateRangeChange={handleDateRangeChange}
               />
             </div>
-            <div className="revenues-choose__body">
-              <button
-                onClick={() => handleButtonClick('button1')}
-                className={`revenues-button ${
-                  selectedButton === 'button1' ? 'active' : ''
-                }`}
-              >
-                Button 1
-              </button>
-              <button
-                onClick={() => handleButtonClick('button2')}
-                className={`revenues-button ${
-                  selectedButton === 'button2' ? 'active' : ''
-                }`}
-              >
-                Button 2
-              </button>
+
+            <div>
+              <RevenuesChooseBody
+                selectedContent={selectedContent}
+                handleContentChange={handleContentChange}
+              />
             </div>
           </div>
-          <div className="content">
-            {selectedButton === 'button1' && <div>Content for Button 1</div>}
-            {selectedButton === 'button2' && <div>Content for Button 2</div>}
-          </div>
+          <RevenuesContent
+            selectedContent={selectedContent}
+            selectedView={selectedView}
+            selectedDateRange={selectedDateRange}
+          />
         </div>
       </div>
     </div>
