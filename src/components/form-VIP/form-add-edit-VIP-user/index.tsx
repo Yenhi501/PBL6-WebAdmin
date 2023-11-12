@@ -1,41 +1,41 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
-import { ItemVIPPackage } from '../../../pages/Item';
+import { VIPUser } from '../../../model/VIPUser';
+import moment from 'moment';
 
-export type FormAddEditVIPPackage = {
+export type FormAddEditVIPUser = {
   isEditForm?: boolean;
   isOpen: boolean;
   handleCancel: (props: any) => void;
-  editItem?: ItemVIPPackage | null;
+  editItem?: VIPUser | null;
 };
 
 const { Option } = Select;
+const dateFormat = 'YYYY/MM/DD';
 
 type FieldType = {
-  name?: string;
-  time?: string;
-  status?: string;
-  price?: number;
-  discount?: number;
+  id?: string;
+  idPackage?: string;
+  dateRegistered?: string;
+  durationPackage?: number;
 };
 
-export const FormAddEditVIPPackage = ({
+export const FormAddEditVIPUser = ({
   isOpen,
   isEditForm = false,
   editItem = null,
   handleCancel,
-}: FormAddEditVIPPackage) => {
+}: FormAddEditVIPUser) => {
   const [form] = useForm();
 
-  const setEditItemValue = (editItem: ItemVIPPackage) => {
+  const setEditItemValue = (editItem: VIPUser) => {
     form.setFieldsValue({
-      name: editItem.name,
-      time: editItem.time,
-      status: editItem.status,
-      price: editItem.price,
-      discount: editItem.discount,
+      id: editItem.id,
+      idPackage: editItem.idPackage,
+      dateRegistered: moment(editItem.dateRegistered),
+      durationPackage: editItem.durationPackage,
     });
   };
 
@@ -62,61 +62,59 @@ export const FormAddEditVIPPackage = ({
         autoComplete="off"
         layout="vertical"
         className="form-add-edit-VIP-package"
-        onFinish={(values: ItemVIPPackage) => {}}
+        onFinish={(values: VIPUser) => {}}
       >
         <Form.Item<FieldType>
-          label="Name"
-          name="name"
+          label="Id user"
+          name="id"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input />
+          <Input disabled={isEditForm} />
         </Form.Item>
 
         <Row>
           <Col span={10}>
             <Form.Item<FieldType>
-              label="Time"
-              name="time"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-              wrapperCol={{ span: 24 }}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col span={10} offset={4}>
-            <Form.Item<FieldType>
-              label="Status"
-              name="status"
+              label="Package"
+              name="idPackage"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
               wrapperCol={{ span: 24 }}
             >
               <Select>
-                <Option value="active">Active</Option>
-                <Option value="pending">Pending</Option>
-                <Option value="inactive">Inactive</Option>
+                <Option value="V1">VIP1</Option>
+                <Option value="V2">VIP2</Option>
+                <Option value="V3">VIP3</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+
+          <Col span={10} offset={4}>
+            <Form.Item<FieldType>
+              label="Duration"
+              name="durationPackage"
+              rules={[
+                { required: true, message: 'Please input your password!' },
+              ]}
+              wrapperCol={{ span: 24 }}
+            >
+              <Select>
+                <Option value="30">1 month</Option>
+                <Option value="180">6 months</Option>
+                <Option value="365">1 year</Option>
               </Select>
             </Form.Item>
           </Col>
         </Row>
 
         <Form.Item<FieldType>
-          label="Price"
-          name="price"
+          label="Date registered"
+          name="dateRegistered"
           rules={[{ required: true, message: 'Please input your password!' }]}
+          hidden={!isEditForm}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType>
-          label="Discount"
-          name="discount"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input />
+          <DatePicker className="date-picker" format={dateFormat} />
         </Form.Item>
         <Row justify={'end'} gutter={16}>
           <Col>

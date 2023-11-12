@@ -1,41 +1,41 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
-import { ItemVIPPackage } from '../../../pages/Item';
+import moment from 'moment';
+import { User } from '../../model/user';
 
-export type FormAddEditVIPPackage = {
+export type FormAddEditUser = {
   isEditForm?: boolean;
   isOpen: boolean;
   handleCancel: (props: any) => void;
-  editItem?: ItemVIPPackage | null;
+  editItem?: User | null;
 };
 
 const { Option } = Select;
 
 type FieldType = {
-  name?: string;
-  time?: string;
+  id?: string;
+  email?: string;
+  role?: string;
   status?: string;
-  price?: number;
-  discount?: number;
+  currentPassword?: string;
+  newPassword?: string;
 };
 
-export const FormAddEditVIPPackage = ({
+export const FormAddEditUser = ({
   isOpen,
   isEditForm = false,
   editItem = null,
   handleCancel,
-}: FormAddEditVIPPackage) => {
+}: FormAddEditUser) => {
   const [form] = useForm();
 
-  const setEditItemValue = (editItem: ItemVIPPackage) => {
+  const setEditItemValue = (editItem: User) => {
     form.setFieldsValue({
-      name: editItem.name,
-      time: editItem.time,
+      id: editItem.id,
+      role: editItem.role,
       status: editItem.status,
-      price: editItem.price,
-      discount: editItem.discount,
     });
   };
 
@@ -62,31 +62,25 @@ export const FormAddEditVIPPackage = ({
         autoComplete="off"
         layout="vertical"
         className="form-add-edit-VIP-package"
-        onFinish={(values: ItemVIPPackage) => {}}
+        onFinish={(values: User) => {}}
       >
         <Form.Item<FieldType>
-          label="Name"
-          name="name"
+          label="Username"
+          name="id"
           rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <Input disabled={isEditForm} />
+        </Form.Item>
+        <Form.Item<FieldType>
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+          hidden={isEditForm}
         >
           <Input />
         </Form.Item>
-
         <Row>
           <Col span={10}>
-            <Form.Item<FieldType>
-              label="Time"
-              name="time"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-              wrapperCol={{ span: 24 }}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col span={10} offset={4}>
             <Form.Item<FieldType>
               label="Status"
               name="status"
@@ -97,27 +91,49 @@ export const FormAddEditVIPPackage = ({
             >
               <Select>
                 <Option value="active">Active</Option>
-                <Option value="pending">Pending</Option>
-                <Option value="inactive">Inactive</Option>
+                <Option value="ban">Ban</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+
+          <Col span={10} offset={4}>
+            <Form.Item<FieldType>
+              label="Role"
+              name="role"
+              rules={[
+                { required: true, message: 'Please input your password!' },
+              ]}
+              wrapperCol={{ span: 24 }}
+            >
+              <Select>
+                <Option value="user">User</Option>
+                <Option value="VIPUser">VIP User</Option>
+                <Option value="admin">Admin</Option>
               </Select>
             </Form.Item>
           </Col>
         </Row>
+        <Row>
+          <Col span={10}>
+            <Form.Item<FieldType>
+              label="Current password"
+              name="currentPassword"
+              wrapperCol={{ span: 24 }}
+            >
+              <Input.Password />
+            </Form.Item>
+          </Col>
 
-        <Form.Item<FieldType>
-          label="Price"
-          name="price"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType>
-          label="Discount"
-          name="discount"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input />
-        </Form.Item>
+          <Col span={10} offset={4}>
+            <Form.Item<FieldType>
+              label="New password"
+              name="newPassword"
+              wrapperCol={{ span: 24 }}
+            >
+              <Input.Password />
+            </Form.Item>
+          </Col>
+        </Row>
         <Row justify={'end'} gutter={16}>
           <Col>
             <Button

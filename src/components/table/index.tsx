@@ -4,9 +4,10 @@ import './index.scss';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
-import { VIPUser } from '../../pages/VIPPackages/value-item-component';
+import { VIPUser } from '../../model/VIPUser';
+import { User } from '../../model/user';
 
-export type ItemType = ItemVIPPackage | ItemMovies | VIPUser;
+export type ItemType = ItemVIPPackage | ItemMovies | VIPUser | User;
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;

@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { ItemType, TableResult } from '../../components/table/index';
+import { ItemType } from '../../components/table/index';
 import './index.scss';
-import { Search } from '../../components/search/index';
 import { Button, Modal, Tabs, TabsProps } from 'antd';
 import { DatePicker, Form, Input, Select } from 'antd';
 import { ItemVIPPackage } from '../Item';
 import dayjs from 'dayjs';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import { PosterUpload } from '../../components/upload-poster';
-import {
-  VIPUser,
-  columnTables,
-  columnTablesUserVIP,
-} from './value-item-component';
+import { columnTables, columnTablesUserVIP } from './value-item-component';
 import { ItemMovies } from '../movies';
 import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
 import { TableVIPPackage } from '../../components/table-VIP';
+import { FormAddEditVIPUser } from '../../components/form-VIP/form-add-edit-VIP-user';
+import { VIPUser } from '../../model/VIPUser';
+import moment from 'moment';
 
 const dataOrigin: Array<ItemVIPPackage> = [
   {
@@ -55,22 +53,28 @@ const dataOriginVIPUser: Array<VIPUser> = [
   {
     key: '1',
     id: '1',
-    package: 'VIP by 1 month',
-    expireDate: '20/10/2023',
+    idPackage: 'V1',
+    durationPackage: 30,
+    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
+    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
     dayLeft: 30,
   },
   {
-    key: '1',
+    key: '2',
     id: '2',
-    package: 'VIP by 1 month',
-    expireDate: '20/10/2023',
+    idPackage: 'V1',
+    durationPackage: 30,
+    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
+    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
     dayLeft: 30,
   },
   {
-    key: '1',
+    key: '3',
     id: '3',
-    package: 'VIP by 1 month',
-    expireDate: '20/10/2023',
+    idPackage: 'V1',
+    durationPackage: 30,
+    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
+    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
     dayLeft: 30,
   },
 ];
@@ -100,8 +104,10 @@ export const statusCard = [
 
 export const VIPPackages: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
+  const [isModalVIPUserOpen, setIsModalVIPUserOpen] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemVIPPackage | null>(null);
+  const [editedVIPUser, setEditedVIPUser] = useState<VIPUser | null>(null);
+
   const [data, setData] = useState<Array<ItemVIPPackage>>(dataOrigin);
   const [dataVIPUser, setDataVIPUser] =
     useState<Array<VIPUser>>(dataOriginVIPUser);
@@ -116,7 +122,6 @@ export const VIPPackages: React.FC = () => {
           columns={columnTables}
           needOperationColumn={true}
           onEdit={(record: ItemType | null) => {
-            setSelectedItem(record);
             setEditedItem(record ? ({ ...record } as ItemVIPPackage) : null);
             setIsModalOpen(true);
           }}
@@ -133,10 +138,10 @@ export const VIPPackages: React.FC = () => {
           columns={columnTablesUserVIP}
           needOperationColumn={true}
           onEdit={(record: ItemType | null) => {
-            setSelectedItem(record);
-            setEditedItem(record ? ({ ...record } as ItemVIPPackage) : null);
-            setIsModalOpen(true);
+            setEditedVIPUser(record ? ({ ...record } as VIPUser) : null);
+            setIsModalVIPUserOpen(true);
           }}
+          onNewBtnClick={() => setIsModalVIPUserOpen(true)}
         />
       ),
     },
@@ -151,6 +156,16 @@ export const VIPPackages: React.FC = () => {
           setEditedItem(null);
         }}
         editItem={editedItem}
+        isEditForm={editedItem != null ? true : false}
+      />
+      <FormAddEditVIPUser
+        isOpen={isModalVIPUserOpen}
+        handleCancel={() => {
+          setIsModalVIPUserOpen(false);
+          setEditedVIPUser(null);
+        }}
+        editItem={editedVIPUser}
+        isEditForm={editedVIPUser != null ? true : false}
       />
       <h2 className="movies-header">VIP Packages</h2>
       <div className="row">

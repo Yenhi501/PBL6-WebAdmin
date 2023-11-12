@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Movies } from '../movies';
-import { User } from '../user';
+import { UserPage } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
 
@@ -39,7 +39,7 @@ export const LayoutAdmin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [selectedItem, setSelectedItem] = useState('Movies');
+
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>
@@ -50,32 +50,16 @@ export const LayoutAdmin: React.FC = () => {
               {collapsed ? <MenuOutlined rev="" /> : <p>CATEGORY</p>}
             </div>
 
-            <Menu.Item
-              key="1"
-              icon={<UserOutlined rev="" />}
-              onClick={() => setSelectedItem('Movies')}
-            >
+            <Menu.Item key="1" icon={<UserOutlined rev="" />}>
               <Link to="/movies">Movies</Link>
             </Menu.Item>
-            <Menu.Item
-              key="2"
-              icon={<VideoCameraOutlined rev="" />}
-              onClick={() => setSelectedItem('Revenues')}
-            >
+            <Menu.Item key="2" icon={<VideoCameraOutlined rev="" />}>
               <Link to="/revenues">Revenues</Link>
             </Menu.Item>
-            <Menu.Item
-              key="3"
-              icon={<UploadOutlined rev="" />}
-              onClick={() => setSelectedItem('VIPPackages')}
-            >
+            <Menu.Item key="3" icon={<UploadOutlined rev="" />}>
               <Link to="/vip-packages">VIP packages</Link>
             </Menu.Item>
-            <Menu.Item
-              key="4"
-              icon={<UserOutlined rev="" />}
-              onClick={() => setSelectedItem('User')}
-            >
+            <Menu.Item key="4" icon={<UserOutlined rev="" />}>
               <Link to="/user">User</Link>
             </Menu.Item>
 
@@ -126,10 +110,16 @@ export const LayoutAdmin: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            {selectedItem === 'Movies' && <Movies />}
-            {selectedItem === 'Revenues' && <Revenues />}
+            <Routes>
+              <Route path="/movies" element={<Movies />} />
+              <Route path="/revenues" element={<Revenues />} />
+              <Route path="/vip-packages" element={<VIPPackages />} />
+              <Route path="/user" element={<UserPage />} />
+            </Routes>
+            {/* {selectedItem === 'Movies' && <Movies />} */}
+            {/* {selectedItem === 'Revenues' && <Revenues />}
             {selectedItem === 'VIPPackages' && <VIPPackages />}
-            {selectedItem === 'User' && <User />}
+            {selectedItem === 'User' && <UserPage />} */}
           </Content>
         </Layout>
       </Layout>
