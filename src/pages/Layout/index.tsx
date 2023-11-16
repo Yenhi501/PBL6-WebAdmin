@@ -111,6 +111,7 @@ export const LayoutAdmin: React.FC = () => {
             }}
           >
             <Routes>
+              <Route path="/" element={<Movies />} />
               <Route path="/movies" element={<Movies />} />
               <Route path="/revenues" element={<Revenues />} />
               <Route path="/vip-packages" element={<VIPPackages />} />
