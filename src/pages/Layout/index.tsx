@@ -13,12 +13,14 @@ import {
   MenuOutlined,
   LogoutOutlined,
   LoginOutlined,
+  UserSwitchOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Movies } from '../movies';
 import { UserPage } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
+import { DAPage } from '../director-actor';
 
 const { Header, Sider, Content } = Layout;
 
@@ -61,6 +63,9 @@ export const LayoutAdmin: React.FC = () => {
             </Menu.Item>
             <Menu.Item key="4" icon={<UserOutlined rev="" />}>
               <Link to="/user">User</Link>
+            </Menu.Item>
+            <Menu.Item key="5" icon={<UserSwitchOutlined rev="" />}>
+              <Link to="/director-actor">Director/Actor</Link>
             </Menu.Item>
 
             {isLogin ? (
@@ -116,6 +121,7 @@ export const LayoutAdmin: React.FC = () => {
               <Route path="/revenues" element={<Revenues />} />
               <Route path="/vip-packages" element={<VIPPackages />} />
               <Route path="/user" element={<UserPage />} />
+              <Route path="/director-actor" element={<DAPage />} />
             </Routes>
             {/* {selectedItem === 'Movies' && <Movies />} */}
             {/* {selectedItem === 'Revenues' && <Revenues />}

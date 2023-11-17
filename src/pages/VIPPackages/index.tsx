@@ -148,7 +148,7 @@ export const VIPPackages: React.FC = () => {
   ];
 
   return (
-    <div>
+    <div className="VIP-container">
       <FormAddEditVIPPackage
         isOpen={isModalOpen}
         handleCancel={() => {
@@ -168,16 +168,19 @@ export const VIPPackages: React.FC = () => {
         isEditForm={editedVIPUser != null ? true : false}
       />
       <h2 className="movies-header">VIP Packages</h2>
-      <div className="row">
-        {statusCard.map((item, index) => (
-          <div className="col-3" key={index}>
-            <StatusCard
-              icon={item.icon}
-              count={item.count}
-              title={item.title}
-            />
-          </div>
-        ))}
+      <div className="content-container">
+        <div className="status-container">
+          {statusCard.map((item, index) => (
+            <div className="status-item" key={index}>
+              <StatusCard
+                icon={item.icon}
+                count={item.count}
+                title={item.title}
+              />
+            </div>
+          ))}
+        </div>
+
         <div className="col-12">
           <div className="card__body">
             <Tabs defaultActiveKey="1" items={itemTabs} />

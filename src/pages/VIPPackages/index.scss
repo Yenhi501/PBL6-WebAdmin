@@ -1,3 +1,19 @@
-.search-bar {
-    position: absolute;
+.VIP-container {
+    display: flex;
+    flex-direction: column;
+    
+    .content-container {
+        .status-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+
+            .status-item {
+                flex: 0.25;
+            }
+        }
+    }
+
+
 }
+

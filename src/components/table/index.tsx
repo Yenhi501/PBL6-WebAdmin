@@ -6,8 +6,14 @@ import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
+import { ActorDirector } from '../../model/director-actor';
 
-export type ItemType = ItemVIPPackage | ItemMovies | VIPUser | User;
+export type ItemType =
+  | ItemVIPPackage
+  | ItemMovies
+  | VIPUser
+  | User
+  | ActorDirector;
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;

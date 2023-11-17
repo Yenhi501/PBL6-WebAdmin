@@ -73,7 +73,7 @@ export const UserPage: React.FC = () => {
   ]);
 
   return (
-    <div>
+    <div className="user-container">
       <FormAddEditUser
         isOpen={isModalOpen}
         handleCancel={() => {
@@ -84,16 +84,19 @@ export const UserPage: React.FC = () => {
         isEditForm={editedItem != null ? true : false}
       />
       <h2 className="movies-header">VIP Packages</h2>
-      <div className="row">
-        {statusCard.map((item, index) => (
-          <div className="col-3" key={index}>
-            <StatusCard
-              icon={item.icon}
-              count={item.count}
-              title={item.title}
-            />
-          </div>
-        ))}
+      <div className="content-container">
+        <div className="status-container">
+          {statusCard.map((item, index) => (
+            <div className="status-item" key={index}>
+              <StatusCard
+                icon={item.icon}
+                count={item.count}
+                title={item.title}
+              />
+            </div>
+          ))}
+        </div>
+
         <div className="col-12">
           <div className="card__body">
             <TableVIPPackage
