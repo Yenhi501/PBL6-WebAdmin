@@ -1,0 +1,34 @@
+.revenues-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .revenues-title {
+    font-size: 1.4rem;
+    margin-right: 10px;
+    font-weight: 600;
+  }
+  .revenues-choose__header {
+    background-color: #e5e5e5;
+    border-radius: 50px;
+    padding: 8px 10px;
+    width: 19%;
+    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  button {
+    font-size: 16px;
+    border: none;
+  }
+
+  button.active {
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .revenues-button {
+    padding: 4px 30px;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,21 @@
+.revenues-choose__body {
+  background-color: #e5e5e5;
+  padding: 8px 10px;
+  border-radius: 50px;
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.25);
+
+  .revenues-button {
+    padding: 4px 26px;
+    font-size: 14px;
+  }
+  button {
+    font-size: 16px;
+    border: none;
+  }
+
+  button.active {
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.25);
+  }
+}

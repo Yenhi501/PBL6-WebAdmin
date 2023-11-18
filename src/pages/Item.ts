@@ -1,5 +1,5 @@
 export interface ItemVIPPackage {
-  key: string;
+    key: string;
     id: string,
     name: string,
     user:number,
@@ -14,5 +14,24 @@ export interface ItemVIPPackage {
     dataIndex: string;
     editable?: boolean;
     width?:string;
-    render ?: (text: string, record: ItemVIPPackage) => JSX.Element;
+    render?: (text: string, record: ItemVIPPackage) => JSX.Element;
   }
+
+  export interface ItemRevenues {
+    key: number;
+    id: string;
+    date: string;
+    status: string;
+    payment: string;
+    money: string;
+  }
+  
+
+  export interface ItemRevenuesColumn {
+    title: string;
+    dataIndex: string;
+    editable?: boolean;
+    width?: string;
+    render?: (text: string, record: ItemRevenues) => JSX.Element;
+  }
+  

@@ -1,4 +1,6 @@
+import { Tabs, TabsProps } from 'antd';
 import React, { useState } from 'react';
+import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType } from '../../components/table/index';
 import './index.scss';
@@ -15,6 +17,7 @@ import { TableVIPPackage } from '../../components/table-VIP';
 import { FormAddEditVIPUser } from '../../components/form-VIP/form-add-edit-VIP-user';
 import { VIPUser } from '../../model/VIPUser';
 import moment from 'moment';
+
 
 const dataOrigin: Array<ItemVIPPackage> = [
   {

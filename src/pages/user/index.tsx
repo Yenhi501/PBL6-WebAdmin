@@ -114,4 +114,5 @@ export const UserPage: React.FC = () => {
       </div>
     </div>
   );
+
 };

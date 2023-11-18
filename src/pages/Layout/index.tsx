@@ -1,26 +1,43 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
 import ThemeAction from '../../redux/actions/ThemeAction';
+
 import {
+  LoginOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
+  MenuOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
+  ShoppingCartOutlined,
+  SketchOutlined,
   UserOutlined,
   VideoCameraOutlined,
   MenuOutlined,
   LogoutOutlined,
   LoginOutlined,
   UserSwitchOutlined,
+
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Avatar, Button, Layout, Menu, theme } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { TopNav } from '../../components/topnav/index';
+import ThemeAction from '../../redux/actions/ThemeAction';
+import { VIPPackages } from '../VIPPackages';
 import { Movies } from '../movies';
+
 import { UserPage } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
 import { DAPage } from '../director-actor';
+
+import './index.scss';
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -49,8 +66,19 @@ export const LayoutAdmin: React.FC = () => {
           <div className="demo-logo-vertical" />
           <Menu mode="inline" defaultSelectedKeys={['1']}>
             <div className="menu-title">
-              {collapsed ? <MenuOutlined rev="" /> : <p>CATEGORY</p>}
+              {collapsed ? (
+                <MenuOutlined rev="" />
+              ) : (
+                <div>
+                  <Avatar
+                    shape="square"
+                    size={64}
+                    icon={<UserOutlined rev={undefined} />}
+                  />
+                </div>
+              )}
             </div>
+
 
             <Menu.Item key="1" icon={<UserOutlined rev="" />}>
               <Link to="/movies">Movies</Link>
@@ -71,13 +99,13 @@ export const LayoutAdmin: React.FC = () => {
             {isLogin ? (
               <div className="login">
                 <Menu.Item icon={<LogoutOutlined rev="" />}>
-                  <Link to="/">Log out</Link>
+                  <Link to="/">Đăng xuất</Link>
                 </Menu.Item>
               </div>
             ) : (
               <div className="login">
                 <Menu.Item icon={<LoginOutlined rev="" />}>
-                  <Link to="/login">Log in</Link>
+                  <Link to="/login">Đăng nhập</Link>
                 </Menu.Item>
               </div>
             )}

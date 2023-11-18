@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Form, Popconfirm, Table, Typography } from 'antd';
 import './index.scss';
 import { DeleteOutlined } from '@ant-design/icons';
-import { ItemColumn, ItemVIPPackage } from '../../pages/Item';
+import { ItemColumn, ItemVIPPackage, ItemRevenues } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
@@ -13,7 +13,9 @@ export type ItemType =
   | ItemMovies
   | VIPUser
   | User
-  | ActorDirector;
+  | ActorDirector
+  | ItemRevenues;
+
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;
@@ -108,15 +110,14 @@ export const TableResult = ({
                   } as React.RefObject<HTMLAnchorElement | null>;
                 }}
               >
-                Edit
+                <EditOutlined rev="" />
               </Typography.Link>
               <Popconfirm
                 title="Sure to delete?"
                 onConfirm={() => handleDelete(record.key)}
-                style={{ marginLeft: 8 }}
                 className="btn-delete"
               >
-                <a>Delete</a>
+                <DeleteOutlined rev="" />
               </Popconfirm>
             </span>
           );
@@ -135,17 +136,17 @@ export const TableResult = ({
         <Button
           type="primary"
           size="large"
-          className="btn-delete-all"
-          icon={<DeleteOutlined rev="" />}
+          className="btn-delete-all "
+          icon={<DeleteOutlined rev="" className="icon-delete-all" />}
           onClick={() => handleDeleteAll(selectedRowKeys)}
         >
           Delete
         </Button>
       </div>
-      <Table<ItemType>
+      <Table
         dataSource={data}
+        bordered
         columns={mergedColumns}
-        rowClassName="editable-row"
         onRow={(record) => ({
           onClick: (event) => {
             if (editButtonRefs[record.key]?.current === event.target) {
