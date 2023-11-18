@@ -1,4 +1,7 @@
+
+import { TabsProps, Tag } from 'antd';
 import { UserInfo } from '../../components/userInfo';
+import { ItemColumn } from '../Item';
 
 export const columnTables = [
   {
@@ -21,6 +24,23 @@ export const columnTables = [
   {
     title: 'Status',
     dataIndex: 'status',
+    render: (status: string) => {
+      let color = '';
+      switch (status) {
+        case 'active':
+          color = 'green';
+          break;
+        case 'inactive':
+          color = 'red';
+          break;
+        case 'pending':
+          color = 'orange';
+          break;
+        default:
+          break;
+      }
+      return <Tag color={color}>{status}</Tag>;
+    },
   },
   {
     title: 'Discount',
@@ -32,7 +52,7 @@ export const columnTables = [
   },
 ];
 
-export const columnTablesUserVIP = [
+export const columnTablesUserVIP: ItemColumn[] = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -44,22 +64,23 @@ export const columnTablesUserVIP = [
   },
   {
     title: 'Package',
-    dataIndex: 'package',
+    dataIndex: 'idPackage',
+    render: (idPackage: string) => <div>{idPackage}</div>,
+  },
+  {
+    title: 'Duration',
+    dataIndex: 'durationPackage',
   },
   {
     title: 'Expiration date',
-    dataIndex: 'expireDate',
+    dataIndex: 'dateExpire',
+  },
+  {
+    title: 'Registered date',
+    dataIndex: 'dateRegistered',
   },
   {
     title: 'Day left',
     dataIndex: 'dayLeft',
   },
 ];
-
-export interface VIPUser {
-  key: string;
-  id: string;
-  package: string;
-  expireDate: string;
-  dayLeft: number;
-}

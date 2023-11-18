@@ -1,41 +1,38 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
-import { ItemVIPPackage } from '../../../pages/Item';
+import { ActorDirector } from '../../model/director-actor';
+import moment from 'moment';
 
-export type FormAddEditVIPPackage = {
+export type FormAddEditDA = {
   isEditForm?: boolean;
   isOpen: boolean;
   handleCancel: (props: any) => void;
-  editItem?: ItemVIPPackage | null;
+  editItem?: ActorDirector | null;
 };
 
 const { Option } = Select;
 
 type FieldType = {
   name?: string;
-  time?: string;
-  status?: string;
-  price?: number;
-  discount?: number;
+  dateOfBirth?: string;
+  gender?: string;
 };
 
-export const FormAddEditVIPPackage = ({
+export const FormAddEditDA = ({
   isOpen,
   isEditForm = false,
   editItem = null,
   handleCancel,
-}: FormAddEditVIPPackage) => {
+}: FormAddEditDA) => {
   const [form] = useForm();
 
-  const setEditItemValue = (editItem: ItemVIPPackage) => {
+  const setEditItemValue = (editItem: ActorDirector) => {
     form.setFieldsValue({
       name: editItem.name,
-      time: editItem.time,
-      status: editItem.status,
-      price: editItem.price,
-      discount: editItem.discount,
+      dateOfBirth: moment(editItem.dateOfBirth),
+      gender: editItem.gender,
     });
   };
 
@@ -62,62 +59,47 @@ export const FormAddEditVIPPackage = ({
         autoComplete="off"
         layout="vertical"
         className="form-add-edit-VIP-package"
-        onFinish={(values: ItemVIPPackage) => {}}
+        onFinish={(values: ActorDirector) => {}}
       >
         <Form.Item<FieldType>
-          label="Name"
+          label="Tên"
           name="name"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input />
         </Form.Item>
-
         <Row>
           <Col span={10}>
             <Form.Item<FieldType>
-              label="Time"
-              name="time"
+              label="Ngày sinh"
+              name="dateOfBirth"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
               wrapperCol={{ span: 24 }}
             >
-              <Input />
+              <DatePicker />
             </Form.Item>
           </Col>
 
           <Col span={10} offset={4}>
             <Form.Item<FieldType>
-              label="Status"
-              name="status"
+              label="Giới tính"
+              name="gender"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
               wrapperCol={{ span: 24 }}
             >
               <Select>
-                <Option value="active">Active</Option>
-                <Option value="pending">Pending</Option>
-                <Option value="inactive">Inactive</Option>
+                <Option value="user">Nam</Option>
+                <Option value="VIPUser">Nữ</Option>
+                <Option value="admin">Khác</Option>
               </Select>
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item<FieldType>
-          label="Price"
-          name="price"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType>
-          label="Discount"
-          name="discount"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input />
-        </Form.Item>
         <Row justify={'end'} gutter={16}>
           <Col>
             <Button

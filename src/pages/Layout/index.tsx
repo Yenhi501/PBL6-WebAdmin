@@ -1,3 +1,11 @@
+
+import React, { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import './index.scss';
+import { TopNav } from '../../components/topnav/index';
+import { useSelector, useDispatch } from 'react-redux';
+import ThemeAction from '../../redux/actions/ThemeAction';
+
 import {
   LoginOutlined,
   LogoutOutlined,
@@ -8,6 +16,11 @@ import {
   SketchOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  MenuOutlined,
+  LogoutOutlined,
+  LoginOutlined,
+  UserSwitchOutlined,
+
 } from '@ant-design/icons';
 import { Avatar, Button, Layout, Menu, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -17,9 +30,14 @@ import { TopNav } from '../../components/topnav/index';
 import ThemeAction from '../../redux/actions/ThemeAction';
 import { VIPPackages } from '../VIPPackages';
 import { Movies } from '../movies';
+
+import { UserPage } from '../user';
 import { Revenues } from '../revenues';
-import { User } from '../user';
+import { VIPPackages } from '../VIPPackages';
+import { DAPage } from '../director-actor';
+
 import './index.scss';
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -40,7 +58,7 @@ export const LayoutAdmin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const [selectedItem, setSelectedItem] = useState('Movies');
+
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>
@@ -61,33 +79,21 @@ export const LayoutAdmin: React.FC = () => {
               )}
             </div>
 
-            <Menu.Item
-              key="1"
-              icon={<VideoCameraOutlined rev="" />}
-              onClick={() => setSelectedItem('Movies')}
-            >
-              <Link to="/movies">Phim</Link>
+
+            <Menu.Item key="1" icon={<UserOutlined rev="" />}>
+              <Link to="/movies">Movies</Link>
             </Menu.Item>
-            <Menu.Item
-              key="2"
-              icon={<ShoppingCartOutlined rev="" />}
-              onClick={() => setSelectedItem('Revenues')}
-            >
-              <Link to="/revenues">Doanh thu</Link>
+            <Menu.Item key="2" icon={<VideoCameraOutlined rev="" />}>
+              <Link to="/revenues">Revenues</Link>
             </Menu.Item>
-            <Menu.Item
-              key="3"
-              icon={<SketchOutlined rev="" />}
-              onClick={() => setSelectedItem('VIPPackages')}
-            >
-              <Link to="/vip-packages">Gói Vip</Link>
+            <Menu.Item key="3" icon={<UploadOutlined rev="" />}>
+              <Link to="/vip-packages">VIP packages</Link>
             </Menu.Item>
-            <Menu.Item
-              key="4"
-              icon={<UserOutlined rev="" />}
-              onClick={() => setSelectedItem('User')}
-            >
-              <Link to="/user">Người dùng</Link>
+            <Menu.Item key="4" icon={<UserOutlined rev="" />}>
+              <Link to="/user">User</Link>
+            </Menu.Item>
+            <Menu.Item key="5" icon={<UserSwitchOutlined rev="" />}>
+              <Link to="/director-actor">Director/Actor</Link>
             </Menu.Item>
 
             {isLogin ? (
@@ -137,10 +143,18 @@ export const LayoutAdmin: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            {selectedItem === 'Movies' && <Movies />}
-            {selectedItem === 'Revenues' && <Revenues />}
+            <Routes>
+              <Route path="/" element={<Movies />} />
+              <Route path="/movies" element={<Movies />} />
+              <Route path="/revenues" element={<Revenues />} />
+              <Route path="/vip-packages" element={<VIPPackages />} />
+              <Route path="/user" element={<UserPage />} />
+              <Route path="/director-actor" element={<DAPage />} />
+            </Routes>
+            {/* {selectedItem === 'Movies' && <Movies />} */}
+            {/* {selectedItem === 'Revenues' && <Revenues />}
             {selectedItem === 'VIPPackages' && <VIPPackages />}
-            {selectedItem === 'User' && <User />}
+            {selectedItem === 'User' && <UserPage />} */}
           </Content>
         </Layout>
       </Layout>
