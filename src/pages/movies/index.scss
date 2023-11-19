@@ -6,8 +6,17 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.col-12 {
+  .search-bar {
+    position: absolute;
+    z-index: 1;
+  }
+}
 .card__body {
   position: relative;
+
+
   .btn-new {
     position: absolute;
     right: 120px;
