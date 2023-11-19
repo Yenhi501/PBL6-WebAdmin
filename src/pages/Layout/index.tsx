@@ -1,10 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
-import ThemeAction from '../../redux/actions/ThemeAction';
 
 import {
   LoginOutlined,
@@ -16,28 +14,18 @@ import {
   SketchOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  MenuOutlined,
-  LogoutOutlined,
-  LoginOutlined,
   UserSwitchOutlined,
-
+  UploadOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Layout, Menu, theme } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { TopNav } from '../../components/topnav/index';
 import ThemeAction from '../../redux/actions/ThemeAction';
-import { VIPPackages } from '../VIPPackages';
 import { Movies } from '../movies';
-
 import { UserPage } from '../user';
 import { Revenues } from '../revenues';
 import { VIPPackages } from '../VIPPackages';
 import { DAPage } from '../director-actor';
 
 import './index.scss';
-
 
 const { Header, Sider, Content } = Layout;
 
@@ -78,7 +66,6 @@ export const LayoutAdmin: React.FC = () => {
                 </div>
               )}
             </div>
-
 
             <Menu.Item key="1" icon={<UserOutlined rev="" />}>
               <Link to="/movies">Movies</Link>

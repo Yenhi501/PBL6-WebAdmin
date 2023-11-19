@@ -1,23 +1,15 @@
-import { Tabs, TabsProps } from 'antd';
 import React, { useState } from 'react';
-import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType } from '../../components/table/index';
 import './index.scss';
-import { Button, Modal, Tabs, TabsProps } from 'antd';
-import { DatePicker, Form, Input, Select } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import { ItemVIPPackage } from '../Item';
-import dayjs from 'dayjs';
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
-import { PosterUpload } from '../../components/upload-poster';
 import { columnTables, columnTablesUserVIP } from './value-item-component';
-import { ItemMovies } from '../movies';
 import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
 import { TableVIPPackage } from '../../components/table-VIP';
 import { FormAddEditVIPUser } from '../../components/form-VIP/form-add-edit-VIP-user';
 import { VIPUser } from '../../model/VIPUser';
 import moment from 'moment';
-
 
 const dataOrigin: Array<ItemVIPPackage> = [
   {

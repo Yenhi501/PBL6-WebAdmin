@@ -2,21 +2,7 @@ import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType } from '../../components/table/index';
 import './index.scss';
-import { Button, Modal, Tabs, TabsProps } from 'antd';
-import { DatePicker, Form, Input, Select } from 'antd';
-import { ItemVIPPackage } from '../Item';
-import dayjs from 'dayjs';
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
-import { PosterUpload } from '../../components/upload-poster';
-import {
-  columnTables,
-  columnTablesUserVIP,
-} from '../VIPPackages/value-item-component';
-import { ItemMovies } from '../movies';
-import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
 import { TableVIPPackage } from '../../components/table-VIP';
-import { FormAddEditVIPUser } from '../../components/form-VIP/form-add-edit-VIP-user';
-import { VIPUser } from '../../model/VIPUser';
 import { FormAddEditUser } from '../../components/form-user';
 import { User } from '../../model/user';
 import { columnTableUser } from './column-table-user';
@@ -114,5 +100,4 @@ export const UserPage: React.FC = () => {
       </div>
     </div>
   );
-
 };

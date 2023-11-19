@@ -1,12 +1,12 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Form, Popconfirm, Table, Typography } from 'antd';
 import './index.scss';
-import { DeleteOutlined } from '@ant-design/icons';
 import { ItemColumn, ItemVIPPackage, ItemRevenues } from '../../pages/Item';
 import { ItemMovies } from '../../pages/movies';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
 import { ActorDirector } from '../../model/director-actor';
+import { useState } from 'react';
 
 export type ItemType =
   | ItemVIPPackage
