@@ -6,7 +6,11 @@ import { ItemMovies } from '../../pages/movies';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
 import { ActorDirector } from '../../model/director-actor';
+import { Episode } from '../../model/episode';
+
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SetIsEditMovies } from '../../redux/actions/movie-action';
 
 export type ItemType =
   | ItemVIPPackage
@@ -14,23 +18,27 @@ export type ItemType =
   | VIPUser
   | User
   | ActorDirector
-  | ItemRevenues;
+  | ItemRevenues
+  | Episode;
 
 export interface ItemTable {
   originData: ItemType[];
   columns: Array<ItemColumn>;
   needOperationColumn: boolean;
   onEdit: (record: ItemType | null) => void;
+  onClickRow?: (record: ItemType | null) => void;
 }
 export const TableResult = ({
   originData,
   columns,
   needOperationColumn,
   onEdit,
+  onClickRow = () => {},
 }: ItemTable) => {
   const [editButtonRefs, setEditButtonRefs] = useState<{
     [key: string]: React.RefObject<HTMLAnchorElement | null>;
   }>({});
+  const [isEdit, setIsEdit] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -64,10 +72,8 @@ export const TableResult = ({
   };
 
   const handleDelete = (key: React.Key) => {
-    console.log(key);
     const newData = data.filter((item) => item.key !== key);
     setData(newData);
-    console.log(newData);
 
     setPaginationConfig({
       ...paginationConfig,
@@ -75,18 +81,17 @@ export const TableResult = ({
     });
   };
   const handleDeleteAll = (selectedRowKeys: React.Key[]) => {
-    console.log(selectedRowKeys);
     const newData = data.filter(
       (items) => !selectedRowKeys.includes(items.key),
     );
     setData(newData);
-    console.log(newData);
     setPaginationConfig({
       ...paginationConfig,
       total: newData.length,
     });
   };
   //edit
+
   const handleEdit = (record: ItemType) => {
     onEdit(record);
   };
@@ -102,22 +107,38 @@ export const TableResult = ({
           return (
             <span className="btn-operation">
               <Typography.Link
-                onClick={() => handleEdit(record)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEdit(record);
+                }}
                 style={{ marginRight: -20, color: 'green' }}
                 ref={(button) => {
                   editButtonRefs[record.key] = {
                     current: button,
                   } as React.RefObject<HTMLAnchorElement | null>;
                 }}
+                className="table-icon"
               >
                 <EditOutlined rev="" />
               </Typography.Link>
               <Popconfirm
                 title="Sure to delete?"
-                onConfirm={() => handleDelete(record.key)}
+                onConfirm={(event) => {
+                  event?.stopPropagation();
+                  handleDelete(record.key);
+                }}
+                onCancel={(event) => {
+                  event?.stopPropagation();
+                }}
                 className="btn-delete"
               >
-                <DeleteOutlined rev="" />
+                <DeleteOutlined
+                  rev=""
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  className="table-icon"
+                />
               </Popconfirm>
             </span>
           );
@@ -131,7 +152,7 @@ export const TableResult = ({
   });
 
   return (
-    <Form form={form} component={false}>
+    <Form form={form} component={false} className="table-container">
       <div className="btn-action">
         <Button
           type="primary"
@@ -148,10 +169,8 @@ export const TableResult = ({
         bordered
         columns={mergedColumns}
         onRow={(record) => ({
-          onClick: (event) => {
-            if (editButtonRefs[record.key]?.current === event.target) {
-              handleEdit(record);
-            }
+          onClick: () => {
+            onClickRow(record);
           },
         })}
         pagination={

@@ -1,0 +1,1 @@
+export { FormDetailMovie } from './form-detail-movie'

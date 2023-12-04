@@ -7,6 +7,7 @@ import { FormAddEditUser } from '../../components/form-user';
 import { User } from '../../model/user';
 import { columnTableUser } from './column-table-user';
 import moment from 'moment';
+import { Button } from 'antd';
 
 export const statusCard = [
   {
@@ -33,6 +34,7 @@ export const statusCard = [
 
 export const UserPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTestOpen, setIsTestOpen] = useState(false);
   const [editedItem, setEditedItem] = useState<User | null>(null);
   const [data, setData] = useState<Array<User>>([
     {
@@ -82,6 +84,7 @@ export const UserPage: React.FC = () => {
             </div>
           ))}
         </div>
+        <Button onClick={() => setIsTestOpen(true)}>Add movie</Button>
 
         <div className="col-12">
           <div className="card__body">

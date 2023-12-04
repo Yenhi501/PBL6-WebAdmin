@@ -1,12 +1,12 @@
-const ThemeReducer = (state = {}, action) => {
+export const ThemeReducer = (state = {}, action) => {
   switch (action.type) {
-    case "SET_MODE":
+    case 'SET_MODE':
       return {
         ...state,
         mode: action.payload,
       };
 
-    case "SET_COLOR":
+    case 'SET_COLOR':
       return {
         ...state,
         color: action.payload,
@@ -16,5 +16,3 @@ const ThemeReducer = (state = {}, action) => {
       return state;
   }
 };
-
-export default ThemeReducer;

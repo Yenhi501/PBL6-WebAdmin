@@ -16,16 +16,27 @@
     color: #1c80dc;
   }
 }
-table {
-  border-collapse: collapse;
-  text-align: center;
-  .ant-table-thead tr {
-    border-top-width: 0px;
+.table-container {
+  table {
+    border-collapse: collapse;
+    text-align: center;
+    .ant-table-thead tr {
+      border-top-width: 0px;
+    }
+    tr {
+      border-color: #0f0f0f;
+      border-top-width: 2px;
+      border-bottom-width: 0px;
+    }
   }
-  tr {
-    border-color: #0f0f0f;
-    border-top-width: 2px;
-    border-bottom-width: 0px;
+
+  .table-icon {
+    padding: 5;
+
+    &:hover {
+      background-color: #ccc;
+    }
+    
   }
 }
 .btn-operation {

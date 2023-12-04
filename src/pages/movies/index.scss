@@ -27,39 +27,3 @@
   // height: 500px !important;
   // top:10px !important;
 }
-.content-edit {
-  display: flex;
-
-  .poster {
-    width: 40%;
-  }
-  .content {
-    width: 50%;
-    margin-left: 5%;
-
-    .item {
-      display: flex;
-      flex-direction: row;
-      .ant-form-item {
-        width: 50%;
-      }
-      .ant-form-item + .ant-form-item {
-        margin-left: 20px;
-      }
-    }
-    .ant-form-item .ant-form-item-label {
-      text-align: start;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .ant-picker {
-      width: 100%;
-    }
-  }
-  .ant-row {
-    display: flex;
-    flex-direction: column;
-    flex-flow: column wrap;
-    min-width: 0;
-  }
-}
