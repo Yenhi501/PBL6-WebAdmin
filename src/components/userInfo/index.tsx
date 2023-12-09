@@ -8,7 +8,7 @@ export type UserInfo = {
   name: string;
   email: string;
 };
-export const UserInfo = ({ id, isShowEmail }: UserInfoComponent) => {
+export const UserInfo = ({ id, isShowEmail = true }: UserInfoComponent) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
     avt: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
     name: 'Nguyen Ngoc Bao Long',
@@ -20,7 +20,7 @@ export const UserInfo = ({ id, isShowEmail }: UserInfoComponent) => {
       <Avatar src={<img src={userInfo.avt} alt="avatar" />} size={50} />
       <div className="user-info">
         <h3 className="user-name">{userInfo.name}</h3>
-        <p className="user-email" hidden={isShowEmail}>
+        <p className="user-email" hidden={!isShowEmail}>
           {userInfo.email}
         </p>
       </div>

@@ -1,0 +1,28 @@
+.form-detail-movie {
+
+    .form-detail-movie-image-container {
+        display: flex;
+        justify-content: center;
+        gap: 70px;
+
+        .form-detail-movie-image-item {
+
+            .image-title {
+                font-weight: 500;
+            }
+        }
+    }
+
+    .form-detail-movie-desc {
+        margin: 20px 0;
+    }
+
+    .btn-new {
+        position: absolute;
+        right: 15%;
+    }
+}
+
+.modal-episode {
+    width: 500px !important;
+}
