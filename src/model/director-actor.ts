@@ -1,8 +1,12 @@
 export interface ActorDirector {
-    key: string;
+    key: number;
     id: string,
     name: string,
     dateOfBirth: string,
     gender: string,
-    amountOfFilm: number
+    amountOfFilm: number,
+    description: string,
+    poster: string,
+    actorId: string,
+    directorId: string,
 }

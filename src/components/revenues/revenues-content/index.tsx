@@ -1,13 +1,14 @@
-import { DatePicker, Form, Input, Modal, Select, Tag } from 'antd';
+import { Button, DatePicker, Form, Input, Modal, Select, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ItemRevenues } from '../../../pages/Item';
 import { ItemType, TableResult } from '../../table';
-import { UserInfo } from '../../userInfo';
 import './index.scss';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import { columns } from './columns';
+import Search from 'antd/es/input/Search';
 dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
@@ -117,57 +118,6 @@ const dataOriginWeek: Array<ItemRevenues> = [
   },
 ];
 
-const columns = [
-  {
-    title: 'Id',
-    dataIndex: 'id',
-    width: '10%',
-  },
-  {
-    title: 'Username',
-    dataIndex: 'username',
-    render: (id: string) => <UserInfo id={id} />,
-    width: '20%',
-  },
-  {
-    title: 'Date',
-    dataIndex: 'date',
-    width: '20%',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    width: '15%',
-    render: (status: string) => {
-      let color = '';
-      switch (status.toLowerCase()) {
-        case 'active':
-          color = 'green';
-          break;
-        case 'inactive':
-          color = 'red';
-          break;
-        case 'pending':
-          color = 'orange';
-          break;
-        default:
-          break;
-      }
-      return <Tag color={color}>{status}</Tag>;
-    },
-  },
-  {
-    title: 'Payment method',
-    dataIndex: 'payment',
-    width: '15%',
-  },
-  {
-    title: 'Money',
-    dataIndex: 'money',
-    width: '10%',
-  },
-];
-
 export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   selectedContent,
   selectedView,
@@ -179,6 +129,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
   const [editedItem, setEditedItem] = useState<ItemRevenues | null>(null);
   const [data, setData] = useState<Array<ItemRevenues>>(dataOriginWeek);
+  const [resetData, setResetData] = useState(0);
   const handleOk = () => {
     if (editedItem) {
       const updatedData = data.map((item) => {
@@ -213,6 +164,12 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
 
   return (
     <div className="content">
+      <div className="search-bar">
+        <Search placeholder="Nhập tên/mô tả phim" />
+        <Button onClick={() => setResetData((prev) => prev + 1)}>
+          Làm mới
+        </Button>
+      </div>
       {selectedContent === 'VIP' && selectedView === 'Week' && (
         <TableResult
           key={tableKey}

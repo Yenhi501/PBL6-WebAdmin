@@ -1,32 +1,32 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Popconfirm, Table, Typography } from 'antd';
 import './index.scss';
 import { ItemColumn, ItemVIPPackage, ItemRevenues } from '../../pages/Item';
-import { ItemMovies } from '../../pages/movies';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
 import { ActorDirector } from '../../model/director-actor';
-import { Episode } from '../../model/episode';
-
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SetIsEditMovies } from '../../redux/actions/movie-action';
+import { useEffect, useState } from 'react';
+import { ColumnsType } from 'antd/es/table';
+import { EpisodeRaw, ItemMovieHandled } from '../../model/movie';
 
 export type ItemType =
   | ItemVIPPackage
-  | ItemMovies
+  | ItemMovieHandled
   | VIPUser
   | User
   | ActorDirector
   | ItemRevenues
-  | Episode;
+  | EpisodeRaw;
 
 export interface ItemTable {
   originData: ItemType[];
-  columns: Array<ItemColumn>;
+  columns: ColumnsType<ItemType>;
   needOperationColumn: boolean;
   onEdit: (record: ItemType | null) => void;
   onClickRow?: (record: ItemType | null) => void;
+  onAdd?: (props?: any) => void;
+  totalData?: number;
+  onChangePagination?: (props?: any) => void;
 }
 export const TableResult = ({
   originData,
@@ -34,11 +34,14 @@ export const TableResult = ({
   needOperationColumn,
   onEdit,
   onClickRow = () => {},
+  onAdd = () => {},
+  onChangePagination = () => {},
+  totalData,
 }: ItemTable) => {
   const [editButtonRefs, setEditButtonRefs] = useState<{
     [key: string]: React.RefObject<HTMLAnchorElement | null>;
   }>({});
-  const [isEdit, setIsEdit] = useState(false);
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -50,26 +53,17 @@ export const TableResult = ({
   };
 
   const [form] = Form.useForm();
-  const [data, setData] = useState<ItemType[]>(originData);
+  const [data, setData] = useState<ItemType[]>([]);
+
+  useEffect(() => {
+    setData(originData);
+  }, [originData]);
 
   //chia page
   const [paginationConfig, setPaginationConfig] = useState({
     defaultPageSize: 8,
     total: originData.length,
   });
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageData, setCurrentPageData] = useState(
-    data.slice(0, paginationConfig.defaultPageSize),
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    const startIndex = (page - 1) * paginationConfig.defaultPageSize;
-    const endIndex = startIndex + paginationConfig.defaultPageSize;
-    const newCurrentPageData = data.slice(startIndex, endIndex);
-    setCurrentPageData(newCurrentPageData);
-  };
 
   const handleDelete = (key: React.Key) => {
     const newData = data.filter((item) => item.key !== key);
@@ -100,9 +94,9 @@ export const TableResult = ({
     columns = [
       ...columns,
       {
-        title: 'Operation',
+        title: 'Tiện ích',
         dataIndex: 'operation',
-        width: '10%',
+        width: '20vh',
         render: (_: any, record: ItemType) => {
           return (
             <span className="btn-operation">
@@ -157,11 +151,20 @@ export const TableResult = ({
         <Button
           type="primary"
           size="large"
+          className="btn-new"
+          icon={<PlusOutlined rev="" style={{ color: 'white' }} />}
+          onClick={onAdd}
+        >
+          Thêm
+        </Button>
+        <Button
+          type="primary"
+          size="large"
           className="btn-delete-all "
           icon={<DeleteOutlined rev="" className="icon-delete-all" />}
           onClick={() => handleDeleteAll(selectedRowKeys)}
         >
-          Delete
+          Xóa hàng loạt
         </Button>
       </div>
       <Table
@@ -173,15 +176,20 @@ export const TableResult = ({
             onClickRow(record);
           },
         })}
-        pagination={
-          paginationConfig.total > paginationConfig.defaultPageSize
-            ? {
-                ...paginationConfig,
-                current: currentPage,
-                onChange: handlePageChange,
-              }
-            : false
-        }
+        // pagination={
+        //   paginationConfig.total > paginationConfig.defaultPageSize
+        //     ? {
+        //         ...paginationConfig,
+        //         current: currentPage,
+        //         onChange: handlePageChange,
+        //       }
+        //     : false
+        // }
+        pagination={{
+          total: totalData,
+          onChange: (e) => onChangePagination(e),
+          pageSize: 5,
+        }}
         scroll={{ x: 'max-content' }}
         rowSelection={{
           ...rowSelection,

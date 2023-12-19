@@ -1,134 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { ItemType } from '../../components/table/index';
+import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
-import { Tabs, TabsProps } from 'antd';
-import { TableVIPPackage } from '../../components/table-VIP';
-import moment from 'moment';
-import { columnTables } from './columns-table-director-user';
+import { Button, Tabs } from 'antd';
+import {
+  getColumnTables,
+  itemTabs,
+  statusCard,
+} from './columns-table-director-user';
 import { ActorDirector } from '../../model/director-actor';
 import { FormAddEditDA } from '../../components/form-actor-director';
+import Search from 'antd/es/input/Search';
+import axios from 'axios';
 
-const dataDirector: Array<ActorDirector> = [
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-];
-
-const dataActor: Array<ActorDirector> = [
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    dateOfBirth: moment('2020-06-09T12:40:14+0000').calendar(),
-    gender: 'Nam',
-    amountOfFilm: 30,
-  },
-];
-
-export const statusCard = [
-  {
-    icon: 'bx bx-shopping-bag',
-    count: '3',
-    title: 'Diễn viên',
-  },
-  {
-    icon: 'bx bx-cart',
-    count: '200',
-    title: 'Đạo diễn',
-  },
-  {
-    icon: 'bx bx-dollar-circle',
-    count: '50',
-    title: 'Diễn viên mới',
-  },
-  {
-    icon: 'bx bx-receipt',
-    count: '20',
-    title: 'Đạo diễn mới',
-  },
-];
+const urlQueryMap: Record<string, string> = {
+  '1': 'http://localhost:8000/api/individuals/actors',
+  '2': 'http://localhost:8000/api/individuals/directors',
+};
 
 export const DAPage: React.FC = () => {
   const [isModalAOpen, setIsModalAOpen] = useState(false);
-  const [isModalDOpen, setIsModalDOpen] = useState(false);
-  const [editedItemA, setEditedItemA] = useState<ActorDirector | null>(null);
-  const [editedItemD, setEditedItemD] = useState<ActorDirector | null>(null);
+  const [editedItem, setEditedItem] = useState<ActorDirector | null>(null);
+  const [data, setData] = useState<Array<ActorDirector>>([]);
+  const [resetData, setResetData] = useState(0);
+  const [activeKey, setActiveKey] = useState<string>('1');
+  const [totalItems, setTotalItems] = useState(0);
+  const [currPage, setCurrentPage] = useState(1);
 
-  const [dataA, setDataA] = useState<Array<ActorDirector>>(dataActor);
-  const [dataD, setDataD] = useState<Array<ActorDirector>>(dataDirector);
+  const getData = (nameSearch?: string) => {
+    const params =
+      nameSearch != null
+        ? { name: nameSearch, page: currPage, pageSize: 5 }
+        : {
+            page: currPage,
+            pageSize: 5,
+          };
+    axios({
+      method: 'GET',
+      url: urlQueryMap[activeKey],
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: params,
+    })
+      .then((response) => {
+        const dataRes = response.data.data;
 
-  const itemTabs: TabsProps['items'] = [
-    {
-      key: '1',
-      label: 'Diễn viên',
-      children: (
-        <TableVIPPackage
-          originData={dataA}
-          columns={columnTables}
-          needOperationColumn={true}
-          onEdit={(record: ItemType | null) => {
-            setEditedItemA(record ? ({ ...record } as ActorDirector) : null);
-            setIsModalAOpen(true);
-          }}
-          onNewBtnClick={() => setIsModalAOpen(true)}
-        />
-      ),
-    },
-    {
-      key: '2',
-      label: 'Đạo diễn',
-      children: (
-        <TableVIPPackage
-          originData={dataD}
-          columns={columnTables}
-          needOperationColumn={true}
-          onEdit={(record: ItemType | null) => {
-            setEditedItemD(record ? ({ ...record } as ActorDirector) : null);
-            setIsModalDOpen(true);
-          }}
-          onNewBtnClick={() => setIsModalDOpen(true)}
-        />
-      ),
-    },
-  ];
+        if (activeKey === '1') {
+          dataRes.actors.forEach(
+            (actor: ActorDirector, index: number) => (actor.key = index + 1),
+          );
+          setData(dataRes.actors);
+          setTotalItems(dataRes.totalActors);
+        } else {
+          dataRes.directors.forEach(
+            (actor: ActorDirector, index: number) => (actor.key = index + 1),
+          );
+          setData(dataRes.directors);
+          setTotalItems(dataRes.totalDirectors);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, [resetData, activeKey, currPage]);
 
   return (
     <div className="director-actor-container">
@@ -136,20 +75,13 @@ export const DAPage: React.FC = () => {
         isOpen={isModalAOpen}
         handleCancel={() => {
           setIsModalAOpen(false);
-          setEditedItemA(null);
+          setEditedItem(null);
         }}
-        editItem={editedItemA}
-        isEditForm={editedItemA != null ? true : false}
+        editItem={editedItem}
+        isEditForm={editedItem != null ? true : false}
+        resetDataTable={() => setResetData((prev) => prev + 1)}
       />
-      <FormAddEditDA
-        isOpen={isModalDOpen}
-        handleCancel={() => {
-          setIsModalDOpen(false);
-          setEditedItemD(null);
-        }}
-        editItem={editedItemD}
-        isEditForm={editedItemD != null ? true : false}
-      />
+
       <h2 className="movies-header">VIP Packages</h2>
       <div className="content-container">
         <div className="status-container">
@@ -166,7 +98,31 @@ export const DAPage: React.FC = () => {
 
         <div className="col-12">
           <div className="card__body">
-            <Tabs defaultActiveKey="1" items={itemTabs} />
+            <Tabs
+              activeKey={activeKey}
+              items={itemTabs}
+              onChange={(e) => setActiveKey(e)}
+            />
+            <div className="search-bar">
+              <Search placeholder="Nhập tên" onSearch={(e) => getData(e)} />
+              <Button onClick={() => setResetData((prev) => prev + 1)}>
+                Làm mới
+              </Button>
+            </div>
+            <TableResult
+              originData={data || []}
+              columns={getColumnTables(
+                activeKey === '1' ? 'actor' : 'director',
+              )}
+              needOperationColumn={true}
+              onEdit={(record: ItemType | null) => {
+                setEditedItem(record ? ({ ...record } as ActorDirector) : null);
+                setIsModalAOpen(true);
+              }}
+              onAdd={() => setIsModalAOpen(true)}
+              totalData={totalItems}
+              onChangePagination={(e) => setCurrentPage(e)}
+            />
           </div>
         </div>
       </div>

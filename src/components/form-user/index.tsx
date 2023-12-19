@@ -1,46 +1,113 @@
-import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
-import React, { useEffect } from 'react';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Spin,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
+
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
-import { User } from '../../model/user';
+import { User, UserAdd, UserEdit } from '../../model/user';
+import axios from 'axios';
 
 export type FormAddEditUser = {
   isEditForm?: boolean;
   isOpen: boolean;
-  handleCancel: (props: any) => void;
+  handleCancel: (props?: any) => void;
   editItem?: User | null;
+  resetDataTable?: (props?: any) => void;
 };
 
 const { Option } = Select;
 
 type FieldType = {
-  id?: string;
-  email?: string;
-  role?: string;
-  status?: string;
-  currentPassword?: string;
-  newPassword?: string;
+  username: string;
+  email: string;
+  role: number;
+  active: boolean;
+  password: string;
+  gender: string;
+  dateOfBirth: string;
 };
 
 export const FormAddEditUser = ({
   isOpen,
   isEditForm = false,
   editItem = null,
-  handleCancel,
+  handleCancel = () => {},
+  resetDataTable = () => {},
 }: FormAddEditUser) => {
   const [form] = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const setEditItemValue = (editItem: User) => {
     form.setFieldsValue({
-      id: editItem.id,
-      role: editItem.role,
-      status: editItem.status,
+      username: editItem.account.username,
+      email: editItem.email,
+      gender: editItem.gender,
+      dateOfBirth: moment(editItem.dateOfBirth),
     });
+  };
+
+  const addUser = (data: FieldType) => {
+    const handledData: UserAdd = {
+      username: data.username,
+      dateOfBirth: moment(data.dateOfBirth).format('YYYY-MM-DD HH:mm:ss.SSSZ'),
+      email: data.email,
+      gender: data.gender,
+      password: data.password,
+    };
+    setIsLoading(true);
+    axios
+      .post('http://localhost:8000/api/user/create-user', handledData, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((res) => {
+        handleCancel();
+        resetDataTable();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  const editUser = (data: FieldType) => {
+    const handledData: UserEdit = {
+      userId: editItem?.userId || 0,
+      username: data.username,
+      dateOfBirth: moment(data.dateOfBirth).format('YYYY-MM-DD HH:mm:ss.SSSZ'),
+      email: data.email,
+      gender: data.gender,
+    };
+
+    setIsLoading(true);
+    axios
+      .put('http://localhost:8000/api/user/update-user', handledData, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((res) => {
+        handleCancel();
+        resetDataTable();
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
     form.resetFields();
+    setIsLoading(false);
     if (editItem != null) {
       setEditItemValue(editItem);
     }
@@ -54,106 +121,96 @@ export const FormAddEditUser = ({
       className="modal-VIP-package"
       onCancel={handleCancel}
     >
-      <Form
-        form={form}
-        name="VIP-package"
-        wrapperCol={{ span: 24 }}
-        initialValues={{ remember: true }}
-        autoComplete="off"
-        layout="vertical"
-        className="form-add-edit-VIP-package"
-        onFinish={(values: User) => {}}
+      <Spin
+        indicator={<LoadingOutlined rev={''} style={{ fontSize: 24 }} spin />}
+        spinning={isLoading}
       >
-        <Form.Item<FieldType>
-          label="Username"
-          name="id"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+        <Form
+          form={form}
+          name="form-add-edit-user"
+          wrapperCol={{ span: 24 }}
+          initialValues={{ remember: true }}
+          autoComplete="off"
+          layout="vertical"
+          className="form-add-edit-user"
+          onFinish={(values: FieldType) => {
+            isEditForm === true ? editUser(values) : addUser(values);
+          }}
         >
-          <Input disabled={isEditForm} />
-        </Form.Item>
-        <Form.Item<FieldType>
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: 'Please input your username!' }]}
-          hidden={isEditForm}
-        >
-          <Input />
-        </Form.Item>
-        <Row>
-          <Col span={10}>
-            <Form.Item<FieldType>
-              label="Status"
-              name="status"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-              wrapperCol={{ span: 24 }}
-            >
-              <Select>
-                <Option value="active">Active</Option>
-                <Option value="ban">Ban</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-
-          <Col span={10} offset={4}>
-            <Form.Item<FieldType>
-              label="Role"
-              name="role"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-              wrapperCol={{ span: 24 }}
-            >
-              <Select>
-                <Option value="user">User</Option>
-                <Option value="VIPUser">VIP User</Option>
-                <Option value="admin">Admin</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={10}>
-            <Form.Item<FieldType>
-              label="Current password"
-              name="currentPassword"
-              wrapperCol={{ span: 24 }}
-            >
-              <Input.Password />
-            </Form.Item>
-          </Col>
-
-          <Col span={10} offset={4}>
-            <Form.Item<FieldType>
-              label="New password"
-              name="newPassword"
-              wrapperCol={{ span: 24 }}
-            >
-              <Input.Password />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row justify={'end'} gutter={16}>
-          <Col>
-            <Button
-              type="default"
-              onClick={() =>
-                editItem != null
-                  ? setEditItemValue(editItem)
-                  : form.resetFields()
-              }
-            >
-              Reset
-            </Button>
-          </Col>
-          <Col>
-            <Button type="primary" htmlType="submit">
-              {isEditForm === true ? 'Save' : 'Submit'}
-            </Button>
-          </Col>
-        </Row>
-      </Form>
+          <Form.Item<FieldType>
+            label="Tên người dùng"
+            name="username"
+            rules={[
+              { required: true, message: 'Vui lòng nhập tên người dùng!' },
+            ]}
+          >
+            <Input disabled={isEditForm} />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: 'Email không hợp lệ!', type: 'email' },
+            ]}
+          >
+            <Input disabled={isEditForm} />
+          </Form.Item>
+          <Row>
+            <Col span={10}>
+              <Form.Item<FieldType> label="Giới tính" name="gender">
+                <Select>
+                  <Option value="male">Nam</Option>
+                  <Option value="female">Nữ</Option>
+                  <Option value="other">Khác</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={10} offset={4}>
+              <Form.Item<FieldType>
+                name="dateOfBirth"
+                label="Ngày sinh"
+                wrapperCol={{ span: 24 }}
+              >
+                <DatePicker
+                  className="date-picker"
+                  placeholder="DD-MM-YYYY"
+                  format={'DD-MM-YYYY'}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item<FieldType>
+            label="Mật khẩu"
+            name="password"
+            wrapperCol={{ span: 24 }}
+            rules={[
+              { required: !isEditForm, message: 'Vui lòng nhập mật khẩu!' },
+            ]}
+            hidden={isEditForm}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Row justify={'end'} gutter={16}>
+            <Col>
+              <Button
+                type="default"
+                onClick={() =>
+                  editItem != null
+                    ? setEditItemValue(editItem)
+                    : form.resetFields()
+                }
+              >
+                Khôi phục
+              </Button>
+            </Col>
+            <Col>
+              <Button type="primary" htmlType="submit">
+                {isEditForm === true ? 'Cập nhật' : 'Thêm'}
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Spin>
     </Modal>
   );
 };

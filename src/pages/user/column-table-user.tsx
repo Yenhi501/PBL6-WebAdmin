@@ -1,41 +1,69 @@
 import { Tag } from 'antd';
 import { UserInfo } from '../../components/userInfo';
-import { ItemColumn } from '../Item';
+import { ColumnsType } from 'antd/es/table';
+import { ItemType } from '../../components/table';
+import moment from 'moment';
 
-export const columnTableUser: ItemColumn[] = [
+export const roleMap: Record<number, string> = {
+  0: 'Chủ',
+  1: 'Quản lý',
+  2: 'Người dùng',
+};
+
+export const columnTableUser: ColumnsType<ItemType> = [
   {
-    title: 'Username',
-    dataIndex: 'id',
-    render: (idUser: string) => <UserInfo id={idUser} />,
-    width: '40%',
+    title: 'STT',
+    dataIndex: 'key',
+    render: (value) => <>{Number(value) >= 10 ? value : '0' + value}</>,
   },
   {
-    title: 'Created date',
-    dataIndex: 'dateCreated',
-    width: '15%',
+    title: 'Người dùng',
+    dataIndex: 'userId',
+    render: (idUser: number) => <UserInfo id={idUser} />,
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    width: '15%',
-    render: (status: string) => {
+    title: 'Ngày sinh',
+    dataIndex: 'dateOfBirth',
+    render: (dateOfBirth: string) => (
+      <>{moment(dateOfBirth).format('DD-MM-YYYY')}</>
+    ),
+  },
+  {
+    title: 'Giới tính',
+    dataIndex: 'gender',
+  },
+  {
+    title: 'Ngày tham gia',
+    dataIndex: 'createdAt',
+    render: (createdAt: string) => (
+      <>{moment(createdAt).format('DD-MM-YYYY')}</>
+    ),
+  },
+  {
+    title: 'Trạng thái',
+    dataIndex: 'active',
+    render: (active: boolean) => {
       let color = '';
-      switch (status) {
-        case 'Active':
+      switch (active) {
+        case true:
           color = 'green';
           break;
-        case 'Ban':
+        case false:
           color = 'red';
           break;
         default:
           break;
       }
-      return <Tag color={color}>{status}</Tag>;
+      return (
+        <Tag color={color}>
+          {active === true ? 'Hoạt động' : 'Chưa kích hoạt'}
+        </Tag>
+      );
     },
   },
   {
-    title: 'Role',
+    title: 'Vai trò',
     dataIndex: 'role',
-    width: '15%',
+    render: (role: number) => <>{roleMap[role]}</>,
   },
 ];

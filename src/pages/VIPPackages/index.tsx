@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { ItemType } from '../../components/table/index';
+import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
-import { Tabs, TabsProps } from 'antd';
+import { Button, Tabs, TabsProps } from 'antd';
 import { ItemVIPPackage } from '../Item';
-import { columnTables, columnTablesUserVIP } from './value-item-component';
+import {
+  columnTables,
+  columnTablesUserVIP,
+  itemTabs,
+  statusCard,
+} from './value-item-component';
 import { FormAddEditVIPPackage } from '../../components/form-VIP/form-add-edit-VIP-package';
-import { TableVIPPackage } from '../../components/table-VIP';
 import { FormAddEditVIPUser } from '../../components/form-VIP/form-add-edit-VIP-user';
 import { VIPUser } from '../../model/VIPUser';
 import moment from 'moment';
+import Search from 'antd/es/input/Search';
+import axios from 'axios';
 
 const dataOrigin: Array<ItemVIPPackage> = [
   {
@@ -20,26 +26,6 @@ const dataOrigin: Array<ItemVIPPackage> = [
     time: 30,
     status: 'active',
     discount: 10,
-    price: 19,
-  },
-  {
-    key: '1',
-    id: 'VHY',
-    name: 'VIP by 6 month',
-    user: 20,
-    time: 133,
-    status: 'active',
-    discount: 0,
-    price: 19,
-  },
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    user: 20,
-    time: 365,
-    status: 'pending',
-    discount: 20,
     price: 19,
   },
 ];
@@ -54,93 +40,34 @@ const dataOriginVIPUser: Array<VIPUser> = [
     dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
     dayLeft: 30,
   },
-  {
-    key: '2',
-    id: '2',
-    idPackage: 'V1',
-    durationPackage: 30,
-    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
-    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
-    dayLeft: 30,
-  },
-  {
-    key: '3',
-    id: '3',
-    idPackage: 'V1',
-    durationPackage: 30,
-    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
-    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
-    dayLeft: 30,
-  },
 ];
 
-export const statusCard = [
-  {
-    icon: 'bx bx-shopping-bag',
-    count: '3',
-    title: 'VIP packages',
-  },
-  {
-    icon: 'bx bx-cart',
-    count: '200',
-    title: 'VIP user',
-  },
-  {
-    icon: 'bx bx-dollar-circle',
-    count: '50',
-    title: 'Expire user',
-  },
-  {
-    icon: 'bx bx-receipt',
-    count: '20',
-    title: 'Renew user in month',
-  },
-];
+const urlMap: Record<string, string> = {
+  '1': 'http://localhost:8000/api/subscription/get-all-subscription-type',
+  '2': '',
+};
 
 export const VIPPackages: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVIPUserOpen, setIsModalVIPUserOpen] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemVIPPackage | null>(null);
   const [editedVIPUser, setEditedVIPUser] = useState<VIPUser | null>(null);
+  const [resetData, setResetData] = useState(0);
+  const [activeKey, setActiveKey] = useState<string>('1');
 
   const [data, setData] = useState<Array<ItemVIPPackage>>(dataOrigin);
   const [dataVIPUser, setDataVIPUser] =
     useState<Array<VIPUser>>(dataOriginVIPUser);
 
-  const itemTabs: TabsProps['items'] = [
-    {
-      key: '1',
-      label: 'VIP packages',
-      children: (
-        <TableVIPPackage
-          originData={data}
-          columns={columnTables}
-          needOperationColumn={true}
-          onEdit={(record: ItemType | null) => {
-            setEditedItem(record ? ({ ...record } as ItemVIPPackage) : null);
-            setIsModalOpen(true);
-          }}
-          onNewBtnClick={() => setIsModalOpen(true)}
-        />
-      ),
-    },
-    {
-      key: '2',
-      label: 'VIP user',
-      children: (
-        <TableVIPPackage
-          originData={dataVIPUser}
-          columns={columnTablesUserVIP}
-          needOperationColumn={true}
-          onEdit={(record: ItemType | null) => {
-            setEditedVIPUser(record ? ({ ...record } as VIPUser) : null);
-            setIsModalVIPUserOpen(true);
-          }}
-          onNewBtnClick={() => setIsModalVIPUserOpen(true)}
-        />
-      ),
-    },
-  ];
+  const getData = () => {
+    axios({
+      method: 'GET',
+      url: '',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  };
 
   return (
     <div className="VIP-container">
@@ -175,10 +102,41 @@ export const VIPPackages: React.FC = () => {
             </div>
           ))}
         </div>
-
         <div className="col-12">
           <div className="card__body">
-            <Tabs defaultActiveKey="1" items={itemTabs} />
+            <Tabs
+              activeKey={activeKey}
+              items={itemTabs}
+              onChange={(e) => setActiveKey(e)}
+            />
+            <div className="search-bar">
+              <Search placeholder="Nhập tên gói" />
+              <Button onClick={() => setResetData((prev) => prev + 1)}>
+                Làm mới
+              </Button>
+            </div>
+            <TableResult
+              key={activeKey}
+              originData={activeKey === '1' ? data : dataVIPUser}
+              columns={activeKey === '1' ? columnTables : columnTablesUserVIP}
+              needOperationColumn={true}
+              onEdit={(record: ItemType | null) => {
+                if (activeKey === '1') {
+                  setEditedItem(
+                    record ? ({ ...record } as ItemVIPPackage) : null,
+                  );
+                  setIsModalOpen(true);
+                } else {
+                  setEditedVIPUser(record ? ({ ...record } as VIPUser) : null);
+                  setIsModalVIPUserOpen(true);
+                }
+              }}
+              onAdd={() =>
+                activeKey === '1'
+                  ? setIsModalOpen(true)
+                  : setIsModalVIPUserOpen(true)
+              }
+            />
           </div>
         </div>
       </div>

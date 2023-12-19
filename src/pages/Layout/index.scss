@@ -2,6 +2,14 @@
   background: var(--contrast-color);
   color: var(--txt-color);
   position: relative;
+
+  .sider {
+    width: 250px !important;
+    max-width: unset !important;
+    min-width: unset !important;
+    flex: unset !important;
+  }
+
   .ant-layout-sider {
     .ant-layout-sider-children {
       background: var(--contrast-color);
@@ -44,14 +52,18 @@
   }
 
   .ant-layout-sider-collapsed {
+
+
     .ant-menu-item-icon {
       margin-top: -8px;
     }
+
     .ant-menu-item {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     .login {
       .ant-menu-item {
         padding-left: 0px !important;

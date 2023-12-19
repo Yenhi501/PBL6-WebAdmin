@@ -155,6 +155,19 @@ table tr {
   }
 }
 
+.ant-modal .ant-modal-title {
+  color: white;
+}
+
+.ant-modal .ant-modal-close {
+  color: rgba(255, 255, 255, 0.74);
+
+  &:hover {
+    color: white;
+
+  }
+}
+
 // .ant-modal-title,
 // .ant-modal-close {
 //     color: var(--contrast-color) !important;

@@ -1,106 +1,62 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
-import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import { Button } from 'antd';
+import React, { useEffect, useState } from 'react';
 import statusCards from '../../assets/JsonData/status-card-data.json';
-import { Search } from '../../components/search/index';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
-
-import { PosterUpload } from '../../components/upload-poster';
 import './index.scss';
 import { FormDetailMovie } from '../../components/form-movie';
 import { FormAddEditMovie } from '../../components/form-movie/form-add-edit-movie';
-import { useDispatch } from 'react-redux';
-import { SetIsEditMovies } from '../../redux/actions/movie-action';
-import moment from 'moment';
+import axios from 'axios';
+import { ItemMovieHandled, ItemMovieRaw } from '../../model/movie';
+import { columnsMovieTable } from './column';
+import { handleDataMovie } from '../../utils/handleDataMovie';
+import Search, { SearchProps } from 'antd/es/input/Search';
 
-export interface ItemMovies {
-  key: number;
-  id: string;
-  nameMovies: string;
-  director: string;
-  country: string;
-  category: string[];
-  year: string;
-  actor: string[];
-  desc: string;
-}
-
-const dataOrigin: Array<ItemMovies> = [
-  {
-    key: 1,
-    id: 's1',
-    nameMovies: 'Hoa Lang',
-    director: 'Ngô Lỗi',
-    country: 'Trung Quốc',
-    category: ['Tình cảm'],
-    year: moment('2020-06-09T12:40:14+0000').calendar(),
-    actor: ['sđssd'],
-    desc: '',
-  },
-  {
-    key: 14,
-    id: '2',
-    nameMovies: 'Hoa Lang',
-    director: 'Ngô Lỗi',
-    country: 'Trung Quốc',
-    category: ['Tình cảm'],
-    year: moment('2020-06-09T12:40:14+0000').calendar(),
-    actor: ['sđssd'],
-    desc: '',
-  },
-  {
-    key: 3,
-    id: '3',
-    nameMovies: 'Hoa Lang',
-    director: 'Ngô Lỗi',
-    country: 'Trung Quốc',
-    category: ['Tình cảm'],
-    year: moment('2020-06-09T12:40:14+0000').calendar(),
-    actor: ['sđssd'],
-    desc: '',
-  },
-];
-
-const columns = [
-  {
-    title: 'Name Movies',
-    dataIndex: 'nameMovies',
-  },
-  {
-    title: 'Director',
-    dataIndex: 'director',
-  },
-  {
-    title: 'Country',
-    dataIndex: 'country',
-  },
-  {
-    title: 'Category',
-    dataIndex: 'category',
-  },
-  {
-    title: 'Year of Manufacture',
-    dataIndex: 'year',
-  },
-  {
-    title: 'actor',
-    dataIndex: 'actor',
-  },
-];
+export const MovieContext = React.createContext({ isOpen: false });
 
 export const Movies: React.FC = () => {
-  const timestamp = Date.now();
   const [isModalDetailOpen, setIsDetailModalOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ItemMovies | null>(null);
-  const [editedItem, setEditedItem] = useState<ItemMovies | null>(null);
-  const [data, setData] = useState<Array<ItemMovies>>(dataOrigin);
+  const [editedItem, setEditedItem] = useState<ItemMovieHandled | null>(null);
+  const [selectedItem, setSelectedItem] = useState<ItemMovieHandled | null>(
+    null,
+  );
+  const [data, setData] = useState<Array<ItemMovieHandled>>([]);
   const [tableKey, setTableKey] = useState(0);
+  const [resetData, setResetData] = useState(0);
+  const [totalMovie, setTotalMovie] = useState(0);
+  const [currPage, setCurrPage] = useState(1);
+
+  const getDataTable = (value?: string) => {
+    const paramsSearch =
+      value != null
+        ? {
+            search: value,
+            page: currPage,
+            pageSize: 5,
+          }
+        : { page: currPage, pageSize: 5 };
+    axios
+      .get('http://localhost:8000/api/movies', {
+        headers: { 'Content-Type': 'application/json' },
+        params: paramsSearch,
+      })
+      .then((response) => {
+        const dataFilms = handleDataMovie(response.data);
+        setData(dataFilms);
+        setTotalMovie(response.data.totalCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getDataTable();
+  }, [resetData, currPage]);
 
   return (
-    <>
+    <MovieContext.Provider value={{ isOpen: isModalAddOpen }}>
       <FormAddEditMovie
         isOpen={isModalAddOpen}
         handleCancel={() => {
@@ -108,15 +64,15 @@ export const Movies: React.FC = () => {
           setEditedItem(null);
         }}
         editItem={editedItem}
-        isEditForm={isModalAddOpen}
+        isEditForm={editedItem != null ? true : false}
       />
       <FormDetailMovie
-        idMovie={selectedItem != null ? selectedItem.id : ''}
+        selectedItem={selectedItem}
         isOpen={isModalDetailOpen}
         onCancel={() => setIsDetailModalOpen(false)}
       />
       <div>
-        <h2 className="movies-header">Movies</h2>
+        <h2 className="movies-header">Quản lý phim</h2>
         <div className="row">
           {statusCards.map((item, index) => (
             <div className="col-3" key={index}>
@@ -127,41 +83,40 @@ export const Movies: React.FC = () => {
               />
             </div>
           ))}
-
           <div className="col-12">
             <div className="search-bar">
-              <Search />
+              <Search
+                placeholder="Nhập tên/mô tả phim"
+                onSearch={(e) => getDataTable(e)}
+              />
+              <Button onClick={() => setResetData((prev) => prev + 1)}>
+                Làm mới
+              </Button>
             </div>
             <div className="card__body">
-              <Button
-                type="primary"
-                size="large"
-                className="btn-new"
-                icon={<PlusOutlined rev="" style={{ color: 'white' }} />}
-                onClick={() => {
-                  setIsModalAddOpen(true);
-                }}
-              >
-                New Item
-              </Button>
               <TableResult
                 key={tableKey}
                 originData={data}
-                columns={columns}
+                columns={columnsMovieTable}
                 needOperationColumn={true}
                 onEdit={(record: ItemType | null) => {
-                  setEditedItem(record ? ({ ...record } as ItemMovies) : null);
+                  setEditedItem(
+                    record ? ({ ...record } as ItemMovieHandled) : null,
+                  );
                   setIsModalAddOpen(true);
                 }}
                 onClickRow={(record) => {
-                  setSelectedItem(record as ItemMovies);
+                  setSelectedItem(record as ItemMovieHandled);
                   setIsDetailModalOpen(true);
                 }}
+                onAdd={() => setIsModalAddOpen(true)}
+                totalData={totalMovie}
+                onChangePagination={(e) => setCurrPage(e)}
               />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </MovieContext.Provider>
   );
 };

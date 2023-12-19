@@ -9,11 +9,13 @@ export type ItemUpload = {
   srcImg?: string;
   setSrcImg: (props: any) => void;
   label?: string;
+  name?: 'poster' | 'background';
 };
 export const ItemUpload = ({
   srcImg = '',
   setSrcImg = () => {},
   label,
+  name,
 }: ItemUpload) => {
   const [fileTrailer, setFileTrailer] = useState<UploadFile[]>([]);
 
@@ -45,10 +47,7 @@ export const ItemUpload = ({
           />
         </div>
         <div className="upload-btn">
-          <Form.Item<FieldType>
-            name="trailer"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
+          <Form.Item<FieldType> name={name}>
             <Upload
               onRemove={(file) => {
                 setFileTrailer(handleRemoveFile(fileTrailer, file));

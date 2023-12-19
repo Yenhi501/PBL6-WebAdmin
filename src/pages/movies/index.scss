@@ -8,19 +8,19 @@
 }
 
 .col-12 {
+  position: relative;
+  
   .search-bar {
     position: absolute;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
 .card__body {
   position: relative;
 
-
-  .btn-new {
-    position: absolute;
-    right: 120px;
-  }
 }
 .ant-modal {
   width: 65% !important;
