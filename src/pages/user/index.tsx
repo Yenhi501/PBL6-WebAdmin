@@ -1,64 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
-import { ItemType } from '../../components/table/index';
+import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
-import { TableVIPPackage } from '../../components/table-VIP';
 import { FormAddEditUser } from '../../components/form-user';
 import { User } from '../../model/user';
 import { columnTableUser } from './column-table-user';
 import moment from 'moment';
 import { Button } from 'antd';
+import Search, { SearchProps } from 'antd/es/input/Search';
+import axios from 'axios';
 
 export const statusCard = [
   {
     icon: 'bx bx-shopping-bag',
-    count: '3',
-    title: 'Total User',
+    count: '50',
+    title: 'Người dùng',
   },
   {
     icon: 'bx bx-cart',
-    count: '200',
-    title: 'New user (week)',
+    count: '10',
+    title: 'Người dùng mới (Tuần)',
   },
   {
     icon: 'bx bx-dollar-circle',
     count: '50',
-    title: 'New user (month)',
+    title: 'Người mới (Tháng)',
   },
   {
     icon: 'bx bx-receipt',
     count: '20',
-    title: 'Ban user',
+    title: 'Người dùng bị cấm',
   },
 ];
 
 export const UserPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isTestOpen, setIsTestOpen] = useState(false);
   const [editedItem, setEditedItem] = useState<User | null>(null);
-  const [data, setData] = useState<Array<User>>([
-    {
-      key: '1',
-      id: '1',
-      dateCreated: moment('2020-06-09T12:40:14+0000').calendar(),
-      status: 'Active',
-      role: 'User',
-    },
-    {
-      key: '2',
-      id: '2',
-      dateCreated: moment('2020-06-09T12:40:14+0000').calendar(),
-      status: 'Ban',
-      role: 'VIP User',
-    },
-    {
-      key: '3',
-      id: '3',
-      dateCreated: moment('2020-06-09T12:40:14+0000').calendar(),
-      status: 'Active',
-      role: 'Admin',
-    },
-  ]);
+  const [resetData, setResetData] = useState(0);
+  const [data, setData] = useState<Array<User>>([]);
+  const [totalUser, setTotalUser] = useState(0);
+  const [currPage, setCurrentPage] = useState(1);
+
+  const getUser = (value?: string) => {
+    const paramsSearch =
+      value != null
+        ? {
+            search: value,
+            page: currPage,
+            pageSize: 5,
+          }
+        : { page: currPage, pageSize: 5 };
+    axios
+      .get('http://localhost:8000/api/user/get-all-users', {
+        params: paramsSearch,
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((response) => {
+        response.data.data.forEach(
+          (item: User, index: number) => (item.key = index + 1),
+        );
+        setTotalUser(response.data.totalCount);
+        setData(response.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [resetData, currPage]);
 
   return (
     <div className="user-container">
@@ -70,6 +81,7 @@ export const UserPage: React.FC = () => {
         }}
         editItem={editedItem}
         isEditForm={editedItem != null ? true : false}
+        resetDataTable={() => setResetData((prev) => prev + 1)}
       />
       <h2 className="movies-header">VIP Packages</h2>
       <div className="content-container">
@@ -84,11 +96,15 @@ export const UserPage: React.FC = () => {
             </div>
           ))}
         </div>
-        <Button onClick={() => setIsTestOpen(true)}>Add movie</Button>
-
         <div className="col-12">
+          <div className="search-bar">
+            <Search placeholder="Nhập email/tên" onSearch={(e) => getUser(e)} />
+            <Button onClick={() => setResetData((prev) => prev + 1)}>
+              Làm mới
+            </Button>
+          </div>
           <div className="card__body">
-            <TableVIPPackage
+            <TableResult
               originData={data}
               columns={columnTableUser}
               needOperationColumn={true}
@@ -96,7 +112,9 @@ export const UserPage: React.FC = () => {
                 setEditedItem(record ? ({ ...record } as User) : null);
                 setIsModalOpen(true);
               }}
-              onNewBtnClick={() => setIsModalOpen(true)}
+              onAdd={() => setIsModalOpen(true)}
+              totalData={totalUser}
+              onChangePagination={(e) => setCurrentPage(e)}
             />
           </div>
         </div>

@@ -1,63 +1,75 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Image,
-  Input,
-  Modal,
-  Progress,
-  Row,
-  Select,
-  Upload,
-  UploadProps,
-  message,
-} from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
-import moment from 'moment';
-import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
-import { User } from '../../../../model/user';
-import { DefaultImg } from './default-img';
 import { ItemUpload } from './item-upload';
+import axios from 'axios';
+import { UrlPost } from '..';
+import { ItemMovieHandled, ItemMovieRaw } from '../../../../model/movie';
+import { MovieContext } from '../../../../pages/movies';
 
 export type FieldType = {
-  trailer?: undefined;
   poster?: undefined;
+  background?: undefined;
 };
 
-export type FormFieldList = {
-  label: string;
-  name: 'img' | 'trailer' | 'poster' | 'background';
-  setData: React.Dispatch<React.SetStateAction<UploadFile<any>[]>>;
-  data: UploadFile<any>[];
-};
-
-export type FormAddEditUser = {
+export type FormAddEditImageMovies = {
   isEditForm?: boolean;
-  onReset?: (props: any) => void;
-  editItem?: User | null;
+  editItem?: ItemMovieHandled | null;
+  urlPostList?: UrlPost[];
 };
 
 export const FormAddEditImageMovies = ({
   isEditForm = false,
   editItem = null,
-  onReset,
-}: FormAddEditUser) => {
+  urlPostList = [],
+}: FormAddEditImageMovies) => {
   const [form] = useForm();
+  const { isOpen } = React.useContext(MovieContext);
 
-  const setEditItemValue = (editItem: User) => {
-    form.setFieldsValue({
-      id: editItem.id,
-      role: editItem.role,
-      status: editItem.status,
-    });
+  const [srcImgPoster, setSrcImgPoster] = useState(editItem?.posterURL);
+  const [srcImgBg, setSrcImgBg] = useState(editItem?.backgroundURL);
+
+  const handleReset = () => {
+    setSrcImgPoster(editItem?.posterURL);
+    setSrcImgBg(editItem?.backgroundURL);
+    form.resetFields();
   };
 
-  const [srcImgPoster, setSrcImgPoster] = useState('');
-  const [srcImgBg, setSrcImgBg] = useState('');
+  const uploadImg = (url: string, data: any) => {
+    axios
+      .put(url, data.file, {
+        headers: {
+          'Content-Type': 'image/jpeg',
+          // Authorization: `token ${/*${token}*/ ''}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleUpload = async (values: any) => {
+    axios
+      .all(
+        urlPostList.map(async (object, index) => {
+          const listValues: any = Object.values(values);
+          if (listValues[index] != null) {
+            uploadImg(object.value, listValues[index].file);
+          }
+        }),
+      )
+      .then((response) => {})
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    if (editItem != null) {
+      handleReset();
+    }
+  }, [isOpen]);
 
   return (
     <Form
@@ -67,33 +79,34 @@ export const FormAddEditImageMovies = ({
       autoComplete="off"
       layout="vertical"
       className="form-add-edit-img"
-      onFinish={(values: User) => {}}
+      onFinish={(values: FieldType) => {
+        if (values.background != null || values.poster != null) {
+          handleUpload(values);
+        }
+      }}
     >
       <ItemUpload
         srcImg={srcImgPoster}
         setSrcImg={setSrcImgPoster}
         label="Poster"
+        name="poster"
       />
       <ItemUpload
         srcImg={srcImgBg}
         setSrcImg={setSrcImgBg}
         label="Background"
+        name="background"
       />
 
       <Row justify={'end'} gutter={16}>
         <Col>
-          <Button
-            type="default"
-            onClick={() =>
-              editItem != null ? setEditItemValue(editItem) : form.resetFields()
-            }
-          >
-            Reset
+          <Button type="default" onClick={handleReset}>
+            Khôi phục
           </Button>
         </Col>
         <Col>
           <Button type="primary" htmlType="submit">
-            {isEditForm === true ? 'Save' : 'Submit'}
+            Cập nhật
           </Button>
         </Col>
       </Row>

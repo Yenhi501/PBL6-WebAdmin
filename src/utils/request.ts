@@ -4,16 +4,11 @@ const config: AxiosRequestConfig<any> = {
     headers: {'Content-Type': 'application/json', 'Authorization': `token ${/*${token}*/''}`}
 }
 
-axios.defaults.baseURL = 'http://localhost:8000/api/';
 
-export const post = async (path: string, content: any) => {
-    const { data } = await axios.post(path, content, config)
-                        .then((response) => response)
-                        .catch(error => {
-                            console.log(error); 
-                            return error;
-                        });
-    return data;
+export const post =  (path: string, content: any) => {
+    return  axios.post(path, content, config);
+                        
+
 }
 
 export const get = async (path: string) => {

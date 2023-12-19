@@ -50,7 +50,7 @@ export const PosterUpload = ({ value, onChange }: PosterUploadItem) => {
       const imageUrl = await getBase64(file.originFileObj as RcFile);
       onChange(imageUrl[0]);
     }
-    console.log(file);
+    // console.log(file);
   };
 
   const uploadButton = (

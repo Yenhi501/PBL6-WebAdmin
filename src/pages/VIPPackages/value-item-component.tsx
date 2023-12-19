@@ -1,9 +1,43 @@
-
 import { TabsProps, Tag } from 'antd';
 import { UserInfo } from '../../components/userInfo';
-import { ItemColumn } from '../Item';
+import { ColumnsType } from 'antd/es/table';
+import { ItemType } from '../../components/table';
 
-export const columnTables = [
+export const itemTabs: TabsProps['items'] = [
+  {
+    key: '1',
+    label: 'VIP packages',
+  },
+  {
+    key: '2',
+    label: 'VIP user',
+  },
+];
+
+export const statusCard = [
+  {
+    icon: 'bx bx-shopping-bag',
+    count: '3',
+    title: 'VIP packages',
+  },
+  {
+    icon: 'bx bx-cart',
+    count: '200',
+    title: 'VIP user',
+  },
+  {
+    icon: 'bx bx-dollar-circle',
+    count: '50',
+    title: 'Expire user',
+  },
+  {
+    icon: 'bx bx-receipt',
+    count: '20',
+    title: 'Renew user in month',
+  },
+];
+
+export const columnTables: ColumnsType<ItemType> = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -52,7 +86,7 @@ export const columnTables = [
   },
 ];
 
-export const columnTablesUserVIP: ItemColumn[] = [
+export const columnTablesUserVIP: ColumnsType<ItemType> = [
   {
     title: 'ID',
     dataIndex: 'id',

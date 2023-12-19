@@ -1,118 +1,122 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Row,
-  Select,
-  SelectProps,
-  Tabs,
-  TabsProps,
-} from 'antd';
-import React, { useEffect } from 'react';
-import { ItemMovies } from '../../../pages/movies';
+import { Modal, SelectProps, Tabs, TabsProps } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'antd/es/form/Form';
 import './index.scss';
-import { UserInfo } from '../../userInfo';
 import moment from 'moment';
 import { FormAddEditInfoFilm } from './add-edit-info';
 import { FormAddEditImageMovies } from './add-edit-image';
 import { FormAddEditVideoMovies } from './form-add-edit-video';
+import axios from 'axios';
+import { ItemMovieHandled, ItemMovieRaw } from '../../../model/movie';
+export interface UrlPost {
+  key: string;
+  value: string;
+}
 
 export type FormAddEditMovie = {
   isEditForm?: boolean;
   isOpen: boolean;
   handleCancel: (props: any) => void;
-  editItem?: ItemMovies | null;
+  editItem?: ItemMovieHandled | null;
 };
+
 export const FormAddEditMovie = ({
   isOpen,
   editItem = null,
   handleCancel,
   isEditForm = false,
 }: FormAddEditMovie) => {
-  const [form] = useForm();
+  const [urlPostImageList, setUrlPostImageList] = useState<UrlPost[]>([
+    { key: '', value: '' },
+  ]);
+  const [urlPostVideo, setUrlPostVideo] = useState<UrlPost>({
+    key: '',
+    value: '',
+  });
 
-  const setEditItemValue = (editItem: ItemMovies) => {
-    form.setFieldsValue({
-      name: editItem.nameMovies,
-      director: editItem.director,
-      yearOfManufacturer: moment(editItem.year),
-      country: editItem.country,
-      category: editItem.category,
-      actor: editItem.actor,
-      desc: editItem.desc,
-    });
+  const [activeKey, setActiveKey] = useState('1');
+
+  const getUrlPostList = () => {
+    axios
+      .get(
+        'http://localhost:8000/api/movies/get/presign-url?movieId=1&option=all',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `token ${/*${token}*/ ''}`,
+          },
+        },
+      )
+      .then((response: any) => {
+        setUrlPostImageList([response.data[0], response.data[1]]);
+        setUrlPostVideo(response.data[2]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    form.resetFields();
-    if (editItem != null) {
-      setEditItemValue(editItem);
+    setActiveKey('1');
+
+    if (
+      isOpen === true &&
+      isEditForm === true &&
+      (activeKey === '2' || activeKey === '3')
+    ) {
+      getUrlPostList();
     }
   }, [isOpen]);
 
-  const optionActors: SelectProps['options'] = [
-    {
-      label: 'China',
-      value: 'china',
-    },
-    {
-      label: 'USA',
-      value: 'usa',
-    },
-  ];
-
-  const optionCategories: SelectProps['options'] = [
-    {
-      label: 'China',
-      value: 'china',
-    },
-    {
-      label: 'USA',
-      value: 'usa',
-    },
-  ];
+  const FormAddEditInfoFilmCustom = () => (
+    <FormAddEditInfoFilm
+      editItem={editItem}
+      isEditForm={isEditForm}
+      onClose={handleCancel}
+    />
+  );
 
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: 'Informations',
+      label: 'Thông tin',
+      children: <FormAddEditInfoFilmCustom />,
+    },
+    {
+      key: '2',
+      label: 'Ảnh',
       children: (
-        <FormAddEditInfoFilm
-          form={form}
-          optionActors={optionActors}
-          optionCategories={optionCategories}
+        <FormAddEditImageMovies
+          urlPostList={urlPostImageList}
           editItem={editItem}
-          isEditForm={isEditForm}
-          onReset={editItem != null ? setEditItemValue : form.resetFields}
-          onClose={handleCancel}
         />
       ),
     },
     {
-      key: '2',
-      label: 'Images',
-      children: <FormAddEditImageMovies />,
-    },
-    {
       key: '3',
-      label: 'Trailer',
-      children: <FormAddEditVideoMovies />,
+      label: 'Phim giới thiệu',
+      children: <FormAddEditVideoMovies urlPostVideo={urlPostVideo} />,
     },
   ];
 
   return (
     <Modal
-      title="Edit Movies"
+      title={isEditForm === true ? 'Chỉnh sửa phim' : 'Thêm phim'}
       open={isOpen}
       onCancel={handleCancel}
       footer={() => <></>}
       className="modal-add-edit-film"
     >
-      <Tabs defaultActiveKey="1" items={items} />
+      {isEditForm === true ? (
+        <Tabs
+          defaultActiveKey={activeKey}
+          items={items}
+          activeKey={activeKey}
+          onTabClick={(activeKey) => setActiveKey(activeKey)}
+        />
+      ) : (
+        <FormAddEditInfoFilmCustom />
+      )}
     </Modal>
   );
 };

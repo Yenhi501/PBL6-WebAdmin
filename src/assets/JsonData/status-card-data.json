@@ -1,22 +1,22 @@
 [
     {
         "icon": "bx bx-shopping-bag",
-        "count": "1,995",
-        "title": "Total sales"
+        "count": "150",
+        "title": "Tổng phim"
     },
     {
         "icon": "bx bx-cart",
-        "count": "2,001",
-        "title": "Daily visits"
+        "count": "200",
+        "title": "Số lượt xem"
     },
     {
         "icon": "bx bx-dollar-circle",
-        "count": "$2,632",
-        "title": "Total income"
+        "count": "5",
+        "title": "Số phim mới (tuần)"
     },
     {
         "icon": "bx bx-receipt",
-        "count": "1,711",
-        "title": "Total orders"
+        "count": "50",
+        "title": "Lượt xem mới (tuần)"
     }
 ]

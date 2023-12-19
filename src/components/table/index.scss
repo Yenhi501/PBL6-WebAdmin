@@ -17,12 +17,15 @@
   }
 }
 .table-container {
+
   table {
     border-collapse: collapse;
     text-align: center;
+
     .ant-table-thead tr {
       border-top-width: 0px;
     }
+
     tr {
       border-color: #0f0f0f;
       border-top-width: 2px;
@@ -63,13 +66,17 @@
 .btn-action {
   display: flex;
   justify-content: flex-end;
+  gap: 10px; 
+
   .anticon .anticon-delete {
     font-size: 1.2rem !important;
     color: var(--txt-color) !important;
   }
+  
   .icon-delete-all {
     color: #fff;
   }
+  
   .btn-delete-all {
     margin-bottom: 10px;
 

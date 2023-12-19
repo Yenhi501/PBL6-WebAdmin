@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,12 +47,19 @@ export const LayoutAdmin: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const { pathname } = useLocation();
+
   return (
     <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
       <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          className="sider"
+        >
           <div className="demo-logo-vertical" />
-          <Menu mode="inline" defaultSelectedKeys={['1']}>
+          <Menu mode="inline" selectedKeys={[pathname]}>
             <div className="menu-title">
               {collapsed ? (
                 <MenuOutlined rev="" />
@@ -67,26 +74,29 @@ export const LayoutAdmin: React.FC = () => {
               )}
             </div>
 
-            <Menu.Item key="1" icon={<UserOutlined rev="" />}>
-              <Link to="/movies">Movies</Link>
+            <Menu.Item key="/movies" icon={<UserOutlined rev="" />}>
+              <Link to="/movies">Phim</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined rev="" />}>
-              <Link to="/revenues">Revenues</Link>
+            <Menu.Item key="/revenues" icon={<VideoCameraOutlined rev="" />}>
+              <Link to="/revenues">Doanh thu</Link>
             </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined rev="" />}>
-              <Link to="/vip-packages">VIP packages</Link>
+            <Menu.Item key="/vip-packages" icon={<UploadOutlined rev="" />}>
+              <Link to="/vip-packages">VIP</Link>
             </Menu.Item>
-            <Menu.Item key="4" icon={<UserOutlined rev="" />}>
-              <Link to="/user">User</Link>
+            <Menu.Item key="/user" icon={<UserOutlined rev="" />}>
+              <Link to="/user">Người dùng</Link>
             </Menu.Item>
-            <Menu.Item key="5" icon={<UserSwitchOutlined rev="" />}>
-              <Link to="/director-actor">Director/Actor</Link>
+            <Menu.Item
+              key="/director-actor"
+              icon={<UserSwitchOutlined rev="" />}
+            >
+              <Link to="/director-actor">Đạo diễn/Diễn viên</Link>
             </Menu.Item>
 
             {isLogin ? (
               <div className="login">
                 <Menu.Item icon={<LogoutOutlined rev="" />}>
-                  <Link to="/">Đăng xuất</Link>
+                  <Link to="/movies">Đăng xuất</Link>
                 </Menu.Item>
               </div>
             ) : (
@@ -138,10 +148,6 @@ export const LayoutAdmin: React.FC = () => {
               <Route path="/user" element={<UserPage />} />
               <Route path="/director-actor" element={<DAPage />} />
             </Routes>
-            {/* {selectedItem === 'Movies' && <Movies />} */}
-            {/* {selectedItem === 'Revenues' && <Revenues />}
-            {selectedItem === 'VIPPackages' && <VIPPackages />}
-            {selectedItem === 'User' && <UserPage />} */}
           </Content>
         </Layout>
       </Layout>

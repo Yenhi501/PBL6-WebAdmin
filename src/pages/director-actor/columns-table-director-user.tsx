@@ -1,25 +1,60 @@
-import { TabsProps, Tag } from 'antd';
+import { TabsProps } from 'antd';
 import { UserInfo } from '../../components/userInfo';
-import { ItemColumn } from '../Item';
+import moment from 'moment';
 
-export const columnTables = [
+export const getColumnTables = (people: 'actor' | 'director') => {
+  return [
+    {
+      title: 'Tên diễn viên',
+      dataIndex: `${people}Id`,
+      render: (id: string) => {
+        return <UserInfo id={id} isShowEmail={false} people={people} />;
+      },
+    },
+    {
+      title: 'Ngày sinh',
+      dataIndex: 'dateOfBirth',
+      render: (dateOfBirth: string) => (
+        <>{moment(dateOfBirth).format('DD-MM-YYYY')}</>
+      ),
+    },
+    {
+      title: 'Giới tính',
+      dataIndex: 'gender',
+    },
+  ];
+};
+
+export const statusCard = [
   {
-    title: 'Tên',
-    dataIndex: 'id',
-    render: (idUser: string) => <UserInfo id={idUser} isShowEmail />,
-    width: '30%',
+    icon: 'bx bx-shopping-bag',
+    count: '3',
+    title: 'Diễn viên',
   },
   {
-    title: 'Ngày sinh',
-    dataIndex: 'dateOfBirth',
-    render: (idPackage: string) => <div>{idPackage}</div>,
+    icon: 'bx bx-cart',
+    count: '200',
+    title: 'Đạo diễn',
   },
   {
-    title: 'Giới tính',
-    dataIndex: 'gender',
+    icon: 'bx bx-dollar-circle',
+    count: '50',
+    title: 'Diễn viên mới',
   },
   {
-    title: 'Số phim',
-    dataIndex: 'amountOfFilm',
+    icon: 'bx bx-receipt',
+    count: '20',
+    title: 'Đạo diễn mới',
+  },
+];
+
+export const itemTabs: TabsProps['items'] = [
+  {
+    key: '1',
+    label: 'Diễn viên',
+  },
+  {
+    key: '2',
+    label: 'Đạo diễn',
   },
 ];
