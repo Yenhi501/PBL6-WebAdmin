@@ -2,6 +2,7 @@ import React from 'react';
 import { DatePicker } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import './index.scss';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 
 interface RevenuesDetailProps {
   dateFormat: string;
@@ -19,12 +20,12 @@ export const RevenuesDetail: React.FC<RevenuesDetailProps> = ({
 
   return (
     <div className="revenues-detail">
-      <h1 className="detail-title">Detail</h1>
+      <h1 className="detail-title">Chi tiết</h1>
       <RangePicker
         className="date-picker"
         defaultValue={[
-          dayjs('2023/01/01', dateFormat),
-          dayjs('2023/07/01', dateFormat),
+          dayjs('10/12/2023', dateFormat),
+          dayjs('20/12/2023', dateFormat),
         ]}
         format={dateFormat}
         onChange={(dates, dateStrings) =>
@@ -33,6 +34,8 @@ export const RevenuesDetail: React.FC<RevenuesDetailProps> = ({
             dateStrings as [string, string],
           )
         }
+        locale={locale}
+        allowClear={false}
       />
     </div>
   );

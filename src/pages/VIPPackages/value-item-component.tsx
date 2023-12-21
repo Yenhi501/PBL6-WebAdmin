@@ -2,6 +2,7 @@ import { TabsProps, Tag } from 'antd';
 import { UserInfo } from '../../components/userInfo';
 import { ColumnsType } from 'antd/es/table';
 import { ItemType } from '../../components/table';
+import { Duration, VIPPackageType } from '../../model/VIPPackage-info';
 
 export const itemTabs: TabsProps['items'] = [
   {
@@ -40,49 +41,38 @@ export const statusCard = [
 export const columnTables: ColumnsType<ItemType> = [
   {
     title: 'ID',
-    dataIndex: 'id',
+    dataIndex: 'subscriptionInfoId',
   },
   {
-    title: 'Name',
-    dataIndex: 'name',
-    width: '10',
+    title: 'Tên gói',
+    dataIndex: 'subscriptionType',
+    render: (value: VIPPackageType) => <>{value.name}</>,
   },
   {
-    title: 'Amount of User',
+    title: 'Số người dùng',
     dataIndex: 'user',
   },
   {
-    title: 'Time',
-    dataIndex: 'time',
+    title: 'Thời gian',
+    dataIndex: 'duration',
+    render: (value: Duration) => (
+      <>
+        {value.time > 10 ? '' : '0'}
+        {value.time} tháng
+      </>
+    ),
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    render: (status: string) => {
-      let color = '';
-      switch (status) {
-        case 'active':
-          color = 'green';
-          break;
-        case 'inactive':
-          color = 'red';
-          break;
-        case 'pending':
-          color = 'orange';
-          break;
-        default:
-          break;
-      }
-      return <Tag color={color}>{status}</Tag>;
-    },
-  },
-  {
-    title: 'Discount',
+    title: 'Giảm giá',
     dataIndex: 'discount',
+    render: (value: number) => <>{value * 100}%</>,
   },
   {
-    title: 'Price',
-    dataIndex: 'price',
+    title: 'Giá',
+    dataIndex: 'subscriptionType',
+    render: (value: VIPPackageType) => (
+      <>{value.price.toLocaleString('it-IT')}₫</>
+    ),
   },
 ];
 

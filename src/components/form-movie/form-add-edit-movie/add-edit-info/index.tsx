@@ -20,6 +20,7 @@ import {
   ItemMovieHandled,
   ItemMovieRaw,
 } from '../../../../model/movie';
+import { endpointServer } from '../../../../utils/endpoint';
 type MovieInfoField = {
   name?: string;
   director?: string[];
@@ -48,7 +49,7 @@ export const FormAddEditInfoFilm = ({
 
   const getDataSelect = () => {
     axios
-      .get('http://localhost:8000/api/home/headers', {
+      .get(`${endpointServer}/home/headers`, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
@@ -108,7 +109,7 @@ export const FormAddEditInfoFilm = ({
     axios({
       method: editItem != null ? 'PUT' : 'POST',
       url:
-        'http://localhost:8000/api/movies' + editItem != null
+        `${endpointServer}/movies` + editItem != null
           ? `/${editItem?.movieId}`
           : '',
       data: data,

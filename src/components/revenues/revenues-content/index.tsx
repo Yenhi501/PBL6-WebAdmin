@@ -1,7 +1,6 @@
 import { Button, DatePicker, Form, Input, Modal, Select, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useEffect, useState } from 'react';
-import { ItemRevenues } from '../../../pages/Item';
 import { ItemType, TableResult } from '../../table';
 import './index.scss';
 import dayjs from 'dayjs';
@@ -9,6 +8,9 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { columns } from './columns';
 import Search from 'antd/es/input/Search';
+import axios from 'axios';
+import { endpointServer } from '../../../utils/endpoint';
+import { DataRawPayment } from '../../../model/revenue';
 dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
@@ -18,118 +20,19 @@ interface RevenuesContentProps {
   selectedDateRange: [dayjs.Dayjs | null, dayjs.Dayjs | null];
 }
 
-const dataOriginWeek: Array<ItemRevenues> = [
-  {
-    key: 1,
-    id: 'VM01',
-    date: '01/01/2021',
-    status: 'Active',
-    payment: 'Paypal',
-    money: '50 VNĐ',
-  },
-  {
-    key: 14,
-    id: 'VM02',
-    date: '01/01/2021',
-    status: 'Active',
-    payment: 'Momo',
-    money: '80 VNĐ',
-  },
-  {
-    key: 1222,
-    id: 'VM04',
-    date: '01/01/2021',
-    status: 'Inactive',
-    payment: 'Paypal',
-    money: '350 VNĐ',
-  },
-  {
-    key: 3,
-    id: 'VM03',
-    date: '01/01/2021',
-    status: 'Pending',
-    payment: 'Momo',
-    money: '50 VNĐ',
-  },
-
-  {
-    key: 145,
-    id: 'VM05',
-    date: '01/01/2021',
-    status: 'Active',
-    payment: 'Paypal',
-    money: '50 VNĐ',
-  },
-  {
-    key: 16,
-    id: 'VM06',
-    date: '01/01/2021',
-    status: 'Pending',
-    payment: 'Paypal',
-    money: '250 VNĐ',
-  },
-  {
-    key: 341,
-    id: 'VM11',
-    date: '01/01/2021',
-    status: 'Pending',
-    payment: 'Paypal',
-    money: '150 VNĐ',
-  },
-  {
-    key: 21,
-    id: 'VM12',
-    date: '01/01/2021',
-    status: 'Inactive',
-    payment: 'Paypal',
-    money: '100 VNĐ',
-  },
-  {
-    key: 121,
-    id: 'VM13',
-    date: '01/01/2021',
-    status: 'Pending',
-    payment: 'Paypal',
-    money: '90 VNĐ',
-  },
-  {
-    key: 122,
-    id: 'VM14',
-    date: '01/01/2021',
-    status: 'Inactive',
-    payment: 'Paypal',
-    money: '330 VNĐ',
-  },
-  {
-    key: 12,
-    id: 'VM21',
-    date: '01/01/2021',
-    status: 'Active',
-    payment: 'Paypal',
-    money: '50 VNĐ',
-  },
-  {
-    key: 13,
-    id: 'VM31',
-    date: '01/01/2021',
-    status: 'Active',
-    payment: 'Paypal',
-    money: '50 VNĐ',
-  },
-];
-
 export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   selectedContent,
   selectedView,
   selectedDateRange,
 }) => {
-  const [form] = useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tableKey, setTableKey] = useState(0);
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
-  const [editedItem, setEditedItem] = useState<ItemRevenues | null>(null);
-  const [data, setData] = useState<Array<ItemRevenues>>(dataOriginWeek);
+  const [editedItem, setEditedItem] = useState<DataRawPayment | null>(null);
+  const [data, setData] = useState<Array<DataRawPayment>>([]);
   const [resetData, setResetData] = useState(0);
+  const [currPage, setCurrPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const handleOk = () => {
     if (editedItem) {
       const updatedData = data.map((item) => {
@@ -144,9 +47,46 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
     }
   };
 
+  const getDataRevenue = (searchValue?: string) => {
+    const defaultParams = {
+      page: currPage,
+      pageSize: 5,
+    };
+    axios
+      .get(
+        `${endpointServer}/payments?startDate=${dayjs(
+          selectedDateRange[0],
+        ).format('YYYY-MM-DD')}&endDate=${dayjs(selectedDateRange[1]).format(
+          'YYYY-MM-DD',
+        )}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          params:
+            searchValue != null
+              ? { search: searchValue, ...defaultParams }
+              : defaultParams,
+        },
+      )
+      .then((res) => {
+        const dataRevenue = res.data.data;
+
+        setTotalItems(res.data.totalCount);
+        dataRevenue.forEach(
+          (payment: DataRawPayment, index: number) => (payment.key = index + 1),
+        );
+        setData(dataRevenue);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    getDataRevenue();
+  }, [resetData, selectedDateRange[0], selectedDateRange[1], currPage]);
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   // useEffect(() => {
   //   const filteredData = dataOriginWeek.filter((item) => {
   //     const itemDate = dayjs(item.date, 'DD/MM/YYYY');
@@ -165,7 +105,11 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   return (
     <div className="content">
       <div className="search-bar">
-        <Search placeholder="Nhập tên/mô tả phim" />
+        <Search
+          placeholder="Nhập thông tin tìm kiếm"
+          onSearch={(e) => getDataRevenue(e)}
+          allowClear
+        />
         <Button onClick={() => setResetData((prev) => prev + 1)}>
           Làm mới
         </Button>
@@ -178,70 +122,13 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           needOperationColumn={true}
           onEdit={(record: ItemType | null) => {
             setSelectedItem(record);
-            setEditedItem(record ? ({ ...record } as ItemRevenues) : null);
+            setEditedItem(record ? ({ ...record } as DataRawPayment) : null);
             setIsModalOpen(true);
           }}
+          onChangePagination={(e) => setCurrPage(e)}
+          totalData={totalItems}
         />
       )}
-      {selectedContent === 'VIP' && selectedView === 'Month' && <div>hihi</div>}
-
-      <Modal
-        title="Edit user revenues"
-        visible={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        className="modal-revenues"
-      >
-        {selectedItem && (
-          <Form
-            form={form}
-            style={{ width: '400px' }}
-            initialValues={{ remember: true }}
-            autoComplete="off"
-            layout="vertical"
-          >
-            <Form.Item label="Payment method">
-              <Input
-                value={(editedItem && editedItem.payment) || ''}
-                onChange={(e) => {
-                  if (editedItem) {
-                    setEditedItem({
-                      ...editedItem,
-                      payment: e.target.value,
-                    });
-                  }
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="Date">
-              <DatePicker
-                value={dayjs((editedItem && editedItem.date) || '').startOf(
-                  'day',
-                )}
-                onChange={(date, dateString) => {
-                  if (editedItem) {
-                    setEditedItem({ ...editedItem, date: dateString });
-                  }
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="Status">
-              <Select
-                value={(editedItem && editedItem.status) || ''}
-                onChange={(value) => {
-                  if (editedItem) {
-                    setEditedItem({ ...editedItem, status: value });
-                  }
-                }}
-              >
-                <Select.Option value="Active">Active</Select.Option>
-                <Select.Option value="Pending">Pending</Select.Option>
-                <Select.Option value="Inactive">Inactive</Select.Option>
-              </Select>
-            </Form.Item>
-          </Form>
-        )}
-      </Modal>
     </div>
   );
 };

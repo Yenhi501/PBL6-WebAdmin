@@ -8,6 +8,7 @@ import { FormAddEditImageMovies } from './add-edit-image';
 import { FormAddEditVideoMovies } from './form-add-edit-video';
 import axios from 'axios';
 import { ItemMovieHandled, ItemMovieRaw } from '../../../model/movie';
+import { endpointServer } from '../../../utils/endpoint';
 export interface UrlPost {
   key: string;
   value: string;
@@ -38,15 +39,12 @@ export const FormAddEditMovie = ({
 
   const getUrlPostList = () => {
     axios
-      .get(
-        'http://localhost:8000/api/movies/get/presign-url?movieId=1&option=all',
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `token ${/*${token}*/ ''}`,
-          },
+      .get(`${endpointServer}/movies/get/presign-url?movieId=1&option=all`, {
+        headers: {
+          'Content-Type': 'application/json',
+          // Authorization: `token ${/*${token}*/ ''}`,
         },
-      )
+      })
       .then((response: any) => {
         setUrlPostImageList([response.data[0], response.data[1]]);
         setUrlPostVideo(response.data[2]);

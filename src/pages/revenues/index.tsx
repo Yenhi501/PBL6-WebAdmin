@@ -10,13 +10,13 @@ import { StatusCardRevenues } from '../../components/revenues/revenues-card';
 
 export const Revenues: React.FC = () => {
   dayjs.extend(customParseFormat);
-  const dateFormat = 'YYYY/MM/DD';
+  const dateFormat = 'DD/MM/YYYY';
 
   const [selectedView, setSelectedView] = useState<'Week' | 'Month'>('Week');
   const [selectedContent, setSelectedContent] = useState<'VIP' | 'ADS'>('VIP');
   const [selectedDateRange, setSelectedDateRange] = useState<
     [dayjs.Dayjs | null, dayjs.Dayjs | null]
-  >([dayjs('2023/01/01', dateFormat), dayjs('2023/07/01', dateFormat)]);
+  >([dayjs('10/12/2023', dateFormat), dayjs('31/12/2023', dateFormat)]);
 
   const handleViewChange = (view: 'Week' | 'Month') => {
     setSelectedView(view);
@@ -35,46 +35,46 @@ export const Revenues: React.FC = () => {
   const statusCardWeek = [
     {
       icon: 'bx bx-shopping-bag',
-      count: '$2,632',
-      title: 'From Vip',
+      count: '500.000',
+      title: 'Gói VIP',
     },
     {
       icon: 'bx bx-cart',
-      count: '$4,629',
-      title: 'From ADS',
+      count: '0',
+      title: 'ADS',
     },
     {
       icon: 'bx bx-dollar-circle',
-      count: '$70,328',
-      title: 'Total Week',
+      count: '200.000',
+      title: 'Trong tuần',
     },
     {
       icon: 'bx bx-receipt',
-      count: '$20,454',
-      title: 'All',
+      count: '500.000',
+      title: 'Tổng',
     },
   ];
 
   const statusCardMonth = [
     {
       icon: 'bx bx-shopping-bag',
-      count: '$23,632',
-      title: 'From Vip',
+      count: '500.000',
+      title: 'Gói VIP',
     },
     {
       icon: 'bx bx-cart',
-      count: '$43,629',
-      title: 'From ADS',
+      count: '0',
+      title: 'ADS',
     },
     {
       icon: 'bx bx-dollar-circle',
-      count: '$50,328',
-      title: 'Total Week',
+      count: '200.000',
+      title: 'Trong tuần',
     },
     {
       icon: 'bx bx-receipt',
-      count: '$32,454',
-      title: 'All',
+      count: '500.000',
+      title: 'Tổng',
     },
   ];
 

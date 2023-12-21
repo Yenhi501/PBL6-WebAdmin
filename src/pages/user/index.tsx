@@ -9,6 +9,7 @@ import moment from 'moment';
 import { Button } from 'antd';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import axios from 'axios';
+import { endpointServer } from '../../utils/endpoint';
 
 export const statusCard = [
   {
@@ -51,7 +52,7 @@ export const UserPage: React.FC = () => {
           }
         : { page: currPage, pageSize: 5 };
     axios
-      .get('http://localhost:8000/api/user/get-all-users', {
+      .get(`${endpointServer}/user/get-all-users`, {
         params: paramsSearch,
         headers: { 'Content-Type': 'application/json' },
       })

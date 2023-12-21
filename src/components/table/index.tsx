@@ -1,21 +1,22 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Popconfirm, Table, Typography } from 'antd';
 import './index.scss';
-import { ItemColumn, ItemVIPPackage, ItemRevenues } from '../../pages/Item';
 import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
 import { ActorDirector } from '../../model/director-actor';
 import { useEffect, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { EpisodeRaw, ItemMovieHandled } from '../../model/movie';
+import { DataRawPayment } from '../../model/revenue';
+import { VIPPackageInfo } from '../../model/VIPPackage-info';
 
 export type ItemType =
-  | ItemVIPPackage
+  | VIPPackageInfo
   | ItemMovieHandled
   | VIPUser
   | User
   | ActorDirector
-  | ItemRevenues
+  | DataRawPayment
   | EpisodeRaw;
 
 export interface ItemTable {
