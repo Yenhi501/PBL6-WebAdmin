@@ -12,10 +12,11 @@ import { ActorDirector } from '../../model/director-actor';
 import { FormAddEditDA } from '../../components/form-actor-director';
 import Search from 'antd/es/input/Search';
 import axios from 'axios';
+import { endpointServer } from '../../utils/endpoint';
 
 const urlQueryMap: Record<string, string> = {
-  '1': 'http://localhost:8000/api/individuals/actors',
-  '2': 'http://localhost:8000/api/individuals/directors',
+  '1': `${endpointServer}/individuals/actors`,
+  '2': `${endpointServer}/individuals/directors`,
 };
 
 export const DAPage: React.FC = () => {

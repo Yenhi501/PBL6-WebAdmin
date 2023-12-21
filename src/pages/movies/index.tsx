@@ -11,6 +11,7 @@ import { ItemMovieHandled, ItemMovieRaw } from '../../model/movie';
 import { columnsMovieTable } from './column';
 import { handleDataMovie } from '../../utils/handleDataMovie';
 import Search, { SearchProps } from 'antd/es/input/Search';
+import { endpointServer } from '../../utils/endpoint';
 
 export const MovieContext = React.createContext({ isOpen: false });
 
@@ -37,7 +38,7 @@ export const Movies: React.FC = () => {
           }
         : { page: currPage, pageSize: 5 };
     axios
-      .get('http://localhost:8000/api/movies', {
+      .get(`${endpointServer}/movies`, {
         headers: { 'Content-Type': 'application/json' },
         params: paramsSearch,
       })

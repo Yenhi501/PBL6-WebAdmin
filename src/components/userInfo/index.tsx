@@ -2,6 +2,7 @@ import { Avatar } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 import axios from 'axios';
+import { endpointServer } from '../../utils/endpoint';
 
 export type UserInfoComponent = {
   id?: string | number;
@@ -22,6 +23,17 @@ export type InfoDA = {
   name: string;
 };
 
+const defaultUser = {
+  avatarURL: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
+  username: 'Default Name',
+  email: 'default@gmail.com',
+};
+
+const defaultDA = {
+  poster: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
+  name: 'Default Name',
+};
+
 export const UserInfo = ({
   id,
   isShowEmail = true,
@@ -30,20 +42,13 @@ export const UserInfo = ({
   name,
   people = 'user',
 }: UserInfoComponent) => {
-  const [info, setInfo] = useState<Info>({
-    avatarURL: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
-    username: 'Default Name',
-    email: 'default@gmail.com',
-  });
-  const [infoDA, setInfoDA] = useState<InfoDA>({
-    poster: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
-    name: 'Default Name',
-  });
+  const [info, setInfo] = useState<Info>(defaultUser);
+  const [infoDA, setInfoDA] = useState<InfoDA>(defaultDA);
 
   const urlQueryMap: Record<string, string> = {
-    user: 'http://localhost:8000/api/user/get-user',
-    actor: `http://localhost:8000/api/individuals/actors/${id}`,
-    director: `http://localhost:8000/api/individuals/directors/${id}`,
+    user: `${endpointServer}/user/get-user`,
+    actor: `${endpointServer}/individuals/actors/${id}`,
+    director: `${endpointServer}/individuals/directors/${id}`,
   };
 
   const getDataUser = () => {
@@ -54,13 +59,17 @@ export const UserInfo = ({
       })
       .then((res) => {
         people === 'user' ? setInfo(res.data) : setInfoDA(res.data.data);
+        console.log(res);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    if (id != null) {
+    if (id != null && id !== '0') {
       getDataUser();
+    } else {
+      setInfo(defaultUser);
+      setInfoDA(defaultDA);
     }
   }, [id]);
 

@@ -1,3 +1,5 @@
+import { DataRawPayment } from "../model/revenue";
+
 export interface ItemVIPPackage {
     key: string;
     id: string,
@@ -17,21 +19,11 @@ export interface ItemVIPPackage {
     render?: (text: string, record: ItemVIPPackage) => JSX.Element;
   }
 
-  export interface ItemRevenues {
-    key: number;
-    id: string;
-    date: string;
-    status: string;
-    payment: string;
-    money: string;
-  }
-  
-
   export interface ItemRevenuesColumn {
     title: string;
     dataIndex: string;
     editable?: boolean;
     width?: string;
-    render?: (text: string, record: ItemRevenues) => JSX.Element;
+    render?: (text: string, record: DataRawPayment) => JSX.Element;
   }
   

@@ -18,6 +18,7 @@ import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import { User, UserAdd, UserEdit } from '../../model/user';
 import axios from 'axios';
+import { endpointServer } from '../../utils/endpoint';
 
 export type FormAddEditUser = {
   isEditForm?: boolean;
@@ -68,7 +69,7 @@ export const FormAddEditUser = ({
     };
     setIsLoading(true);
     axios
-      .post('http://localhost:8000/api/user/create-user', handledData, {
+      .post(`${endpointServer}/user/create-user`, handledData, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
@@ -92,7 +93,7 @@ export const FormAddEditUser = ({
 
     setIsLoading(true);
     axios
-      .put('http://localhost:8000/api/user/update-user', handledData, {
+      .put(`${endpointServer}/user/update-user`, handledData, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((res) => {

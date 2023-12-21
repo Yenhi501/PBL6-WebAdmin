@@ -1,0 +1,1 @@
+export const endpointServer = 'http://localhost:8000/api'

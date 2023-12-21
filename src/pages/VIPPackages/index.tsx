@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
@@ -16,58 +16,45 @@ import { VIPUser } from '../../model/VIPUser';
 import moment from 'moment';
 import Search from 'antd/es/input/Search';
 import axios from 'axios';
-
-const dataOrigin: Array<ItemVIPPackage> = [
-  {
-    key: '1',
-    id: 'VM',
-    name: 'VIP by 1 month',
-    user: 20,
-    time: 30,
-    status: 'active',
-    discount: 10,
-    price: 19,
-  },
-];
-
-const dataOriginVIPUser: Array<VIPUser> = [
-  {
-    key: '1',
-    id: '1',
-    idPackage: 'V1',
-    durationPackage: 30,
-    dateExpire: moment('2020-06-09T12:40:14+0000').calendar(),
-    dateRegistered: moment('2020-06-09T12:40:14+0000').calendar(),
-    dayLeft: 30,
-  },
-];
+import { endpointServer } from '../../utils/endpoint';
+import { VIPPackageInfo } from '../../model/VIPPackage-info';
 
 const urlMap: Record<string, string> = {
-  '1': 'http://localhost:8000/api/subscription/get-all-subscription-type',
+  '1': `${endpointServer}/subscription/get-all-subscription-type`,
   '2': '',
 };
 
 export const VIPPackages: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVIPUserOpen, setIsModalVIPUserOpen] = useState(false);
-  const [editedItem, setEditedItem] = useState<ItemVIPPackage | null>(null);
+  const [editedItem, setEditedItem] = useState<VIPPackageInfo | null>(null);
   const [editedVIPUser, setEditedVIPUser] = useState<VIPUser | null>(null);
   const [resetData, setResetData] = useState(0);
   const [activeKey, setActiveKey] = useState<string>('1');
+  const [data, setData] = useState<Array<VIPPackageInfo>>([]);
+  const [dataVIPUser, setDataVIPUser] = useState<Array<VIPUser>>([]);
 
-  const [data, setData] = useState<Array<ItemVIPPackage>>(dataOrigin);
-  const [dataVIPUser, setDataVIPUser] =
-    useState<Array<VIPUser>>(dataOriginVIPUser);
-
-  const getData = () => {
+  const getDataVIPPackage = () => {
     axios({
       method: 'GET',
-      url: '',
+      url: `${endpointServer}/subscription/get-all-subscription-info`,
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    })
+      .then((res) => {
+        const dataVIPPackage = res.data.data;
+        dataVIPPackage.forEach(
+          (item: VIPPackageInfo, index: number) => (item.key = index + 1),
+        );
+        setData(dataVIPPackage);
+      })
+      .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    getDataVIPPackage();
+  }, [resetData]);
 
   return (
     <div className="VIP-container">
@@ -123,7 +110,7 @@ export const VIPPackages: React.FC = () => {
               onEdit={(record: ItemType | null) => {
                 if (activeKey === '1') {
                   setEditedItem(
-                    record ? ({ ...record } as ItemVIPPackage) : null,
+                    record ? ({ ...record } as VIPPackageInfo) : null,
                   );
                   setIsModalOpen(true);
                 } else {

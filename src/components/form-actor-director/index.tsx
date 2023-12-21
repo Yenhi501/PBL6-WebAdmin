@@ -16,6 +16,7 @@ import { ActorDirector } from '../../model/director-actor';
 import moment from 'moment';
 import axios from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
+import { endpointServer } from '../../utils/endpoint';
 
 export type FormAddEditDA = {
   isEditForm?: boolean;
@@ -53,8 +54,8 @@ export const FormAddEditDA = ({
     });
   };
   const urlQueryMap: Record<string, string> = {
-    actor: `http://localhost:8000/api/individuals/actors`,
-    director: `http://localhost:8000/api/individuals/directors`,
+    actor: `${endpointServer}/individuals/actors`,
+    director: `${endpointServer}/individuals/directors`,
   };
 
   const addEditDA = (data: FieldType) => {

@@ -3,12 +3,13 @@ import React, { useEffect } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
 import { ItemVIPPackage } from '../../../pages/Item';
+import { VIPPackageInfo } from '../../../model/VIPPackage-info';
 
 export type FormAddEditVIPPackage = {
   isEditForm?: boolean;
   isOpen: boolean;
   handleCancel: (props: any) => void;
-  editItem?: ItemVIPPackage | null;
+  editItem?: VIPPackageInfo | null;
 };
 
 const { Option } = Select;
@@ -29,12 +30,11 @@ export const FormAddEditVIPPackage = ({
 }: FormAddEditVIPPackage) => {
   const [form] = useForm();
 
-  const setEditItemValue = (editItem: ItemVIPPackage) => {
+  const setEditItemValue = (editItem: VIPPackageInfo) => {
     form.setFieldsValue({
-      name: editItem.name,
-      time: editItem.time,
-      status: editItem.status,
-      price: editItem.price,
+      name: editItem.subscriptionType.name,
+      time: editItem.duration.time,
+      price: editItem.subscriptionType.price,
       discount: editItem.discount,
     });
   };
