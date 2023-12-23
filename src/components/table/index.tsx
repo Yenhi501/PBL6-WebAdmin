@@ -5,7 +5,7 @@ import { VIPUser } from '../../model/VIPUser';
 import { User } from '../../model/user';
 import { ActorDirector } from '../../model/director-actor';
 import { useEffect, useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
+import { ColumnsType, TableProps } from 'antd/es/table';
 import { EpisodeRaw, ItemMovieHandled } from '../../model/movie';
 import { DataRawPayment } from '../../model/revenue';
 import { VIPPackageInfo } from '../../model/VIPPackage-info';
@@ -19,7 +19,7 @@ export type ItemType =
   | DataRawPayment
   | EpisodeRaw;
 
-export interface ItemTable {
+export interface ItemTable extends TableProps<ItemType> {
   originData: ItemType[];
   columns: ColumnsType<ItemType>;
   needOperationColumn: boolean;
@@ -28,6 +28,7 @@ export interface ItemTable {
   onAdd?: (props?: any) => void;
   totalData?: number;
   onChangePagination?: (props?: any) => void;
+  isHideCreate?: boolean;
 }
 export const TableResult = ({
   originData,
@@ -38,6 +39,8 @@ export const TableResult = ({
   onAdd = () => {},
   onChangePagination = () => {},
   totalData,
+  isHideCreate = false,
+  onChange,
 }: ItemTable) => {
   const [editButtonRefs, setEditButtonRefs] = useState<{
     [key: string]: React.RefObject<HTMLAnchorElement | null>;
@@ -100,7 +103,10 @@ export const TableResult = ({
         width: '20vh',
         render: (_: any, record: ItemType) => {
           return (
-            <span className="btn-operation">
+            <span
+              className="btn-operation"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Typography.Link
                 onClick={(event) => {
                   event.stopPropagation();
@@ -155,6 +161,7 @@ export const TableResult = ({
           className="btn-new"
           icon={<PlusOutlined rev="" style={{ color: 'white' }} />}
           onClick={onAdd}
+          hidden={isHideCreate}
         >
           Thêm
         </Button>
@@ -177,15 +184,6 @@ export const TableResult = ({
             onClickRow(record);
           },
         })}
-        // pagination={
-        //   paginationConfig.total > paginationConfig.defaultPageSize
-        //     ? {
-        //         ...paginationConfig,
-        //         current: currentPage,
-        //         onChange: handlePageChange,
-        //       }
-        //     : false
-        // }
         pagination={{
           total: totalData,
           onChange: (e) => onChangePagination(e),
@@ -195,6 +193,7 @@ export const TableResult = ({
         rowSelection={{
           ...rowSelection,
         }}
+        onChange={onChange}
       />
     </Form>
   );

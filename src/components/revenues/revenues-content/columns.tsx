@@ -6,10 +6,10 @@ import moment from 'moment';
 
 export const columns: ColumnsType<ItemType> = [
   {
-    title: 'STT',
-    dataIndex: 'key',
+    title: 'ID',
+    dataIndex: 'paymentId',
     width: '7%',
-    render: (value) => <>{Number(value) >= 10 ? value : '0' + value}</>,
+    render: (value) => <>{value}</>,
   },
   {
     title: 'Người dùng',
@@ -20,8 +20,6 @@ export const columns: ColumnsType<ItemType> = [
       if (orderInfo != null) {
         userId = orderInfo?.split(' ')[0]?.split('_')[1];
       }
-      console.log(userId);
-
       return <UserInfo id={userId} />;
     },
   },

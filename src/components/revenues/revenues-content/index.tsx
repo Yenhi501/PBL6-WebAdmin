@@ -11,6 +11,7 @@ import Search from 'antd/es/input/Search';
 import axios from 'axios';
 import { endpointServer } from '../../../utils/endpoint';
 import { DataRawPayment } from '../../../model/revenue';
+import { FormRevenue } from '../../form-revenue';
 dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
@@ -69,7 +70,6 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
       )
       .then((res) => {
         const dataRevenue = res.data.data;
-
         setTotalItems(res.data.totalCount);
         dataRevenue.forEach(
           (payment: DataRawPayment, index: number) => (payment.key = index + 1),
@@ -87,23 +87,16 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
     setIsModalOpen(false);
   };
 
-  // useEffect(() => {
-  //   const filteredData = dataOriginWeek.filter((item) => {
-  //     const itemDate = dayjs(item.date, 'DD/MM/YYYY');
-  //     const startDate = selectedDateRange[0];
-  //     const endDate = selectedDateRange[1];
-
-  //     return startDate && endDate
-  //       ? itemDate.isSameOrAfter(startDate, 'day') &&
-  //           itemDate.isSameOrBefore(endDate, 'day')
-  //       : true;
-  //   });
-
-  //   setData(filteredData);
-  // }, [selectedDateRange]);
-
   return (
     <div className="content">
+      <FormRevenue
+        isOpen={isModalOpen}
+        handleCancel={() => {
+          setIsModalOpen(false);
+          setEditedItem(null);
+        }}
+        editItem={editedItem}
+      />
       <div className="search-bar">
         <Search
           placeholder="Nhập thông tin tìm kiếm"
@@ -113,6 +106,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
         <Button onClick={() => setResetData((prev) => prev + 1)}>
           Làm mới
         </Button>
+        FormRevenue
       </div>
       {selectedContent === 'VIP' && selectedView === 'Week' && (
         <TableResult
@@ -127,6 +121,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           }}
           onChangePagination={(e) => setCurrPage(e)}
           totalData={totalItems}
+          isHideCreate={true}
         />
       )}
     </div>

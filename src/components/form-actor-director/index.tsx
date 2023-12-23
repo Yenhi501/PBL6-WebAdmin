@@ -80,6 +80,7 @@ export const FormAddEditDA = ({
 
   useEffect(() => {
     form.resetFields();
+    setIsLoading(false);
     if (editItem != null) {
       setEditItemValue(editItem);
     }

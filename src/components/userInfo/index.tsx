@@ -59,7 +59,6 @@ export const UserInfo = ({
       })
       .then((res) => {
         people === 'user' ? setInfo(res.data) : setInfoDA(res.data.data);
-        console.log(res);
       })
       .catch((err) => console.log(err));
   };
