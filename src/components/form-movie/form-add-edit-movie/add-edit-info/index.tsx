@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   Radio,
-  RadioChangeEvent,
   Row,
   Select,
   SelectProps,
@@ -15,33 +14,34 @@ import { UserInfo } from '../../../userInfo';
 import moment from 'moment';
 import axios from 'axios';
 import { useForm } from 'antd/es/form/Form';
-import {
-  GenreMovie,
-  ItemMovieHandled,
-  ItemMovieRaw,
-} from '../../../../model/movie';
+import { GenreMovie, ItemMovieHandled } from '../../../../model/movie';
 import { endpointServer } from '../../../../utils/endpoint';
-type MovieInfoField = {
-  name?: string;
-  director?: string[];
-  yearOfManufacturer?: string;
-  type?: boolean;
-  level?: number;
-  country?: string;
-  genre?: string[];
-  actor?: string[];
-  desc?: string;
+import { DebounceSelect } from '../../../deboundSelect';
+import {
+  getDataActorsSelect,
+  getDataDirectorsSelect,
+} from '../../../../utils/directors-actors';
+import dayjs from 'dayjs';
+import { MovieInfoField } from './type';
+import { convertStringTrueFalse } from '../../../../utils/convert-string-true-false';
+
+const levelMap: Record<number, string> = {
+  0: 'Cơ bản',
+  1: 'Cao cấp',
 };
+
 export type FormAddEditInfoFilm = {
   editItem?: ItemMovieHandled | null;
   isEditForm?: boolean;
   onClose?: (props?: any) => void;
+  setIsLoading?: (props?: any) => void;
 };
 
 export const FormAddEditInfoFilm = ({
-  editItem,
+  editItem = null,
   isEditForm,
   onClose = () => {},
+  setIsLoading = () => {},
 }: FormAddEditInfoFilm) => {
   const [form] = useForm();
   const [dataNations, setDataNations] = useState<SelectProps['options']>([]);
@@ -67,7 +67,6 @@ export const FormAddEditInfoFilm = ({
           },
         );
 
-        setDataNations(handledDataNation);
         setDataGenre(handledDataGenres);
       })
       .catch((err) => console.log(err));
@@ -77,41 +76,29 @@ export const FormAddEditInfoFilm = ({
     getDataSelect();
   }, []);
 
-  const optionActors: SelectProps['options'] = [
-    {
-      label: 'Hồ Ý Hoàn',
-      value: 2,
-    },
-  ];
-
-  const optionDirectors: SelectProps['options'] = [
-    {
-      label: 'Mai Guan Zhi',
-      value: 18,
-    },
-  ];
-
   const handleAddEditRequest = (values: MovieInfoField) => {
+    setIsLoading(true);
     values.yearOfManufacturer = moment(values.yearOfManufacturer).format(
       'YYYY-MM-DD HH:mm:ss.SSSZ',
     );
+
     const data = {
       title: values.name,
       description: values.desc,
       releaseDate: values.yearOfManufacturer,
       nation: values.country,
-      genreIds: values.genre,
-      actorIds: values.actor,
-      directorIds: values.director,
+      genreIds: values.genre?.map((item) => item.value),
+      actorIds: values.actor?.map((item) => item.value),
+      directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: values.level,
+      level: values.level?.value,
     };
+
     axios({
       method: editItem != null ? 'PUT' : 'POST',
-      url:
-        `${endpointServer}/movies` + editItem != null
-          ? `/${editItem?.movieId}`
-          : '',
+      url: `${endpointServer}/movies${
+        editItem != null ? `/${editItem?.movieId}` : ''
+      }`,
       data: data,
       headers: {
         'Content-Type': 'application/json',
@@ -119,9 +106,10 @@ export const FormAddEditInfoFilm = ({
       },
     })
       .then((response) => {
-        console.log(response);
+        onClose();
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err);
       });
   };
@@ -130,14 +118,23 @@ export const FormAddEditInfoFilm = ({
     try {
       form.setFieldsValue({
         name: editItem.title,
-        director: editItem.directors.map((director) => director.director_id),
-        yearOfManufacturer: moment(editItem.releaseDate),
+        director: editItem?.directors.map((director) => {
+          return { label: director.name, value: director.director_id };
+        }),
+        yearOfManufacturer: dayjs(editItem.releaseDate, 'DD-MM-YYYY'),
         country: editItem.nation,
-        category: editItem.genres.map((genre) => genre.genre_id),
-        actor: editItem.actors.map((actor) => actor.actor_id),
+        genre: editItem?.genres.map((genre) => {
+          return { label: genre.name, value: genre.genre_id };
+        }),
+        actor: editItem?.actors.map((actors) => {
+          return { label: actors.name, value: actors.actor_id };
+        }),
         desc: editItem.description,
-        level: editItem.level,
-        type: Boolean(editItem.isSeries),
+        level: {
+          value: editItem.level,
+          label: levelMap[Number(editItem.level)],
+        },
+        type: convertStringTrueFalse(editItem.isSeries),
       });
     } catch (error) {
       console.log(error);
@@ -146,7 +143,6 @@ export const FormAddEditInfoFilm = ({
 
   useEffect(() => {
     if (editItem != null) {
-      // console.log(editItem);
       setEditItemValue(editItem);
     }
   }, []);
@@ -189,7 +185,11 @@ export const FormAddEditInfoFilm = ({
             wrapperCol={{ span: 24 }}
             rules={[{ required: true, message: 'Vui lòng nhập năm sản xuất' }]}
           >
-            <DatePicker className="date-picker" placeholder="DD-MM-YYYY" />
+            <DatePicker
+              className="date-picker"
+              placeholder="DD-MM-YYYY"
+              format="DD-MM-YYYY"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -199,9 +199,9 @@ export const FormAddEditInfoFilm = ({
             name="type"
             label="Loại phim"
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: 'Vui lòng chọn loại phim' }]}
           >
-            <Radio.Group defaultValue={true}>
+            <Radio.Group>
               <Radio value={true}>Phim bộ</Radio>
               <Radio value={false}>Phim lẻ</Radio>
             </Radio.Group>
@@ -227,15 +227,21 @@ export const FormAddEditInfoFilm = ({
         wrapperCol={{ span: 24 }}
         rules={[{ required: true, message: 'Vui lòng chọn đạo diễn' }]}
       >
-        <Select
+        <DebounceSelect
           mode="multiple"
           allowClear
-          options={optionDirectors}
-          optionRender={(option) => (
-            <UserInfo isShowEmail={false} id={option.data.value} />
-          )}
+          optionRender={(option) => {
+            return (
+              <UserInfo
+                isShowEmail={false}
+                id={option.data.value}
+                people="director"
+              />
+            );
+          }}
           maxTagCount="responsive"
-          placeholder="Chọn đạo diễn"
+          placeholder="Nhập tên đạo diễn"
+          fetchOptions={getDataDirectorsSelect}
         />
       </Form.Item>
 
@@ -258,15 +264,21 @@ export const FormAddEditInfoFilm = ({
         label="Diễn viên"
         rules={[{ required: true, message: 'Vui lòng chọn diễn viên' }]}
       >
-        <Select
+        <DebounceSelect
           mode="multiple"
           allowClear
-          options={optionActors}
-          optionRender={(option) => (
-            <UserInfo isShowEmail={false} id={option.data.value} />
-          )}
+          optionRender={(option) => {
+            return (
+              <UserInfo
+                isShowEmail={false}
+                id={option.data.value}
+                people="actor"
+              />
+            );
+          }}
           maxTagCount="responsive"
-          placeholder="Chọn diễn viên"
+          placeholder="Nhập tên diễn viên"
+          fetchOptions={getDataActorsSelect}
         />
       </Form.Item>
       <Form.Item<MovieInfoField>

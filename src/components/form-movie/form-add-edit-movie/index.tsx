@@ -1,13 +1,13 @@
-import { Modal, SelectProps, Tabs, TabsProps } from 'antd';
+import { Modal, Spin, Tabs, TabsProps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'antd/es/form/Form';
+import { LoadingOutlined } from '@ant-design/icons';
+
 import './index.scss';
-import moment from 'moment';
 import { FormAddEditInfoFilm } from './add-edit-info';
 import { FormAddEditImageMovies } from './add-edit-image';
 import { FormAddEditVideoMovies } from './form-add-edit-video';
 import axios from 'axios';
-import { ItemMovieHandled, ItemMovieRaw } from '../../../model/movie';
+import { ItemMovieHandled } from '../../../model/movie';
 import { endpointServer } from '../../../utils/endpoint';
 export interface UrlPost {
   key: string;
@@ -36,6 +36,7 @@ export const FormAddEditMovie = ({
   });
 
   const [activeKey, setActiveKey] = useState('1');
+  const [isLoading, setIsLoading] = useState(false);
 
   const getUrlPostList = () => {
     axios
@@ -56,6 +57,7 @@ export const FormAddEditMovie = ({
 
   useEffect(() => {
     setActiveKey('1');
+    setIsLoading(false);
 
     if (
       isOpen === true &&
@@ -71,6 +73,7 @@ export const FormAddEditMovie = ({
       editItem={editItem}
       isEditForm={isEditForm}
       onClose={handleCancel}
+      setIsLoading={setIsLoading}
     />
   );
 
@@ -105,16 +108,21 @@ export const FormAddEditMovie = ({
       footer={() => <></>}
       className="modal-add-edit-film"
     >
-      {isEditForm === true ? (
-        <Tabs
-          defaultActiveKey={activeKey}
-          items={items}
-          activeKey={activeKey}
-          onTabClick={(activeKey) => setActiveKey(activeKey)}
-        />
-      ) : (
-        <FormAddEditInfoFilmCustom />
-      )}
+      <Spin
+        indicator={<LoadingOutlined rev={''} style={{ fontSize: 24 }} spin />}
+        spinning={isLoading}
+      >
+        {isEditForm === true ? (
+          <Tabs
+            defaultActiveKey={activeKey}
+            items={items}
+            activeKey={activeKey}
+            onTabClick={(activeKey) => setActiveKey(activeKey)}
+          />
+        ) : (
+          <FormAddEditInfoFilmCustom />
+        )}
+      </Spin>
     </Modal>
   );
 };

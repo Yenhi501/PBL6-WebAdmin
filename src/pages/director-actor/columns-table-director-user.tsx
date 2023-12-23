@@ -4,6 +4,7 @@ import moment from 'moment';
 
 export const getColumnTables = (people: 'actor' | 'director') => {
   return [
+    { title: 'ID', dataIndex: `${people}Id` },
     {
       title: 'Tên diễn viên',
       dataIndex: `${people}Id`,

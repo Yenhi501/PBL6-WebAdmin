@@ -43,14 +43,17 @@ export const UserPage: React.FC = () => {
   const [currPage, setCurrentPage] = useState(1);
 
   const getUser = (value?: string) => {
+    const defaultParams = {
+      page: currPage,
+      pageSize: 5,
+    };
     const paramsSearch =
       value != null
         ? {
             search: value,
-            page: currPage,
-            pageSize: 5,
+            ...defaultParams,
           }
-        : { page: currPage, pageSize: 5 };
+        : defaultParams;
     axios
       .get(`${endpointServer}/user/get-all-users`, {
         params: paramsSearch,
