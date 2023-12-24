@@ -26,6 +26,7 @@ import { VIPPackages } from '../VIPPackages';
 import { DAPage } from '../director-actor';
 
 import './index.scss';
+import { RegisterPage } from '../register';
 
 const { Header, Sider, Content } = Layout;
 
@@ -74,38 +75,36 @@ export const LayoutAdmin: React.FC = () => {
               )}
             </div>
 
-            <Menu.Item key="/movies" icon={<UserOutlined rev="" />}>
-              <Link to="/movies">Phim</Link>
-            </Menu.Item>
-            <Menu.Item key="/revenues" icon={<VideoCameraOutlined rev="" />}>
-              <Link to="/revenues">Doanh thu</Link>
-            </Menu.Item>
-            <Menu.Item key="/vip-packages" icon={<UploadOutlined rev="" />}>
-              <Link to="/vip-packages">VIP</Link>
-            </Menu.Item>
-            <Menu.Item key="/user" icon={<UserOutlined rev="" />}>
-              <Link to="/user">Người dùng</Link>
+            <Menu.Item key="/userId/movies" icon={<UserOutlined rev="" />}>
+              <Link to="/userId/movies">Phim</Link>
             </Menu.Item>
             <Menu.Item
-              key="/director-actor"
+              key="/userId/revenues"
+              icon={<VideoCameraOutlined rev="" />}
+            >
+              <Link to="/userId/revenues">Doanh thu</Link>
+            </Menu.Item>
+            <Menu.Item
+              key="/userId/vip-packages"
+              icon={<UploadOutlined rev="" />}
+            >
+              <Link to="/userId/vip-packages">VIP</Link>
+            </Menu.Item>
+            <Menu.Item key="/userId/user" icon={<UserOutlined rev="" />}>
+              <Link to="/userId/user">Người dùng</Link>
+            </Menu.Item>
+            <Menu.Item
+              key="/userId/director-actor"
               icon={<UserSwitchOutlined rev="" />}
             >
-              <Link to="/director-actor">Đạo diễn/Diễn viên</Link>
+              <Link to="/userId/director-actor">Đạo diễn/Diễn viên</Link>
             </Menu.Item>
 
-            {isLogin ? (
-              <div className="login">
-                <Menu.Item icon={<LogoutOutlined rev="" />}>
-                  <Link to="/movies">Đăng xuất</Link>
-                </Menu.Item>
-              </div>
-            ) : (
-              <div className="login">
-                <Menu.Item icon={<LoginOutlined rev="" />}>
-                  <Link to="/login">Đăng nhập</Link>
-                </Menu.Item>
-              </div>
-            )}
+            <div className="login">
+              <Menu.Item icon={<LogoutOutlined rev="" />}>
+                <Link to="/">Đăng xuất</Link>
+              </Menu.Item>
+            </div>
           </Menu>
         </Sider>
         <Layout>
@@ -131,7 +130,6 @@ export const LayoutAdmin: React.FC = () => {
             />
             <TopNav />
           </Header>
-
           <Content
             style={{
               margin: '24px 16px',
@@ -141,12 +139,12 @@ export const LayoutAdmin: React.FC = () => {
             }}
           >
             <Routes>
-              <Route path="/" element={<Movies />} />
               <Route path="/movies" element={<Movies />} />
               <Route path="/revenues" element={<Revenues />} />
               <Route path="/vip-packages" element={<VIPPackages />} />
               <Route path="/user" element={<UserPage />} />
               <Route path="/director-actor" element={<DAPage />} />
+              <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </Content>
         </Layout>
