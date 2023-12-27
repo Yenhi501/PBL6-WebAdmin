@@ -4,18 +4,23 @@ import { DefaultImg } from '../default-img';
 import { FieldType } from '..';
 import { UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/es/upload';
+import './index.scss';
 
 export type ItemUpload = {
   srcImg?: string;
   setSrcImg: (props: any) => void;
   label?: string;
   name?: 'poster' | 'background';
+  widthImgPreview?: number | string;
+  heightImgPreview?: number | string;
 };
 export const ItemUpload = ({
   srcImg = '',
   setSrcImg = () => {},
   label,
   name,
+  widthImgPreview = 150,
+  heightImgPreview = 150,
 }: ItemUpload) => {
   const [fileTrailer, setFileTrailer] = useState<UploadFile[]>([]);
 
@@ -35,7 +40,7 @@ export const ItemUpload = ({
   };
 
   return (
-    <div>
+    <div className="item-upload-container">
       <h1>{label}</h1>
       <div className="form-add-edit-img-content">
         <div className="form-add-edit-img-container">
@@ -43,6 +48,8 @@ export const ItemUpload = ({
             src={srcImg}
             fallback={DefaultImg}
             className="form-add-edit-img-img"
+            width={widthImgPreview}
+            height={heightImgPreview}
             placeholder
           />
         </div>

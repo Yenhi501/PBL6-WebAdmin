@@ -51,6 +51,7 @@ export const FormDetailMovie = ({
               width={200}
               src={selectedItem?.posterURL}
               fallback={DefaultImg}
+              wrapperStyle={{ borderRadius: 15, overflow: 'hidden' }}
             />
           </div>
           <div className="form-detail-movie-image-item">
@@ -59,6 +60,7 @@ export const FormDetailMovie = ({
               width={200}
               src={selectedItem?.backgroundURL}
               fallback={DefaultImg}
+              wrapperStyle={{ borderRadius: 15, overflow: 'hidden' }}
             />
           </div>
         </div>

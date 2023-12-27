@@ -61,7 +61,6 @@ export const FormAddEditImageMovies = ({
           }
         }),
       )
-      .then((response) => {})
       .catch((error) => console.log(error));
   };
 
@@ -69,7 +68,7 @@ export const FormAddEditImageMovies = ({
     if (editItem != null) {
       handleReset();
     }
-  }, [isOpen]);
+  }, [isOpen, editItem]);
 
   return (
     <Form
@@ -90,12 +89,14 @@ export const FormAddEditImageMovies = ({
         setSrcImg={setSrcImgPoster}
         label="Poster"
         name="poster"
+        heightImgPreview={200}
       />
       <ItemUpload
         srcImg={srcImgBg}
         setSrcImg={setSrcImgBg}
         label="Background"
         name="background"
+        widthImgPreview={300}
       />
 
       <Row justify={'end'} gutter={16}>
