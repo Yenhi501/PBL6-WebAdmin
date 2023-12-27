@@ -5,6 +5,7 @@ import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
+  UserAddOutlined,
   LoginOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
@@ -98,6 +99,9 @@ export const LayoutAdmin: React.FC = () => {
               icon={<UserSwitchOutlined rev="" />}
             >
               <Link to="/userId/director-actor">Đạo diễn/Diễn viên</Link>
+            </Menu.Item>
+            <Menu.Item icon={<UserAddOutlined rev="" />}>
+              <Link to="/register">Tạo admin</Link>
             </Menu.Item>
 
             <div className="login">

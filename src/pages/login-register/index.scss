@@ -1,0 +1,22 @@
+.container-login-register {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .form-content {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .login-register-bg {
+    object-fit: cover;
+  }
+
+  .login-register-mask {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.277);
+    inset: 0;
+  }
+}

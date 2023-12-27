@@ -1,0 +1,58 @@
+.container-login-form {
+  background-color: #4d4d4d83;
+  width: 460px;
+  border-radius: 8px;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+
+  .form-login-heading {
+    font-weight: 500;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  .form-login {
+    margin: 10px 40px;
+
+    .form-login-field-container {
+      margin-bottom: 10px;
+    }
+
+    .login-form-icon {
+      color: rgb(250, 250, 250);
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .login-form-sub-text {
+      color: rgb(250, 250, 250);
+    }
+
+    .login-form-btn-submit {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+
+  .login-form-link {
+    color: #59afff;
+
+    &:hover {
+      color: #8ac7ff;
+    }
+  }
+
+  .forgot-password-link {
+    display: block;
+    position: absolute;
+    right: 0;
+  }
+
+  .form-login-sub-section {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-top: 50px;
+  }
+}

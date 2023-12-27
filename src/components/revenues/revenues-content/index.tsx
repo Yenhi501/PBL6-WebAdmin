@@ -106,7 +106,6 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
         <Button onClick={() => setResetData((prev) => prev + 1)}>
           Làm mới
         </Button>
-        FormRevenue
       </div>
       {selectedContent === 'VIP' && selectedView === 'Week' && (
         <TableResult
