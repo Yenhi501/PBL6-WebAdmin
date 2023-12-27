@@ -4,7 +4,7 @@ import './index.scss';
 
 interface StatusCardProps {
   icon: string;
-  count: string;
+  count: string | number;
   title: string;
 }
 

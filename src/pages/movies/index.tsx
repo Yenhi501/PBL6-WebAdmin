@@ -32,7 +32,6 @@ export const Movies: React.FC = () => {
         isOpen={isModalDetailOpen}
         onCancel={() => setIsDetailModalOpen(false)}
       />
-
       <MoviesPageBody
         onEditItemTable={(record) => {
           {
@@ -46,8 +45,7 @@ export const Movies: React.FC = () => {
           setIsDetailModalOpen(true);
         }}
       />
-
-      <ChartSection />
+      {/* <ChartSection /> */}
     </MovieContext.Provider>
   );
 };

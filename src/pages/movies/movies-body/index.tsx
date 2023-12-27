@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../../components/status-card';
 import { ItemType, TableResult } from '../../../components/table';
-import { Button, TableProps } from 'antd';
+import { Button, Spin, TableProps } from 'antd';
 import Search from 'antd/es/input/Search';
 import { GenreMovie, ItemMovieHandled } from '../../../model/movie';
 import axios from 'axios';
 import { endpointServer } from '../../../utils/endpoint';
 import { handleDataMovie } from '../../../utils/handleDataMovie';
 import { columnsMovieTable } from '../column';
-import { statusCard } from '../../user';
 import { FilterValue } from 'antd/es/table/interface';
 
 export type MoviesPageBody = {
@@ -29,8 +28,10 @@ export const MoviesPageBody = ({
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
   >({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataTable = (value?: string) => {
+    setIsLoading(true);
     const paramsSearch =
       value != null
         ? {
@@ -47,14 +48,17 @@ export const MoviesPageBody = ({
       .then((response) => {
         const dataFilms = handleDataMovie(response.data);
         setData(dataFilms);
+        setIsLoading(false);
         setTotalMovie(response.data.totalCount);
       })
       .catch((error) => {
+        setIsLoading(false);
         console.log(error);
       });
   };
 
   const [genres, setGenres] = useState<GenreMovie[]>([]);
+  const [nations, setNations] = useState<string[]>([]);
 
   const getAllGenre = () => {
     axios
@@ -63,10 +67,21 @@ export const MoviesPageBody = ({
       .catch((err) => console.log(err));
   };
 
+  const getAllNations = () => {
+    axios
+      .get(`${endpointServer}/movies/get/nations`)
+      .then((res) => setNations(res.data))
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     getDataTable();
-    getAllGenre();
   }, [resetData, currPage]);
+
+  useEffect(() => {
+    getAllNations();
+    getAllGenre();
+  }, []);
 
   const handleChange: TableProps<ItemType>['onChange'] = (
     pagination,
@@ -75,6 +90,29 @@ export const MoviesPageBody = ({
   ) => {
     setFilteredInfo(filters);
   };
+
+  const statusCard = [
+    {
+      icon: 'bx bx-shopping-bag',
+      count: totalMovie,
+      title: 'Tổng phim',
+    },
+    {
+      icon: 'bx bx-cart',
+      count: genres.length,
+      title: 'Thể loại',
+    },
+    {
+      icon: 'bx bx-dollar-circle',
+      count: nations.length,
+      title: 'Quốc gia',
+    },
+    {
+      icon: 'bx bx-receipt',
+      count: '20',
+      title: 'Phim VIP',
+    },
+  ];
 
   return (
     <div>
@@ -100,20 +138,22 @@ export const MoviesPageBody = ({
             </Button>
           </div>
           <div className="card__body">
-            <TableResult
-              key={tableKey}
-              originData={data}
-              columns={columnsMovieTable(filteredInfo, genres)}
-              needOperationColumn={true}
-              onEdit={(record: ItemType | null) => onEditItemTable(record)}
-              onClickRow={(record) => onClickRowTable(record)}
-              onAdd={onAddItemTable}
-              totalData={totalMovie}
-              onChangePagination={(e) => setCurrPage(e)}
-              onChange={(pagination, filters, sorter, extra) => {
-                handleChange(pagination, filters, sorter, extra);
-              }}
-            />
+            <Spin spinning={isLoading}>
+              <TableResult
+                key={tableKey}
+                originData={data}
+                columns={columnsMovieTable(filteredInfo, genres)}
+                needOperationColumn={true}
+                onEdit={(record: ItemType | null) => onEditItemTable(record)}
+                onClickRow={(record) => onClickRowTable(record)}
+                onAdd={onAddItemTable}
+                totalData={totalMovie}
+                onChangePagination={(e) => setCurrPage(e)}
+                onChange={(pagination, filters, sorter, extra) => {
+                  handleChange(pagination, filters, sorter, extra);
+                }}
+              />
+            </Spin>
           </div>
         </div>
       </div>

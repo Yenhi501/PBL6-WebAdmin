@@ -6,12 +6,12 @@ import './assets/css/index.css';
 import { LayoutAdmin as Layout } from './pages/Layout/index';
 import './index.scss';
 import { Route, Routes } from 'react-router';
-import { LoginPage } from './pages/login';
+import { LoginRegisterPage } from './pages/login-register';
 
 export const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/*" element={<LoginRegisterPage />} />
       <Route path="/userId/*" element={<Layout />} />
     </Routes>
   );

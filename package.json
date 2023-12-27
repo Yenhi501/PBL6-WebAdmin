@@ -1,6 +1,5 @@
 {
   "name": "react-shop",
-  "homepage": "/movies",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +12,7 @@
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
     "dayjs": "^1.11.10",
+    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "^18.0.0",
@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.14.202",
     "@types/react-router-dom": "^5.3.3",
     "tailwindcss": "^3.3.3"
