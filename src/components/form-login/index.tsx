@@ -28,7 +28,7 @@ export const FormLogin = ({ className }: FormLogin) => {
       password: valuesForm.password,
     };
     axios
-      .post(`${endpointServer}/auth/login`, data, {
+      .post(`${endpointServer}/auth/login-admin`, data, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
@@ -40,6 +40,8 @@ export const FormLogin = ({ className }: FormLogin) => {
         navigator({
           pathname: `/userId/movies`,
         });
+
+        console.log(res);
 
         setIsLoading(false);
       })
