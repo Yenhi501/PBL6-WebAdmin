@@ -13,13 +13,9 @@ export const columns: ColumnsType<ItemType> = [
   },
   {
     title: 'Người dùng',
-    dataIndex: 'orderInfo',
+    dataIndex: 'userId',
     width: '20%',
-    render: (orderInfo: string) => {
-      let userId = '0';
-      if (orderInfo != null) {
-        userId = orderInfo?.split(' ')[0]?.split('_')[1];
-      }
+    render: (userId: number) => {
       return <UserInfo id={userId} />;
     },
   },
