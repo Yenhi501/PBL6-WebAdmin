@@ -14,15 +14,18 @@ export type MoviesPageBody = {
   onEditItemTable?: (props?: any) => void;
   onClickRowTable?: (props?: any) => void;
   onAddItemTable?: (props?: any) => void;
+  resetData?: number;
+  setResetData?: (props?: any) => void;
 };
 export const MoviesPageBody = ({
   onEditItemTable = () => {},
   onClickRowTable = () => {},
   onAddItemTable = () => {},
+  setResetData = () => {},
+  resetData,
 }: MoviesPageBody) => {
   const [data, setData] = useState<Array<ItemMovieHandled>>([]);
   const [tableKey, _] = useState(0);
-  const [resetData, setResetData] = useState(0);
   const [totalMovie, setTotalMovie] = useState(0);
   const [currPage, setCurrPage] = useState(1);
   const [filteredInfo, setFilteredInfo] = useState<
@@ -50,9 +53,26 @@ export const MoviesPageBody = ({
         setData(dataFilms);
         setIsLoading(false);
         setTotalMovie(response.data.totalCount);
+        console.log(response);
       })
       .catch((error) => {
         setIsLoading(false);
+        console.log(error);
+      });
+  };
+
+  const deleteMovie = (movieId: number) => {
+    axios
+      .delete(`${endpointServer}/movies`, {
+        params: {
+          id: movieId,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setResetData((prev: number) => prev + 1);
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -133,7 +153,7 @@ export const MoviesPageBody = ({
               placeholder="Nhập tên/mô tả phim"
               onSearch={(e) => getDataTable(e)}
             />
-            <Button onClick={() => setResetData((prev) => prev + 1)}>
+            <Button onClick={() => setResetData((prev: number) => prev + 1)}>
               Làm mới
             </Button>
           </div>

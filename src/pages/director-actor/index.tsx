@@ -13,6 +13,7 @@ import { FormAddEditDA } from '../../components/form-actor-director';
 import Search from 'antd/es/input/Search';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
+import { useToken } from '../../hooks/useToken';
 
 const urlQueryMap: Record<string, string> = {
   '1': `${endpointServer}/individuals/actors`,
@@ -27,6 +28,7 @@ export const DAPage: React.FC = () => {
   const [activeKey, setActiveKey] = useState<string>('1');
   const [totalItems, setTotalItems] = useState(0);
   const [currPage, setCurrentPage] = useState(1);
+  const { accessToken } = useToken();
 
   const getData = (nameSearch?: string) => {
     const params =
@@ -41,10 +43,13 @@ export const DAPage: React.FC = () => {
       url: urlQueryMap[activeKey],
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
       },
       params: params,
     })
       .then((response) => {
+        console.log(response);
+
         const dataRes = response.data.data;
 
         if (activeKey === '1') {

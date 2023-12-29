@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Select, Spin } from 'antd';
 import type { SelectProps } from 'antd/es/select';
 import debounce from 'lodash/debounce';
+import { useToken } from '../../hooks/useToken';
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
@@ -28,6 +29,7 @@ export const DebounceSelect = <
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>(defaultOptions);
   const fetchRef = useRef(0);
+  const { accessToken } = useToken();
 
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value: string) => {
@@ -36,11 +38,13 @@ export const DebounceSelect = <
       setOptions([]);
       setFetching(true);
 
-      fetchOptions(value).then((newOptions) => {
+      fetchOptions(value, accessToken).then((newOptions) => {
         if (fetchId !== fetchRef.current) {
           // for fetch callback order
           return;
         }
+
+        console.log(newOptions);
 
         setOptions(newOptions);
         setFetching(false);

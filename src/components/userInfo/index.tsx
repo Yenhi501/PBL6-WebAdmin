@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './index.scss';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
+import { useToken } from '../../hooks/useToken';
 
 export type UserInfoComponent = {
   id?: string | number;
@@ -44,6 +45,7 @@ export const UserInfo = ({
 }: UserInfoComponent) => {
   const [info, setInfo] = useState<Info>(defaultUser);
   const [infoDA, setInfoDA] = useState<InfoDA>(defaultDA);
+  const { accessToken } = useToken();
 
   const urlQueryMap: Record<string, string> = {
     user: `${endpointServer}/user/get-user`,
@@ -54,7 +56,10 @@ export const UserInfo = ({
   const getDataUser = () => {
     axios
       .get(urlQueryMap[people], {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
         params: people === 'user' ? { userId: id } : {},
       })
       .then((res) => {

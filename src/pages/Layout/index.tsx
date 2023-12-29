@@ -28,12 +28,20 @@ import { DAPage } from '../director-actor';
 
 import './index.scss';
 import { RegisterPage } from '../register';
+import { useRefreshToken } from '../../hooks/useRefreshtoken';
 
 const { Header, Sider, Content } = Layout;
 
 export const LayoutAdmin: React.FC = () => {
   const themeReducer = useSelector((state: any) => state.ThemeReducer);
   const dispatch = useDispatch();
+
+  const timeRefreshToken = 1000 * 14 * 60; /*14m*/
+
+  useEffect(() => {
+    const timer = setInterval(useRefreshToken, timeRefreshToken);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const themeClass = localStorage.getItem('themeMode') || 'theme-mode-light';

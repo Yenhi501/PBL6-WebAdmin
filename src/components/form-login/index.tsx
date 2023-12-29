@@ -36,13 +36,10 @@ export const FormLogin = ({ className }: FormLogin) => {
         let refreshToken = JSON.stringify(res.data.result.token.refreshToken);
         Cookies.set('accessToken', accessToken, { expires: 1 });
         Cookies.set('refreshToken', refreshToken, { expires: 1 });
-        console.log(res);
 
         navigator({
           pathname: `/userId/movies`,
         });
-
-        console.log(res);
 
         setIsLoading(false);
       })

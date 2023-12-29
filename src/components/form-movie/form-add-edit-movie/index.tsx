@@ -9,7 +9,7 @@ import { FormAddEditVideoMovies } from './form-add-edit-video';
 import axios from 'axios';
 import { ItemMovieHandled } from '../../../model/movie';
 import { endpointServer } from '../../../utils/endpoint';
-import { accessToken } from '../../../utils/token';
+import { useToken } from '../../../hooks/useToken';
 export interface UrlPost {
   key: string;
   value: string;
@@ -35,6 +35,7 @@ export const FormAddEditMovie = ({
     key: '',
     value: '',
   });
+  const { accessToken } = useToken();
 
   const [activeKey, setActiveKey] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
@@ -51,9 +52,10 @@ export const FormAddEditMovie = ({
         },
       )
       .then((response: any) => {
+        console.log(response.data[0]);
+
         setUrlPostImageList([response.data[0], response.data[1]]);
         setUrlPostVideo(response.data[2]);
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
