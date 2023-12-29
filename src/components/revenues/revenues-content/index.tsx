@@ -12,6 +12,7 @@ import axios from 'axios';
 import { endpointServer } from '../../../utils/endpoint';
 import { DataRawPayment } from '../../../model/revenue';
 import { FormRevenue } from '../../form-revenue';
+import { useToken } from '../../../hooks/useToken';
 dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
@@ -34,6 +35,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   const [resetData, setResetData] = useState(0);
   const [currPage, setCurrPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const { accessToken } = useToken();
   const handleOk = () => {
     if (editedItem) {
       const updatedData = data.map((item) => {
@@ -61,7 +63,10 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           'YYYY-MM-DD',
         )}`,
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + accessToken,
+          },
           params:
             searchValue != null
               ? { search: searchValue, ...defaultParams }
@@ -71,9 +76,15 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
       .then((res) => {
         const dataRevenue = res.data.data;
         setTotalItems(res.data.totalCount);
-        dataRevenue.forEach(
-          (payment: DataRawPayment, index: number) => (payment.key = index + 1),
-        );
+        dataRevenue.forEach((payment: DataRawPayment, index: number) => {
+          payment.key = index + 1;
+          if (payment.orderInfo != null) {
+            payment.userId = Number(payment.orderInfo?.split(' ')[1]);
+          }
+          console.log(payment.userId);
+        });
+        console.log(dataRevenue);
+
         setData(dataRevenue);
       })
       .catch((err) => console.error(err));
