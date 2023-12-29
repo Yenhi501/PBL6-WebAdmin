@@ -2,10 +2,16 @@ import axios from 'axios';
 import { endpointServer } from './endpoint';
 import { ActorDirector } from '../model/director-actor';
 
-export const getDataActorsSelect = async (value: string) => {
+export const getDataActorsSelect = async (
+  value: string,
+  accessToken?: string,
+) => {
   return axios
     .get(`${endpointServer}/individuals/actors`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       params: { name: value },
     })
     .then((res) => {
@@ -20,15 +26,20 @@ export const getDataActorsSelect = async (value: string) => {
     })
     .catch((err) => {
       console.log(err);
-
       return [];
     });
 };
 
-export const getDataDirectorsSelect = async (value: string) => {
+export const getDataDirectorsSelect = async (
+  value: string,
+  accessToken?: string,
+) => {
   return axios
     .get(`${endpointServer}/individuals/directors`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       params: { name: value },
     })
     .then((res) => {

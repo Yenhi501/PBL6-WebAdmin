@@ -29,6 +29,8 @@ export interface ItemTable extends TableProps<ItemType> {
   totalData?: number;
   onChangePagination?: (props?: any) => void;
   isHideCreate?: boolean;
+  onDeleteAll?: (props?: any) => void;
+  onDelete?: (props?: any) => void;
 }
 export const TableResult = ({
   originData,
@@ -38,6 +40,8 @@ export const TableResult = ({
   onClickRow = () => {},
   onAdd = () => {},
   onChangePagination = () => {},
+  onDeleteAll = () => {},
+  onDelete = () => {},
   totalData,
   isHideCreate = false,
   onChange,
@@ -46,49 +50,12 @@ export const TableResult = ({
     [key: string]: React.RefObject<HTMLAnchorElement | null>;
   }>({});
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
   const [form] = Form.useForm();
   const [data, setData] = useState<ItemType[]>([]);
 
   useEffect(() => {
     setData(originData);
   }, [originData]);
-
-  //chia page
-  const [paginationConfig, setPaginationConfig] = useState({
-    defaultPageSize: 8,
-    total: originData.length,
-  });
-
-  const handleDelete = (key: React.Key) => {
-    const newData = data.filter((item) => item.key !== key);
-    setData(newData);
-
-    setPaginationConfig({
-      ...paginationConfig,
-      total: newData.length,
-    });
-  };
-  const handleDeleteAll = (selectedRowKeys: React.Key[]) => {
-    const newData = data.filter(
-      (items) => !selectedRowKeys.includes(items.key),
-    );
-    setData(newData);
-    setPaginationConfig({
-      ...paginationConfig,
-      total: newData.length,
-    });
-  };
-  //edit
 
   const handleEdit = (record: ItemType) => {
     onEdit(record);
@@ -126,7 +93,7 @@ export const TableResult = ({
                 title="Sure to delete?"
                 onConfirm={(event) => {
                   event?.stopPropagation();
-                  handleDelete(record.key);
+                  onDelete(record);
                 }}
                 onCancel={(event) => {
                   event?.stopPropagation();
@@ -170,7 +137,7 @@ export const TableResult = ({
           size="large"
           className="btn-delete-all "
           icon={<DeleteOutlined rev="" className="icon-delete-all" />}
-          onClick={() => handleDeleteAll(selectedRowKeys)}
+          onClick={onDeleteAll}
         >
           Xóa hàng loạt
         </Button>
@@ -190,9 +157,6 @@ export const TableResult = ({
           pageSize: 5,
         }}
         scroll={{ x: 'max-content' }}
-        rowSelection={{
-          ...rowSelection,
-        }}
         onChange={onChange}
       />
     </Form>

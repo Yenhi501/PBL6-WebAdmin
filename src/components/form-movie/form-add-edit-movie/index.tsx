@@ -9,6 +9,7 @@ import { FormAddEditVideoMovies } from './form-add-edit-video';
 import axios from 'axios';
 import { ItemMovieHandled } from '../../../model/movie';
 import { endpointServer } from '../../../utils/endpoint';
+import { useToken } from '../../../hooks/useToken';
 export interface UrlPost {
   key: string;
   value: string;
@@ -34,19 +35,25 @@ export const FormAddEditMovie = ({
     key: '',
     value: '',
   });
+  const { accessToken } = useToken();
 
   const [activeKey, setActiveKey] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
 
   const getUrlPostList = () => {
     axios
-      .get(`${endpointServer}/movies/get/presign-url?movieId=1&option=all`, {
-        headers: {
-          'Content-Type': 'application/json',
-          // Authorization: `token ${/*${token}*/ ''}`,
+      .get(
+        `${endpointServer}/movies/get/presign-url?movieId=${editItem?.movieId}&option=all`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      })
+      )
       .then((response: any) => {
+        console.log(response.data[0]);
+
         setUrlPostImageList([response.data[0], response.data[1]]);
         setUrlPostVideo(response.data[2]);
       })
@@ -58,7 +65,9 @@ export const FormAddEditMovie = ({
   useEffect(() => {
     setActiveKey('1');
     setIsLoading(false);
+  }, [isOpen]);
 
+  useEffect(() => {
     if (
       isOpen === true &&
       isEditForm === true &&
@@ -66,7 +75,7 @@ export const FormAddEditMovie = ({
     ) {
       getUrlPostList();
     }
-  }, [isOpen]);
+  }, [activeKey]);
 
   const FormAddEditInfoFilmCustom = () => (
     <FormAddEditInfoFilm

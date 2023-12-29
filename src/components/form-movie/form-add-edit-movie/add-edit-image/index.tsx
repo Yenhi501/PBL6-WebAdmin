@@ -8,6 +8,10 @@ import axios from 'axios';
 import { UrlPost } from '..';
 import { ItemMovieHandled, ItemMovieRaw } from '../../../../model/movie';
 import { MovieContext } from '../../../../pages/movies';
+import Cookies from 'js-cookie';
+import { useToken } from '../../../../hooks/useToken';
+import { endpointServer } from '../../../../utils/endpoint';
+import { ImgVidRequest } from '../../../../model/img-vid-request';
 
 export type FieldType = {
   poster?: undefined;
@@ -27,6 +31,7 @@ export const FormAddEditImageMovies = ({
 }: FormAddEditImageMovies) => {
   const [form] = useForm();
   const { isOpen } = React.useContext(MovieContext);
+  const { accessToken } = useToken();
 
   const [srcImgPoster, setSrcImgPoster] = useState(editItem?.posterURL);
   const [srcImgBg, setSrcImgBg] = useState(editItem?.backgroundURL);
@@ -37,18 +42,42 @@ export const FormAddEditImageMovies = ({
     form.resetFields();
   };
 
-  const uploadImg = (url: string, data: any) => {
+  const uploadImg = async (url: string, data: any, obj: ImgVidRequest) => {
+    console.log(url);
+
     axios
-      .put(url, data.file, {
-        headers: {
-          'Content-Type': 'image/jpeg',
-          // Authorization: `token ${/*${token}*/ ''}`,
+      .put(
+        'https://s3.ap-southeast-1.amazonaws.com/myBucket/myKey?AWSAccessKeyId=AKIAQT4QXGPJPQR3LDMN&Content-Type=image%2Fjpeg&Expires=1703835972&Signature=UEC7ZOJKA0WUzLK3ShUf7zNjZWs%3D',
+        data.file,
+        {
+          headers: {
+            'Content-Type': 'image/jpeg',
+          },
         },
-      })
+      )
       .then((response) => {
         console.log(response);
       })
       .catch((error) => console.log(error));
+
+    // await axios
+    //   .post(
+    //     `${endpointServer}/movies/cloudfront/clear-cache`,
+    //     {
+    //       movieId: editItem?.movieId,
+    //       option: obj,
+    //     },
+    //     {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authentication: `Bearer ${accessToken}`,
+    //       },
+    //     },
+    //   )
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   const handleUpload = async (values: any) => {
@@ -57,11 +86,14 @@ export const FormAddEditImageMovies = ({
         urlPostList.map(async (object, index) => {
           const listValues: any = Object.values(values);
           if (listValues[index] != null) {
-            uploadImg(object.value, listValues[index].file);
+            await uploadImg(
+              object.value,
+              listValues[index].file,
+              index === 0 ? 'poster' : 'background',
+            );
           }
         }),
       )
-      .then((response) => {})
       .catch((error) => console.log(error));
   };
 
@@ -69,7 +101,7 @@ export const FormAddEditImageMovies = ({
     if (editItem != null) {
       handleReset();
     }
-  }, [isOpen]);
+  }, [isOpen, editItem]);
 
   return (
     <Form
@@ -90,12 +122,14 @@ export const FormAddEditImageMovies = ({
         setSrcImg={setSrcImgPoster}
         label="Poster"
         name="poster"
+        heightImgPreview={200}
       />
       <ItemUpload
         srcImg={srcImgBg}
         setSrcImg={setSrcImgBg}
         label="Background"
         name="background"
+        widthImgPreview={300}
       />
 
       <Row justify={'end'} gutter={16}>

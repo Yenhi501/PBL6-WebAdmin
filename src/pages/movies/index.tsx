@@ -15,6 +15,7 @@ export const Movies: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<ItemMovieHandled | null>(
     null,
   );
+  const [resetData, setResetData] = useState(0);
 
   return (
     <MovieContext.Provider value={{ isOpen: isModalAddOpen }}>
@@ -23,6 +24,7 @@ export const Movies: React.FC = () => {
         handleCancel={() => {
           setIsModalAddOpen(false);
           setEditedItem(null);
+          setResetData((prev) => prev + 1);
         }}
         editItem={editedItem}
         isEditForm={editedItem != null ? true : false}
@@ -44,6 +46,8 @@ export const Movies: React.FC = () => {
           setSelectedItem(record as ItemMovieHandled);
           setIsDetailModalOpen(true);
         }}
+        setResetData={setResetData}
+        resetData={resetData}
       />
       {/* <ChartSection /> */}
     </MovieContext.Provider>

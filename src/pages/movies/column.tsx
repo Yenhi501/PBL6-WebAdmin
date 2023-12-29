@@ -10,9 +10,9 @@ import { ItemType } from '../../components/table';
 import { ColumnFilterItem, FilterValue, Key } from 'antd/es/table/interface';
 
 const levelMap: Record<string, string> = {
-  '1': 'Tiêu chuẩn',
-  '2': 'Cao cấp',
-  '3': 'Đặc biệt',
+  '0': 'Tiêu chuẩn',
+  '1': 'Cao cấp',
+  '2': 'Đặc biệt',
 };
 
 const typeMovieMap: Record<string, string> = {

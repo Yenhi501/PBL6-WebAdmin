@@ -24,6 +24,7 @@ import {
 import dayjs from 'dayjs';
 import { MovieInfoField } from './type';
 import { convertStringTrueFalse } from '../../../../utils/convert-string-true-false';
+import { useToken } from '../../../../hooks/useToken';
 
 const levelMap: Record<number, string> = {
   0: 'Cơ bản',
@@ -46,6 +47,7 @@ export const FormAddEditInfoFilm = ({
   const [form] = useForm();
   const [dataNations, setDataNations] = useState<SelectProps['options']>([]);
   const [dataGenre, setDataGenre] = useState<SelectProps['options']>([]);
+  const { accessToken } = useToken();
 
   const getDataSelect = () => {
     axios
@@ -68,6 +70,7 @@ export const FormAddEditInfoFilm = ({
         );
 
         setDataGenre(handledDataGenres);
+        setDataNations(handledDataNation);
       })
       .catch((err) => console.log(err));
   };
@@ -87,11 +90,11 @@ export const FormAddEditInfoFilm = ({
       description: values.desc,
       releaseDate: values.yearOfManufacturer,
       nation: values.country,
-      genreIds: values.genre?.map((item) => item.value),
+      genreIds: values.genre,
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: values.level?.value,
+      level: Number(values.level),
     };
 
     axios({
@@ -102,7 +105,7 @@ export const FormAddEditInfoFilm = ({
       data: data,
       headers: {
         'Content-Type': 'application/json',
-        // Authorization: `token ${/*${token}*/ ''}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
       .then((response) => {
@@ -175,7 +178,7 @@ export const FormAddEditInfoFilm = ({
             wrapperCol={{ span: 24 }}
             rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
           >
-            <Input placeholder="Nhập quốc gia" />
+            <Select placeholder="Nhập quốc gia" options={dataNations} />
           </Form.Item>
         </Col>
         <Col span={10} offset={4}>

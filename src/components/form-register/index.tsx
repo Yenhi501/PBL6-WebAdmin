@@ -22,14 +22,14 @@ import {
 import locale from 'antd/es/date-picker/locale/vi_VN';
 
 import './index.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
 import { RuleObject } from 'antd/es/form';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
 import moment from 'moment';
-import { accessToken } from '../../utils/token';
 import { BtnNotify } from '../btn-notify';
+import { useToken } from '../../hooks/useToken';
 
 type FieldType = {
   username?: string;
@@ -62,6 +62,7 @@ export const FormRegister = ({ className }: FormRegister) => {
   const [form] = useForm();
   const [api, contextHolder] = notification.useNotification();
   const navigator = useNavigate();
+  const { accessToken } = useToken();
 
   const openNotification = (type: NotificationType) => {
     api[type]({
@@ -118,6 +119,7 @@ export const FormRegister = ({ className }: FormRegister) => {
       .then((res) => {
         setIsLoading(false);
         openNotification('success');
+
         form.resetFields();
       })
       .catch((err) => {
@@ -270,6 +272,11 @@ export const FormRegister = ({ className }: FormRegister) => {
             >
               Đăng ký
             </Button>
+            <Link to={'/userId/movies'}>
+              <Button type="default" className="register-form-btn-submit">
+                Trở lại
+              </Button>
+            </Link>
           </Form.Item>
         </Form>
         <div className="form-register-sub-section">

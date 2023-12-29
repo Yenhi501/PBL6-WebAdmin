@@ -41,8 +41,6 @@ export const FormLogin = ({ className }: FormLogin) => {
           pathname: `/userId/movies`,
         });
 
-        console.log(res);
-
         setIsLoading(false);
       })
       .catch((err) => {

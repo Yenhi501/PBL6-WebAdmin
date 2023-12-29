@@ -1,0 +1,35 @@
+.form-add-edit-img-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 15px;
+
+  .form-add-edit-img-container {
+    .form-add-edit-img-img {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+
+    .ant-image-mask {
+      border-radius: 10px;
+    }
+  }
+  .form-add-edit-img-pre {
+    width: 150px;
+    height: 150px;
+    background-color: #e4e4e4;
+    border: 1px dashed #ccc;
+    border-radius: 15px;
+    margin-bottom: 15px;
+  }
+
+  .upload-btn {
+    display: flex;
+    gap: 20px;
+  }
+}
