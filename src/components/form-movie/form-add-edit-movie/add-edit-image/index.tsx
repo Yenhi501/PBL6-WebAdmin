@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import { useToken } from '../../../../hooks/useToken';
 import { endpointServer } from '../../../../utils/endpoint';
 import { ImgVidRequest } from '../../../../model/img-vid-request';
+import type { UploadFile } from 'antd/es/upload/interface';
 
 export type FieldType = {
   poster?: undefined;
@@ -39,19 +40,35 @@ export const FormAddEditImageMovies = ({
   const handleReset = () => {
     setSrcImgPoster(editItem?.posterURL);
     setSrcImgBg(editItem?.backgroundURL);
-    form.resetFields();
   };
 
-  const uploadImg = async (url: string, data: any, obj: ImgVidRequest) => {
-    console.log(url);
+  const uploadImg = async (
+    url: string,
+    data: UploadFile,
+    obj: ImgVidRequest,
+  ) => {
+    await axios
+      .put(url, data, {
+        headers: {
+          'Content-Type': 'image/jpeg',
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
 
-    axios
-      .put(
-        'https://s3.ap-southeast-1.amazonaws.com/myBucket/myKey?AWSAccessKeyId=AKIAQT4QXGPJPQR3LDMN&Content-Type=image%2Fjpeg&Expires=1703835972&Signature=UEC7ZOJKA0WUzLK3ShUf7zNjZWs%3D',
-        data.file,
+    await axios
+      .post(
+        `${endpointServer}/movies/cloudfront/clear-cache`,
+        {
+          movieId: editItem?.movieId,
+          option: obj,
+        },
         {
           headers: {
-            'Content-Type': 'image/jpeg',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       )
@@ -59,25 +76,6 @@ export const FormAddEditImageMovies = ({
         console.log(response);
       })
       .catch((error) => console.log(error));
-
-    // await axios
-    //   .post(
-    //     `${endpointServer}/movies/cloudfront/clear-cache`,
-    //     {
-    //       movieId: editItem?.movieId,
-    //       option: obj,
-    //     },
-    //     {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authentication: `Bearer ${accessToken}`,
-    //       },
-    //     },
-    //   )
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => console.log(error));
   };
 
   const handleUpload = async (values: any) => {
@@ -86,7 +84,7 @@ export const FormAddEditImageMovies = ({
         urlPostList.map(async (object, index) => {
           const listValues: any = Object.values(values);
           if (listValues[index] != null) {
-            await uploadImg(
+            uploadImg(
               object.value,
               listValues[index].file,
               index === 0 ? 'poster' : 'background',

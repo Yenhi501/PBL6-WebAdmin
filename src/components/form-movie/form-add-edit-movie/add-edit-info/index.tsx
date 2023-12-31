@@ -85,6 +85,8 @@ export const FormAddEditInfoFilm = ({
       'YYYY-MM-DD HH:mm:ss.SSSZ',
     );
 
+    console.log(values.level);
+
     const data = {
       title: values.name,
       description: values.desc,
@@ -94,7 +96,7 @@ export const FormAddEditInfoFilm = ({
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: Number(values.level),
+      level: Number(values.level?.value),
     };
 
     axios({

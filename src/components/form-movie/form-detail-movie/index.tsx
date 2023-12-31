@@ -42,13 +42,18 @@ export const FormDetailMovie = ({
       className="form-detail-movie"
       title="Chi tiết phim"
     >
-      <FormAddEpisode isOpen={isOpenAdd} onCancel={() => setIsOpenAdd(false)} />
+      <FormAddEpisode
+        isOpen={isOpenAdd}
+        onCancel={() => setIsOpenAdd(false)}
+        movieId={selectedItem?.movieId}
+      />
       <Image.PreviewGroup>
         <div className="form-detail-movie-image-container">
           <div className="form-detail-movie-image-item">
             <h1 className="image-title">Poster</h1>
             <Image
               width={200}
+              height={300}
               src={selectedItem?.posterURL}
               fallback={DefaultImg}
               wrapperStyle={{ borderRadius: 15, overflow: 'hidden' }}
@@ -57,10 +62,12 @@ export const FormDetailMovie = ({
           <div className="form-detail-movie-image-item">
             <h1 className="image-title">Background</h1>
             <Image
-              width={200}
+              width={300}
+              height={150}
               src={selectedItem?.backgroundURL}
               fallback={DefaultImg}
               wrapperStyle={{ borderRadius: 15, overflow: 'hidden' }}
+              className="form-detail-movie-background"
             />
           </div>
         </div>
