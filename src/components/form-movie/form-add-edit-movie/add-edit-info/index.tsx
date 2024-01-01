@@ -81,7 +81,7 @@ export const FormAddEditInfoFilm = ({
 
   const handleAddEditRequest = (values: MovieInfoField) => {
     setIsLoading(true);
-    values.yearOfManufacturer = moment(values.yearOfManufacturer).format(
+    values.yearOfManufacturer = dayjs(values.yearOfManufacturer).format(
       'YYYY-MM-DD HH:mm:ss.SSSZ',
     );
 
@@ -94,7 +94,7 @@ export const FormAddEditInfoFilm = ({
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: Number(values.level),
+      level: Number(values.level?.value),
     };
 
     axios({

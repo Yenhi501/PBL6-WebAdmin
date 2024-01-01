@@ -53,7 +53,6 @@ export const MoviesPageBody = ({
         setData(dataFilms);
         setIsLoading(false);
         setTotalMovie(response.data.totalCount);
-        console.log(response);
       })
       .catch((error) => {
         setIsLoading(false);

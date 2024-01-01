@@ -1,5 +1,5 @@
 import { Button, Form, Image, Upload, UploadFile } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DefaultImg } from '../default-img';
 import { FieldType } from '..';
 import { UploadOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -50,7 +50,6 @@ export const ItemUpload = ({
             className="form-add-edit-img-img"
             width={widthImgPreview}
             height={heightImgPreview}
-            placeholder
           />
         </div>
         <div className="upload-btn">
@@ -66,17 +65,10 @@ export const ItemUpload = ({
               fileList={fileTrailer}
             >
               <div>
-                <Button icon={<UploadOutlined rev="" />}>Upload</Button>
+                <Button icon={<UploadOutlined rev="" />}>Tải lên</Button>
               </div>
             </Upload>
           </Form.Item>
-          <Button
-            icon={<DeleteOutlined rev="" />}
-            danger
-            onClick={() => setSrcImg('')}
-          >
-            Remove
-          </Button>
         </div>
       </div>
     </div>
