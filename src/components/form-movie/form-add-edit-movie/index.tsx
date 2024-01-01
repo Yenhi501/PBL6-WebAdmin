@@ -9,6 +9,7 @@ import axios from 'axios';
 import { ItemMovieHandled } from '../../../model/movie';
 import { endpointServer } from '../../../utils/endpoint';
 import { useToken } from '../../../hooks/useToken';
+
 export interface UrlPost {
   key: string;
   value: string;
@@ -93,6 +94,7 @@ export const FormAddEditMovie = ({
         <FormAddEditImageMovies
           urlPostList={urlPostImageList}
           editItem={editItem}
+          onClose={handleCancel}
         />
       ),
     },

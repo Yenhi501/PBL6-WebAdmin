@@ -12,7 +12,6 @@ import {
 } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { UserInfo } from '../../../userInfo';
-import moment from 'moment';
 import axios from 'axios';
 import { useForm } from 'antd/es/form/Form';
 import { GenreMovie, ItemMovieHandled } from '../../../../model/movie';
@@ -97,7 +96,7 @@ export const FormAddEditInfoFilm = ({
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: Number(values.level?.value),
+      level: values.level,
     };
 
     axios({
@@ -113,6 +112,7 @@ export const FormAddEditInfoFilm = ({
     })
       .then((response) => {
         onClose();
+        console.log(response);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -136,10 +136,7 @@ export const FormAddEditInfoFilm = ({
           return { label: actors.name, value: actors.actor_id };
         }),
         desc: editItem.description,
-        level: {
-          value: editItem.level,
-          label: levelMap[editItem.level],
-        },
+        level: editItem.level,
         type: convertStringTrueFalse(editItem.isSeries),
       });
     } catch (error) {
