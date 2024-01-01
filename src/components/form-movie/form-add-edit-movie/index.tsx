@@ -1,6 +1,5 @@
 import { Modal, Spin, Tabs, TabsProps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { LoadingOutlined } from '@ant-design/icons';
 
 import './index.scss';
 import { FormAddEditInfoFilm } from './add-edit-info';
@@ -38,7 +37,6 @@ export const FormAddEditMovie = ({
   const { accessToken } = useToken();
 
   const [activeKey, setActiveKey] = useState('1');
-  const [isLoading, setIsLoading] = useState(false);
 
   const getUrlPostList = () => {
     axios
@@ -64,7 +62,6 @@ export const FormAddEditMovie = ({
 
   useEffect(() => {
     setActiveKey('1');
-    setIsLoading(false);
   }, [isOpen]);
 
   useEffect(() => {
@@ -82,7 +79,6 @@ export const FormAddEditMovie = ({
       editItem={editItem}
       isEditForm={isEditForm}
       onClose={handleCancel}
-      setIsLoading={setIsLoading}
     />
   );
 
@@ -117,21 +113,12 @@ export const FormAddEditMovie = ({
       footer={() => <></>}
       className="modal-add-edit-film"
     >
-      <Spin
-        indicator={<LoadingOutlined rev={''} style={{ fontSize: 24 }} spin />}
-        spinning={isLoading}
-      >
-        {isEditForm === true ? (
-          <Tabs
-            defaultActiveKey={activeKey}
-            items={items}
-            activeKey={activeKey}
-            onTabClick={(activeKey) => setActiveKey(activeKey)}
-          />
-        ) : (
-          <FormAddEditInfoFilmCustom />
-        )}
-      </Spin>
+      <Tabs
+        defaultActiveKey={activeKey}
+        items={isEditForm === true ? items : [items[0]]}
+        activeKey={activeKey}
+        onTabClick={(activeKey) => setActiveKey(activeKey)}
+      />
     </Modal>
   );
 };

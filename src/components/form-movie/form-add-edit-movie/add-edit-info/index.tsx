@@ -8,8 +8,9 @@ import {
   Row,
   Select,
   SelectProps,
+  Spin,
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserInfo } from '../../../userInfo';
 import moment from 'moment';
 import axios from 'axios';
@@ -25,6 +26,7 @@ import dayjs from 'dayjs';
 import { MovieInfoField } from './type';
 import { convertStringTrueFalse } from '../../../../utils/convert-string-true-false';
 import { useToken } from '../../../../hooks/useToken';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const levelMap: Record<number, string> = {
   0: 'Cơ bản',
@@ -36,18 +38,19 @@ export type FormAddEditInfoFilm = {
   isEditForm?: boolean;
   onClose?: (props?: any) => void;
   setIsLoading?: (props?: any) => void;
+  isLoading?: boolean;
 };
 
 export const FormAddEditInfoFilm = ({
   editItem = null,
   isEditForm,
   onClose = () => {},
-  setIsLoading = () => {},
 }: FormAddEditInfoFilm) => {
   const [form] = useForm();
   const [dataNations, setDataNations] = useState<SelectProps['options']>([]);
   const [dataGenre, setDataGenre] = useState<SelectProps['options']>([]);
   const { accessToken } = useToken();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataSelect = () => {
     axios
@@ -81,7 +84,7 @@ export const FormAddEditInfoFilm = ({
 
   const handleAddEditRequest = (values: MovieInfoField) => {
     setIsLoading(true);
-    values.yearOfManufacturer = moment(values.yearOfManufacturer).format(
+    values.yearOfManufacturer = dayjs(values.yearOfManufacturer).format(
       'YYYY-MM-DD HH:mm:ss.SSSZ',
     );
 
@@ -94,7 +97,7 @@ export const FormAddEditInfoFilm = ({
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: Number(values.level),
+      level: values.level?.value,
     };
 
     axios({
@@ -135,7 +138,7 @@ export const FormAddEditInfoFilm = ({
         desc: editItem.description,
         level: {
           value: editItem.level,
-          label: levelMap[Number(editItem.level)],
+          label: levelMap[editItem.level],
         },
         type: convertStringTrueFalse(editItem.isSeries),
       });
@@ -151,163 +154,172 @@ export const FormAddEditInfoFilm = ({
   }, []);
 
   return (
-    <Form
-      form={form}
-      name="form-add-edit-film"
-      wrapperCol={{ span: 24 }}
-      initialValues={{ remember: true }}
-      autoComplete="off"
-      layout="vertical"
-      className="form-add-edit-film"
-      onFinish={(values) => {
-        handleAddEditRequest(values);
-      }}
+    <Spin
+      indicator={<LoadingOutlined rev={''} style={{ fontSize: 24 }} spin />}
+      spinning={isLoading}
     >
-      <Form.Item<MovieInfoField>
-        name="name"
-        label="Tên"
-        rules={[{ required: true, message: 'Vui lòng nhập tên phim' }]}
-      >
-        <Input placeholder="Nhập tên phim" />
-      </Form.Item>
-      <Row>
-        <Col span={10}>
-          <Form.Item<MovieInfoField>
-            name="country"
-            label="Quốc gia"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
-          >
-            <Select placeholder="Nhập quốc gia" options={dataNations} />
-          </Form.Item>
-        </Col>
-        <Col span={10} offset={4}>
-          <Form.Item<MovieInfoField>
-            name="yearOfManufacturer"
-            label="Năm sản xuất"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: 'Vui lòng nhập năm sản xuất' }]}
-          >
-            <DatePicker
-              className="date-picker"
-              placeholder="DD-MM-YYYY"
-              format="DD-MM-YYYY"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={12}>
-          <Form.Item<MovieInfoField>
-            name="type"
-            label="Loại phim"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: 'Vui lòng chọn loại phim' }]}
-          >
-            <Radio.Group>
-              <Radio value={true}>Phim bộ</Radio>
-              <Radio value={false}>Phim lẻ</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-        <Col span={10} offset={2}>
-          <Form.Item<MovieInfoField>
-            name="level"
-            label="Cấp độ"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: 'Vui lòng chọn cấp độ' }]}
-          >
-            <Select placeholder="Chọn cấp độ">
-              <Select.Option value={0}>Cơ bản</Select.Option>
-              <Select.Option value={1}>Cao cấp</Select.Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
-      <Form.Item<MovieInfoField>
-        name="director"
-        label="Đạo diễn"
+      <Form
+        form={form}
+        name="form-add-edit-film"
         wrapperCol={{ span: 24 }}
-        rules={[{ required: true, message: 'Vui lòng chọn đạo diễn' }]}
+        autoComplete="off"
+        layout="vertical"
+        className="form-add-edit-film"
+        onFinish={(values) => {
+          handleAddEditRequest(values);
+        }}
       >
-        <DebounceSelect
-          mode="multiple"
-          allowClear
-          optionRender={(option) => {
-            return (
-              <UserInfo
-                isShowEmail={false}
-                id={option.data.value}
-                people="director"
+        <Form.Item<MovieInfoField>
+          name="name"
+          label="Tên"
+          rules={[{ required: true, message: 'Vui lòng nhập tên phim' }]}
+        >
+          <Input placeholder="Nhập tên phim" />
+        </Form.Item>
+        <Row>
+          <Col span={10}>
+            <Form.Item<MovieInfoField>
+              name="country"
+              label="Quốc gia"
+              wrapperCol={{ span: 24 }}
+              rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
+            >
+              <Select placeholder="Nhập quốc gia" options={dataNations} />
+            </Form.Item>
+          </Col>
+          <Col span={10} offset={4}>
+            <Form.Item<MovieInfoField>
+              name="yearOfManufacturer"
+              label="Năm sản xuất"
+              wrapperCol={{ span: 24 }}
+              rules={[
+                { required: true, message: 'Vui lòng nhập năm sản xuất' },
+              ]}
+            >
+              <DatePicker
+                className="date-picker"
+                placeholder="DD-MM-YYYY"
+                format="DD-MM-YYYY"
               />
-            );
-          }}
-          maxTagCount="responsive"
-          placeholder="Nhập tên đạo diễn"
-          fetchOptions={getDataDirectorsSelect}
-        />
-      </Form.Item>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Form.Item<MovieInfoField>
+              name="type"
+              label="Loại phim"
+              wrapperCol={{ span: 24 }}
+              rules={[{ required: true, message: 'Vui lòng chọn loại phim' }]}
+            >
+              <Radio.Group>
+                <Radio value={true}>Phim bộ</Radio>
+                <Radio value={false}>Phim lẻ</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+          <Col span={10} offset={2}>
+            <Form.Item<MovieInfoField>
+              name="level"
+              label="Cấp độ"
+              wrapperCol={{ span: 24 }}
+              rules={[{ required: true, message: 'Vui lòng chọn cấp độ' }]}
+            >
+              <Select
+                placeholder="Chọn cấp độ"
+                options={[
+                  { label: 'Cơ bản', value: 0 },
+                  { label: 'Cao cấp', value: 1 },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item<MovieInfoField>
+          name="director"
+          label="Đạo diễn"
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: 'Vui lòng chọn đạo diễn' }]}
+        >
+          <DebounceSelect
+            mode="multiple"
+            allowClear
+            optionRender={(option) => {
+              return (
+                <UserInfo
+                  isShowEmail={false}
+                  id={option.data.value}
+                  people="director"
+                />
+              );
+            }}
+            maxTagCount="responsive"
+            placeholder="Nhập tên đạo diễn"
+            fetchOptions={getDataDirectorsSelect}
+          />
+        </Form.Item>
 
-      <Form.Item<MovieInfoField>
-        name="genre"
-        label="Thể loại"
-        wrapperCol={{ span: 24 }}
-        rules={[{ required: true, message: 'Vui lòng chọn thể loại phim' }]}
-      >
-        <Select
-          mode="multiple"
-          allowClear
-          maxTagCount="responsive"
-          options={dataGenre}
-          placeholder="Chọn thể loại"
-        />
-      </Form.Item>
-      <Form.Item<MovieInfoField>
-        name="actor"
-        label="Diễn viên"
-        rules={[{ required: true, message: 'Vui lòng chọn diễn viên' }]}
-      >
-        <DebounceSelect
-          mode="multiple"
-          allowClear
-          optionRender={(option) => {
-            return (
-              <UserInfo
-                isShowEmail={false}
-                id={option.data.value}
-                people="actor"
-              />
-            );
-          }}
-          maxTagCount="responsive"
-          placeholder="Nhập tên diễn viên"
-          fetchOptions={getDataActorsSelect}
-        />
-      </Form.Item>
-      <Form.Item<MovieInfoField>
-        name="desc"
-        label="Mô tả"
-        rules={[{ required: true, message: 'Vui lòng nhập mô tả cho phim' }]}
-      >
-        <Input.TextArea placeholder="Nhập mô tả phim" />
-      </Form.Item>
-      <Row justify={'end'} gutter={16}>
-        <Col>
-          <Button
-            type="default"
-            onClick={() =>
-              editItem != null ? setEditItemValue : form.resetFields
-            }
-          >
-            Khôi phục
-          </Button>
-        </Col>
-        <Col>
-          <Button type="primary" htmlType="submit">
-            {isEditForm === true ? 'Cập nhật' : 'Thêm'}
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+        <Form.Item<MovieInfoField>
+          name="genre"
+          label="Thể loại"
+          wrapperCol={{ span: 24 }}
+          rules={[{ required: true, message: 'Vui lòng chọn thể loại phim' }]}
+        >
+          <Select
+            mode="multiple"
+            allowClear
+            maxTagCount="responsive"
+            options={dataGenre}
+            placeholder="Chọn thể loại"
+          />
+        </Form.Item>
+        <Form.Item<MovieInfoField>
+          name="actor"
+          label="Diễn viên"
+          rules={[{ required: true, message: 'Vui lòng chọn diễn viên' }]}
+        >
+          <DebounceSelect
+            mode="multiple"
+            allowClear
+            optionRender={(option) => {
+              return (
+                <UserInfo
+                  isShowEmail={false}
+                  id={option.data.value}
+                  people="actor"
+                />
+              );
+            }}
+            maxTagCount="responsive"
+            placeholder="Nhập tên diễn viên"
+            fetchOptions={getDataActorsSelect}
+          />
+        </Form.Item>
+        <Form.Item<MovieInfoField>
+          name="desc"
+          label="Mô tả"
+          rules={[{ required: true, message: 'Vui lòng nhập mô tả cho phim' }]}
+        >
+          <Input.TextArea placeholder="Nhập mô tả phim" />
+        </Form.Item>
+        <Row justify={'end'} gutter={16}>
+          <Col>
+            <Button
+              type="default"
+              onClick={() =>
+                editItem != null ? setEditItemValue : form.resetFields
+              }
+            >
+              Khôi phục
+            </Button>
+          </Col>
+          <Col>
+            <Button type="primary" htmlType="submit">
+              {isEditForm === true ? 'Cập nhật' : 'Thêm'}
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Spin>
   );
 };
