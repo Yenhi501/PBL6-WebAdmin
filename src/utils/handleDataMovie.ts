@@ -9,7 +9,7 @@ export const handleDataMovie = (dataRaw: DataRaw) => {
         key: item.movieId,
         movieId: item.movieId.toString(),
         releaseDate: moment(item.releaseDate).format('DD-MM-YYYY'),
-        level: item.level.toString(),
+        level: item.level,
         isSeries: item.isSeries.toString(),
       };
     },
