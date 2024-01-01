@@ -81,11 +81,9 @@ export const FormAddEditInfoFilm = ({
 
   const handleAddEditRequest = (values: MovieInfoField) => {
     setIsLoading(true);
-    values.yearOfManufacturer = moment(values.yearOfManufacturer).format(
+    values.yearOfManufacturer = dayjs(values.yearOfManufacturer).format(
       'YYYY-MM-DD HH:mm:ss.SSSZ',
     );
-
-    console.log(values.level);
 
     const data = {
       title: values.name,
