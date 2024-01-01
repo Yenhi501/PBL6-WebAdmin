@@ -11,6 +11,8 @@ import { UrlPost } from '..';
 import { FieldType } from './type';
 import { ItemMovieHandled, ItemMovieRaw } from '../../../../model/movie';
 import { MovieContext } from '../../../../pages/movies';
+import { useToken } from '../../../../hooks/useToken';
+import { endpointServer } from '../../../../utils/endpoint';
 
 export type FormAddEditVideoMovies = {
   isEditForm?: boolean;
@@ -24,15 +26,34 @@ export const FormAddEditVideoMovies = ({
 }: FormAddEditVideoMovies) => {
   const [form] = useForm();
   const { isOpen } = React.useContext(MovieContext);
+  const { accessToken } = useToken();
 
-  const handleUpload = (values: any) => {
-    axios
+  const handleUpload = async (values: any) => {
+    await axios
       .put(urlPostVideo.value, values.file, {
         headers: {
           'Content-Type': 'video/mp4',
-          // Authorization: `token ${/*${token}*/ ''}`,
         },
       })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+
+    await axios
+      .post(
+        `${endpointServer}/movies/cloudfront/clear-cache`,
+        {
+          movieId: editItem?.movieId,
+          option: 'trailer',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
       .then((response) => {
         console.log(response);
       })
@@ -66,7 +87,7 @@ export const FormAddEditVideoMovies = ({
     if (editItem != null) {
       handleReset();
     }
-  }, [isOpen]);
+  }, [isOpen, editItem]);
 
   return (
     <Form
@@ -77,14 +98,15 @@ export const FormAddEditVideoMovies = ({
       layout="vertical"
       className="form-add-edit-video"
       onFinish={(values: any) => {
-        handleUpload(values);
+        handleUpload(values.trailer);
       }}
     >
       <div className="form-add-edit-video-content">
         <div className="form-add-edit-img-container">
           <video
             muted
-            width="100%"
+            width={300}
+            height={300}
             controls
             src={srcVideo}
             className="form-add-edit-video-img"

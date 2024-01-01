@@ -50,8 +50,6 @@ export const FormAddEditMovie = ({
         },
       )
       .then((response: any) => {
-        console.log(response.data[0]);
-
         setUrlPostImageList([response.data[0], response.data[1]]);
         setUrlPostVideo(response.data[2]);
       })
@@ -101,7 +99,12 @@ export const FormAddEditMovie = ({
     {
       key: '3',
       label: 'Phim giới thiệu',
-      children: <FormAddEditVideoMovies urlPostVideo={urlPostVideo} />,
+      children: (
+        <FormAddEditVideoMovies
+          urlPostVideo={urlPostVideo}
+          editItem={editItem}
+        />
+      ),
     },
   ];
 

@@ -1,23 +1,22 @@
 .form-detail-movie {
-    .form-detail-movie-image-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 70px;
+  .form-detail-movie-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
 
-        .form-detail-movie-image-item {
-
-            .image-title {
-                font-weight: 500;
-            }
-        }
+    .form-detail-movie-image-item {
+      .image-title {
+        font-weight: 500;
+      }
     }
+  }
 
-    .form-detail-movie-desc {
-        margin: 20px 0;
-    }
+  .form-detail-movie-desc {
+    margin: 20px 0;
+  }
 }
 
 .modal-episode {
-    width: 500px !important;
+  width: 500px !important;
 }

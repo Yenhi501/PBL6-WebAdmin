@@ -97,7 +97,7 @@ export const FormAddEditInfoFilm = ({
       actorIds: values.actor?.map((item) => item.value),
       directorIds: values.director?.map((item) => item.value),
       isSeries: values.type,
-      level: values.level?.value,
+      level: Number(values.level?.value),
     };
 
     axios({
