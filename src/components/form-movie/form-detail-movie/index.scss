@@ -9,11 +9,20 @@
       .image-title {
         font-weight: 500;
       }
+
+      .form-detail-movie-image,
+      .form-detail-movie-background {
+        object-fit: cover;
+      }
     }
   }
 
   .form-detail-movie-desc {
     margin: 20px 0;
+  }
+  .refresh-btn {
+    position: absolute;
+    margin-top: 8px;
   }
 }
 

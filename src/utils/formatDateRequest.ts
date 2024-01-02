@@ -1,5 +1,5 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const formatDateRequest = (date: string | Date) => {
-  return moment(date).format('YYYY-MM-DD HH:mm:ss.SSSZ');
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ss.SSSZ');
 };

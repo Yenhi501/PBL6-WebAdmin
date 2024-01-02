@@ -105,6 +105,7 @@ export const FormAddEditMovie = ({
         <FormAddEditVideoMovies
           urlPostVideo={urlPostVideo}
           editItem={editItem}
+          onClose={handleCancel}
         />
       ),
     },
