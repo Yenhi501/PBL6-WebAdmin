@@ -4,6 +4,16 @@ export type EpisodeRaw = {
   episode_no: number;
   movie_url: string;
   title: string;
+  release_date: string;
+};
+
+export const defaultEpisodeRaw: EpisodeRaw = {
+  key: '',
+  episode_id: 0,
+  episode_no: 0,
+  movie_url: '',
+  title: '',
+  release_date: '',
 };
 
 export type GenreMovie = {
@@ -11,14 +21,29 @@ export type GenreMovie = {
   name: string;
 };
 
+export const defaultGenreMovie: GenreMovie = {
+  genre_id: 0,
+  name: '',
+};
+
 export type DirectorMovie = {
   director_id: number;
   name: string;
 };
 
+export const defaultDirectorMovie: DirectorMovie = {
+  director_id: 0,
+  name: '',
+};
+
 export type ActorMovie = {
   actor_id: number;
   name: string;
+};
+
+export const defaultActorMovie: ActorMovie = {
+  actor_id: 0,
+  name: '',
 };
 
 export type ItemMovieRaw = {
@@ -40,6 +65,27 @@ export type ItemMovieRaw = {
   posterURL: string;
   releaseDate: string;
   trailerURL: string;
+};
+
+export const defaultItemMovieRaw: ItemMovieRaw = {
+  key: 0,
+  movieId: 0,
+  title: '',
+  level: 0,
+  isSeries: false,
+  actors: [defaultActorMovie],
+  averageRating: 0,
+  backgroundURL: '',
+  description: '',
+  directors: [defaultDirectorMovie],
+  episodeNum: 0,
+  episodes: [defaultEpisodeRaw],
+  genres: [defaultGenreMovie],
+  nation: '',
+  numFavorite: 0,
+  posterURL: '',
+  releaseDate: '',
+  trailerURL: '',
 };
 
 export interface ItemMovieHandled {

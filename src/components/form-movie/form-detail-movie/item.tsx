@@ -1,8 +1,8 @@
 import { DescriptionsProps } from 'antd';
-import { ItemMovieHandled, ItemMovieRaw } from '../../../model/movie';
+import { ItemMovieRaw } from '../../../model/movie';
 import { handleSeparate } from '../../../utils/handleSaparate';
 
-export const ItemDesc = (selectedItem: ItemMovieHandled | null) => {
+export const ItemDesc = (selectedItem: ItemMovieRaw) => {
   const items: DescriptionsProps['items'] = [
     {
       key: '1',
@@ -51,7 +51,7 @@ export const ItemDesc = (selectedItem: ItemMovieHandled | null) => {
     },
     {
       key: '7',
-      label: selectedItem?.isSeries === 'true' ? 'Số tập phim' : 'Số phần phim',
+      label: selectedItem?.isSeries === true ? 'Số tập phim' : 'Số phần phim',
       children: selectedItem?.numFavorite,
     },
     {

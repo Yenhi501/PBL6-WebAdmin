@@ -10,6 +10,7 @@ import { Button } from 'antd';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
+import { useToken } from '../../hooks/useToken';
 
 export const statusCard = [
   {
@@ -41,6 +42,7 @@ export const UserPage: React.FC = () => {
   const [data, setData] = useState<Array<User>>([]);
   const [totalUser, setTotalUser] = useState(0);
   const [currPage, setCurrentPage] = useState(1);
+  const { accessToken } = useToken();
 
   const getUser = (value?: string) => {
     const defaultParams = {
@@ -57,7 +59,10 @@ export const UserPage: React.FC = () => {
     axios
       .get(`${endpointServer}/user/get-all-users`, {
         params: paramsSearch,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((response) => {
         response.data.data.forEach(

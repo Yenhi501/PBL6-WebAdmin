@@ -52,6 +52,24 @@ export const VIPPackages: React.FC = () => {
       .catch((err) => console.log(err));
   };
 
+  const getVIPUser = () => {
+    axios({
+      method: 'GET',
+      url: `${endpointServer}/subscription/get-all-subscription-info`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        const dataVIPPackage = res.data.data;
+        dataVIPPackage.forEach(
+          (item: VIPPackageInfo, index: number) => (item.key = index + 1),
+        );
+        setData(dataVIPPackage);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     getDataVIPPackage();
   }, [resetData]);
