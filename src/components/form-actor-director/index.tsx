@@ -17,6 +17,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 import { endpointServer } from '../../utils/endpoint';
+import { useToken } from '../../hooks/useToken';
 
 export type FormAddEditDA = {
   isEditForm?: boolean;
@@ -45,7 +46,7 @@ export const FormAddEditDA = ({
 }: FormAddEditDA) => {
   const [form] = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { accessToken } = useToken();
   const setEditItemValue = (editItem: ActorDirector) => {
     form.setFieldsValue({
       name: editItem.name,
@@ -66,7 +67,10 @@ export const FormAddEditDA = ({
         editItem != null ? `/${editItem[`${people}Id`]}` : ''
       }`,
       data: { ...data, description: '' },
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
       .then((res) => {
         handleCancel();

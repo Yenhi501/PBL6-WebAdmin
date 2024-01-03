@@ -1,18 +1,17 @@
-import { Button, DatePicker, Form, Input, Modal, Select, Tag } from 'antd';
-import { useForm } from 'antd/es/form/Form';
-import React, { useEffect, useState } from 'react';
-import { ItemType, TableResult } from '../../table';
-import './index.scss';
+import { Button } from 'antd';
+import Search from 'antd/es/input/Search';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import { columns } from './columns';
-import Search from 'antd/es/input/Search';
-import axios from 'axios';
-import { endpointServer } from '../../../utils/endpoint';
-import { DataRawPayment } from '../../../model/revenue';
-import { FormRevenue } from '../../form-revenue';
+import React, { useEffect, useState } from 'react';
 import { useToken } from '../../../hooks/useToken';
+import { DataRawPayment } from '../../../model/revenue';
+import { endpointServer } from '../../../utils/endpoint';
+import { FormRevenue } from '../../form-revenue';
+import { ItemType, TableResult } from '../../table';
+import { columns } from './columns';
+import './index.scss';
 dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
@@ -123,7 +122,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           key={tableKey}
           originData={data}
           columns={columns}
-          needOperationColumn={true}
+          needOperationColumn={false}
           onEdit={(record: ItemType | null) => {
             setSelectedItem(record);
             setEditedItem(record ? ({ ...record } as DataRawPayment) : null);

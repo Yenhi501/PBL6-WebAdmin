@@ -16,7 +16,7 @@ export const StatusCard: React.FC<StatusCardProps> = (props) => {
       </div>
       <div className="status-card__info">
         <h4>{props.count}</h4>
-        <span>{props.title}</span>
+        <span className="!ml-2">{props.title}</span>
       </div>
     </div>
   );
