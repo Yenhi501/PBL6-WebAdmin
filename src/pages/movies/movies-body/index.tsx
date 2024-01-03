@@ -9,6 +9,7 @@ import { endpointServer } from '../../../utils/endpoint';
 import { handleDataMovie } from '../../../utils/handleDataMovie';
 import { columnsMovieTable } from '../column';
 import { FilterValue } from 'antd/es/table/interface';
+import { useToken } from '../../../hooks/useToken';
 
 export type MoviesPageBody = {
   onEditItemTable?: (props?: any) => void;
@@ -28,6 +29,7 @@ export const MoviesPageBody = ({
   const [tableKey, _] = useState(0);
   const [totalMovie, setTotalMovie] = useState(0);
   const [currPage, setCurrPage] = useState(1);
+  const { accessToken } = useToken();
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
   >({});
@@ -62,9 +64,10 @@ export const MoviesPageBody = ({
 
   const deleteMovie = (movieId: number) => {
     axios
-      .delete(`${endpointServer}/movies`, {
-        params: {
-          id: movieId,
+      .delete(`${endpointServer}/movies/${movieId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((response) => {
@@ -166,6 +169,7 @@ export const MoviesPageBody = ({
                 onEdit={(record: ItemType | null) => onEditItemTable(record)}
                 onClickRow={(record) => onClickRowTable(record)}
                 onAdd={onAddItemTable}
+                onDelete={(record) => deleteMovie(record.movieId)}
                 totalData={totalMovie}
                 onChangePagination={(e) => setCurrPage(e)}
                 onChange={(pagination, filters, sorter, extra) => {

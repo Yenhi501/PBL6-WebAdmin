@@ -19,6 +19,7 @@ import moment from 'moment';
 import { User, UserAdd, UserEdit } from '../../model/user';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
+import { useToken } from '../../hooks/useToken';
 
 export type FormAddEditUser = {
   isEditForm?: boolean;
@@ -49,7 +50,7 @@ export const FormAddEditUser = ({
 }: FormAddEditUser) => {
   const [form] = useForm();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { accessToken } = useToken();
   const setEditItemValue = (editItem: User) => {
     form.setFieldsValue({
       username: editItem.account.username,
@@ -70,7 +71,10 @@ export const FormAddEditUser = ({
     setIsLoading(true);
     axios
       .post(`${endpointServer}/user/create-user`, handledData, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         handleCancel();
@@ -160,9 +164,9 @@ export const FormAddEditUser = ({
             <Col span={10}>
               <Form.Item<FieldType> label="Giới tính" name="gender">
                 <Select>
-                  <Option value="male">Nam</Option>
-                  <Option value="female">Nữ</Option>
-                  <Option value="other">Khác</Option>
+                  <Option value="Male">Nam</Option>
+                  <Option value="Female">Nữ</Option>
+                  <Option value="Other">Khác</Option>
                 </Select>
               </Form.Item>
             </Col>

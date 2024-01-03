@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import './index.scss';
+import React, { useState } from 'react';
 import { FormDetailMovie } from '../../components/form-movie';
 import { FormAddEditMovie } from '../../components/form-movie/form-add-edit-movie';
-import { ItemMovieHandled, ItemMovieRaw } from '../../model/movie';
-import { ChartSection } from './chart-section';
+import { ItemMovieHandled } from '../../model/movie';
+import './index.scss';
 import { MoviesPageBody } from './movies-body';
 
 export const MovieContext = React.createContext({ isOpen: false });

@@ -71,6 +71,50 @@ export const DAPage: React.FC = () => {
       });
   };
 
+  const deleteActor = (actorId: number) => {
+    axios
+      .delete(`${endpointServer}/individuals/actors/${actorId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setResetData((prev: number) => prev + 1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteDirector = (directorId: number) => {
+    axios
+      .delete(`${endpointServer}/individuals/directors/${directorId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setResetData((prev: number) => prev + 1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDelete = (itemId: number) => {
+    if (activeKey === '1') {
+      deleteActor(itemId);
+    } else if (activeKey === '2') {
+      deleteDirector(itemId);
+    } else {
+      console.error('Invalid activeKey');
+    }
+  };
+
   useEffect(() => {
     getData();
   }, [resetData, activeKey, currPage]);
@@ -125,6 +169,9 @@ export const DAPage: React.FC = () => {
                 setEditedItem(record ? ({ ...record } as ActorDirector) : null);
                 setIsModalAOpen(true);
               }}
+              onDelete={(record) =>
+                handleDelete(record.actorId || record.directorId)
+              }
               onAdd={() => setIsModalAOpen(true)}
               totalData={totalItems}
               onChangePagination={(e) => setCurrentPage(e)}

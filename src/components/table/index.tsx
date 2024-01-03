@@ -90,7 +90,7 @@ export const TableResult = ({
                 <EditOutlined rev="" />
               </Typography.Link>
               <Popconfirm
-                title="Sure to delete?"
+                title="Bạn có chắc chắn xóa?"
                 onConfirm={(event) => {
                   event?.stopPropagation();
                   onDelete(record);
