@@ -35,7 +35,7 @@ export const FormAddEditImageMovies = ({
   editItem = null,
   urlPostList = [],
   onClose = () => {},
-  isDA,
+  isDA = false,
   DA = 'actor',
   DAId,
   avtIndividual,
@@ -67,15 +67,10 @@ export const FormAddEditImageMovies = ({
           'Content-Type': 'image/jpeg',
         },
       })
-      .then((response) => {
-        console.log(response);
-      })
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
       });
-
-    console.log(Number(DAId));
 
     const param =
       isDA === false
@@ -104,7 +99,6 @@ export const FormAddEditImageMovies = ({
       )
       .then((response) => {
         setIsLoading(false);
-        console.log(response);
         onClose();
       })
       .catch((error) => {

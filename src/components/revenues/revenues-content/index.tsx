@@ -80,9 +80,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           if (payment.orderInfo != null) {
             payment.userId = Number(payment.orderInfo?.split(' ')[1]);
           }
-          console.log(payment.userId);
         });
-        console.log(dataRevenue);
 
         setData(dataRevenue);
       })

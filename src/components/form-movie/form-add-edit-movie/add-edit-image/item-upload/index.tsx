@@ -52,7 +52,7 @@ export const ItemUpload = ({
             src={srcImg}
             fallback={DefaultImg}
             className="form-add-edit-img-img"
-            width={heightImgPreview}
+            width={widthImgPreview}
             height={heightImgPreview}
             style={rounded === true ? { borderRadius: 900 } : {}}
           />

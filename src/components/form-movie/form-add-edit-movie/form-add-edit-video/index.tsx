@@ -76,7 +76,6 @@ export const FormAddEditVideoMovies = ({
   };
 
   const updateVideoEpisode = async (file: UploadFile, dataUrl: string) => {
-
     await axios
       .put(dataUrl, file, {
         headers: {
@@ -130,7 +129,6 @@ export const FormAddEditVideoMovies = ({
       })
       .then((response) => {
         setIsLoading(false);
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -194,7 +192,6 @@ export const FormAddEditVideoMovies = ({
         },
       })
       .then((response) => {
-        console.log(response);
         setSrcVideo(response.data.episode.movieURL);
       })
       .catch((error) => {
@@ -204,7 +201,9 @@ export const FormAddEditVideoMovies = ({
 
   useEffect(() => {
     setIsLoading(false);
-    getEpisode();
+    if (episodeItem?.episode_id != null) {
+      getEpisode();
+    }
     if (editItem != null) {
       handleReset();
     }

@@ -64,9 +64,7 @@ export const FormRevenue = ({
         initialValues={{ remember: true }}
         autoComplete="off"
         layout="vertical"
-        onFinish={(values) => {
-          console.log(values);
-        }}
+        onFinish={(values) => {}}
       >
         <Form.Item<RevenueForm> name="id" label="ID">
           <Input disabled />

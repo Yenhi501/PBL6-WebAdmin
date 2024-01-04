@@ -54,10 +54,6 @@ export const columnTables: ColumnsType<ItemType> = [
     render: (value: VIPPackageType) => <>{value?.name}</>,
   },
   {
-    title: 'Số người dùng',
-    dataIndex: 'user',
-  },
-  {
     title: 'Thời gian',
     dataIndex: 'duration',
     render: (value: Duration) =>

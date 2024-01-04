@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import './index.scss';
 import { TopNav } from '../../components/topnav/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,8 +24,7 @@ import {
   UserSwitchOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Layout, Menu, theme } from 'antd';
-import ThemeAction from '../../redux/actions/ThemeAction';
+import { Avatar, Button, Layout, Menu, Modal, theme } from 'antd';
 import { Movies } from '../movies';
 import { UserPage } from '../user';
 import { Revenues } from '../revenues';
@@ -28,39 +33,81 @@ import { DAPage } from '../director-actor';
 
 import './index.scss';
 import { RegisterPage } from '../register';
-import { useRefreshToken } from '../../hooks/useRefreshtoken';
+import { refreshToken } from '../../utils/getRefreshToken';
+import { useToken } from '../../hooks/useToken';
+import axios from 'axios';
+import { endpointServer } from '../../utils/endpoint';
+import Cookies from 'js-cookie';
 
 const { Header, Sider, Content } = Layout;
 
 export const LayoutAdmin: React.FC = () => {
-  const themeReducer = useSelector((state: any) => state.ThemeReducer);
-  const dispatch = useDispatch();
-
   const timeRefreshToken = 1000 * 14 * 60; /*14m*/
+  const { accessToken } = useToken();
 
   useEffect(() => {
-    const timer = setInterval(useRefreshToken, timeRefreshToken);
+    refreshToken();
+    const timer = setInterval(refreshToken, timeRefreshToken);
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const themeClass = localStorage.getItem('themeMode') || 'theme-mode-light';
-    const colorClass = localStorage.getItem('colorMode') || 'theme-mode-light';
-
-    dispatch(ThemeAction.setMode(themeClass));
-    dispatch(ThemeAction.setColor(colorClass));
-  }, [dispatch]);
-
-  const [isLogin, setIsLogin] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const { pathname } = useLocation();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const checkAccessToken = () => {
+    axios
+      .get(`${endpointServer}/user/get-user`, {
+        headers: { Authorization: 'Bearer ' + accessToken },
+        params: { userId: 1 },
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setIsOpenModal(true);
+        }
+      });
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', () => {
+      Cookies.remove('accessToken');
+    });
+
+    return () => {
+      window.removeEventListener('beforeunload', () => {
+        Cookies.remove('accessToken');
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    checkAccessToken();
+  }, [accessToken]);
+
+  const navigator = useNavigate();
 
   return (
-    <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
+    <div className={`layout `}>
+      <Modal
+        title="Cảnh báo truy cập"
+        open={isOpenModal}
+        onCancel={() => {
+          navigator('/');
+        }}
+        footer={[
+          <Button type="primary" onClick={() => navigator('/')}>
+            Đăng nhập
+          </Button>,
+        ]}
+        okText="Đăng nhập"
+      >
+        Bạn hiện đang không có quyền truy cập vào trang quản lý, vui lòng đăng
+        nhập bằng tài khoản chủ/quản lý để tiếp tụcs
+      </Modal>
       <Layout>
         <Sider
           trigger={null}
@@ -84,29 +131,29 @@ export const LayoutAdmin: React.FC = () => {
               )}
             </div>
 
-            <Menu.Item key="/userId/movies" icon={<UserOutlined rev="" />}>
-              <Link to="/userId/movies">Phim</Link>
+            <Menu.Item key="/admin/movies" icon={<UserOutlined rev="" />}>
+              <Link to="/admin/movies">Phim</Link>
             </Menu.Item>
             <Menu.Item
-              key="/userId/revenues"
+              key="/admin/revenues"
               icon={<VideoCameraOutlined rev="" />}
             >
-              <Link to="/userId/revenues">Doanh thu</Link>
+              <Link to="/admin/revenues">Doanh thu</Link>
             </Menu.Item>
             <Menu.Item
-              key="/userId/vip-packages"
+              key="/admin/vip-packages"
               icon={<UploadOutlined rev="" />}
             >
-              <Link to="/userId/vip-packages">VIP</Link>
+              <Link to="/admin/vip-packages">VIP</Link>
             </Menu.Item>
-            <Menu.Item key="/userId/user" icon={<UserOutlined rev="" />}>
-              <Link to="/userId/user">Người dùng</Link>
+            <Menu.Item key="/admin/user" icon={<UserOutlined rev="" />}>
+              <Link to="/admin/user">Người dùng</Link>
             </Menu.Item>
             <Menu.Item
-              key="/userId/director-actor"
+              key="/admin/director-actor"
               icon={<UserSwitchOutlined rev="" />}
             >
-              <Link to="/userId/director-actor">Đạo diễn/Diễn viên</Link>
+              <Link to="/admin/director-actor">Đạo diễn/Diễn viên</Link>
             </Menu.Item>
             <Menu.Item icon={<UserAddOutlined rev="" />}>
               <Link to="/register">Tạo admin</Link>

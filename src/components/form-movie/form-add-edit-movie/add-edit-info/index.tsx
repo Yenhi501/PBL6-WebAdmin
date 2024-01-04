@@ -125,7 +125,6 @@ export const FormAddEditInfoFilm = ({
       },
     })
       .then((response) => {
-        console.log(response);
         if (editItem === null || editItem === undefined) {
           onClose();
           refreshData();
@@ -241,6 +240,11 @@ export const FormAddEditInfoFilm = ({
       setListRemoveGenre(editItem.genres.map((genre) => genre.genre_id));
       setListRemoveActor(editItem.actors.map((actor) => actor.actor_id));
       setListRemoveDirector(
+        editItem.directors.map((director) => director.director_id),
+      );
+      setNewListGenre(editItem.genres.map((genre) => genre.genre_id));
+      setNewListActor(editItem.actors.map((actor) => actor.actor_id));
+      setNewListDirector(
         editItem.directors.map((director) => director.director_id),
       );
     }

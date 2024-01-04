@@ -1,8 +1,8 @@
-import axios from 'axios';
 import Cookies from 'js-cookie';
-import { endpointServer } from '../utils/endpoint';
+import axios from 'axios';
+import { endpointServer } from './endpoint';
 
-export const useRefreshToken = () => {
+export const refreshToken = () => {
   const refreshToken =
     Cookies.get('refreshToken')?.replace(/^"(.*)"$/, '$1') || '';
   axios
@@ -14,5 +14,14 @@ export const useRefreshToken = () => {
       Cookies.set('accessToken', accessToken, { expires: 1 });
       console.log('Refresh Token');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log('Error refresh');
+
+      console.log(err);
+      if (err.response.status === 400) {
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+      }
+      return 'error';
+    });
 };

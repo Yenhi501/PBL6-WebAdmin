@@ -71,7 +71,6 @@ export const MoviesPageBody = ({
         },
       })
       .then((response) => {
-        console.log(response);
         setResetData((prev: number) => prev + 1);
       })
       .catch((error) => {

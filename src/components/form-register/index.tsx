@@ -272,7 +272,7 @@ export const FormRegister = ({ className }: FormRegister) => {
             >
               Đăng ký
             </Button>
-            <Link to={'/userId/movies'}>
+            <Link to={'/admin/movies'}>
               <Button type="default" className="register-form-btn-submit">
                 Trở lại
               </Button>
