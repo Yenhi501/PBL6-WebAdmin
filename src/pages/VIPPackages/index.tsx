@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
-import { Button, Tabs, TabsProps } from 'antd';
+import { Button, Spin, Tabs, TabsProps } from 'antd';
 import { ItemVIPPackage } from '../Item';
 import {
   columnTables,
@@ -35,8 +35,10 @@ export const VIPPackages: React.FC = () => {
   const [data, setData] = useState<Array<VIPPackageInfo>>([]);
   const [dataVIPUser, setDataVIPUser] = useState<Array<VIPUser>>([]);
   const { accessToken } = useToken();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataVIPPackage = () => {
+    setIsLoading(true);
     axios({
       method: 'GET',
       url: `${endpointServer}/subscription/get-all-subscription-info`,
@@ -45,16 +47,21 @@ export const VIPPackages: React.FC = () => {
       },
     })
       .then((res) => {
+        setIsLoading(false);
         const dataVIPPackage = res.data.data;
         dataVIPPackage.forEach(
           (item: VIPPackageInfo, index: number) => (item.key = index + 1),
         );
         setData(dataVIPPackage);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   const getVIPUser = () => {
+    setIsLoading(true);
     axios({
       method: 'GET',
       url: `${endpointServer}/user/get-all-users`,
@@ -69,13 +76,17 @@ export const VIPPackages: React.FC = () => {
       },
     })
       .then((res) => {
+        setIsLoading(false);
         const dataVIPPackage = res.data.data;
         dataVIPPackage.forEach(
           (item: VIPPackageInfo, index: number) => (item.key = index + 1),
         );
         setDataVIPUser(dataVIPPackage);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -132,29 +143,33 @@ export const VIPPackages: React.FC = () => {
                 Làm mới
               </Button>
             </div>
-            <TableResult
-              key={activeKey}
-              originData={activeKey === '1' ? data : dataVIPUser}
-              columns={activeKey === '1' ? columnTables : columnTablesUserVIP}
-              needOperationColumn={true}
-              onEdit={(record: ItemType | null) => {
-                if (activeKey === '1') {
-                  setEditedItem(
-                    record ? ({ ...record } as VIPPackageInfo) : null,
-                  );
-                  setIsModalOpen(true);
-                } else {
-                  setEditedVIPUser(record ? ({ ...record } as VIPUser) : null);
-                  setIsModalVIPUserOpen(true);
+            <Spin spinning={isLoading}>
+              <TableResult
+                key={activeKey}
+                originData={activeKey === '1' ? data : dataVIPUser}
+                columns={activeKey === '1' ? columnTables : columnTablesUserVIP}
+                needOperationColumn={true}
+                onEdit={(record: ItemType | null) => {
+                  if (activeKey === '1') {
+                    setEditedItem(
+                      record ? ({ ...record } as VIPPackageInfo) : null,
+                    );
+                    setIsModalOpen(true);
+                  } else {
+                    setEditedVIPUser(
+                      record ? ({ ...record } as VIPUser) : null,
+                    );
+                    setIsModalVIPUserOpen(true);
+                  }
+                }}
+                onAdd={() =>
+                  activeKey === '1'
+                    ? setIsModalOpen(true)
+                    : setIsModalVIPUserOpen(true)
                 }
-              }}
-              onAdd={() =>
-                activeKey === '1'
-                  ? setIsModalOpen(true)
-                  : setIsModalVIPUserOpen(true)
-              }
-              isHideCreate={activeKey === '2'}
-            />
+                isHideCreate={activeKey === '2'}
+              />
+            </Spin>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import Search from 'antd/es/input/Search';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -42,8 +42,10 @@ export const UserPage: React.FC = () => {
   const [totalUser, setTotalUser] = useState(0);
   const [currPage, setCurrentPage] = useState(1);
   const { accessToken } = useToken();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getUser = (value?: string) => {
+    setIsLoading(true);
     const defaultParams = {
       page: currPage,
       pageSize: 5,
@@ -65,6 +67,7 @@ export const UserPage: React.FC = () => {
         },
       })
       .then((response) => {
+        setIsLoading(false);
         response.data.data.forEach(
           (item: User, index: number) => (item.key = index + 1),
         );
@@ -72,6 +75,7 @@ export const UserPage: React.FC = () => {
         setData(response.data.data);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err);
       });
   };
@@ -128,21 +132,23 @@ export const UserPage: React.FC = () => {
               Làm mới
             </Button>
           </div>
-          <div className="card__body">
-            <TableResult
-              originData={data}
-              columns={columnTableUser}
-              needOperationColumn={true}
-              onEdit={(record: ItemType | null) => {
-                setEditedItem(record ? ({ ...record } as User) : null);
-                setIsModalOpen(true);
-              }}
-              onDelete={(record) => deleteUser(record.userId)}
-              onAdd={() => setIsModalOpen(true)}
-              totalData={totalUser}
-              onChangePagination={(e) => setCurrentPage(e)}
-            />
-          </div>
+          <Spin spinning={isLoading}>
+            <div className="card__body">
+              <TableResult
+                originData={data}
+                columns={columnTableUser}
+                needOperationColumn={true}
+                onEdit={(record: ItemType | null) => {
+                  setEditedItem(record ? ({ ...record } as User) : null);
+                  setIsModalOpen(true);
+                }}
+                onDelete={(record) => deleteUser(record.userId)}
+                onAdd={() => setIsModalOpen(true)}
+                totalData={totalUser}
+                onChangePagination={(e) => setCurrentPage(e)}
+              />
+            </div>
+          </Spin>
         </div>
       </div>
     </div>

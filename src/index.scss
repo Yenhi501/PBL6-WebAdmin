@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
 
 :root {
@@ -87,53 +87,53 @@ ul {
   margin: 0;
 }
 
-.ant-btn-default {
-  background-color: var(--contrast-color);
+// .ant-btn-default {
+//   background-color: var(--contrast-color);
 
-  &:hover {
-    color: var(--sub-primary-color) !important;
-    border: 1px solid var(--sub-primary-color) !important;
-  }
-}
+//   &:hover {
+//     color: var(--sub-primary-color) !important;
+//     border: 1px solid var(--sub-primary-color) !important;
+//   }
+// }
 
-.ant-btn-dashed {
-  background-color: var(--contrast-color);
+// .ant-btn-dashed {
+//   background-color: var(--contrast-color);
 
-  &:hover {
-    color: var(--sub-primary-color) !important;
-    border: 1px dashed var(--sub-primary-color) !important;
-  }
-}
+//   &:hover {
+//     color: var(--sub-primary-color) !important;
+//     border: 1px dashed var(--sub-primary-color) !important;
+//   }
+// }
 
-.ant-btn-primary {
-  background-color: var(--primary-color);
+// .ant-btn-primary {
+//   background-color: var(--primary-color);
 
-  &:hover {
-    background-color: var(--secondary-color) !important;
-    color: var(--contrast-color) !important;
-    border: 1px solid var(--secondary-color) !important;
-  }
-}
+//   &:hover {
+//     background-color: var(--secondary-color) !important;
+//     color: var(--contrast-color) !important;
+//     border: 1px solid var(--secondary-color) !important;
+//   }
+// }
 
 table tr {
   border-color: #fafafa;
 }
 
-.ant-btn-text {
-  color: var(--contrast-color);
+// .ant-btn-text {
+//   color: var(--contrast-color);
 
-  &:hover {
-    color: var(--sub-contrast-color) !important;
-  }
-}
+//   &:hover {
+//     color: var(--sub-contrast-color) !important;
+//   }
+// }
 
-.ant-btn-link {
-  color: var(--primary-color);
+// .ant-btn-link {
+//   color: var(--primary-color);
 
-  &:hover {
-    color: var(--sub-primary-color) !important;
-  }
-}
+//   &:hover {
+//     color: var(--sub-primary-color) !important;
+//   }
+// }
 
 .ant-modal-content {
   padding: 0px !important;
@@ -163,7 +163,6 @@ table tr {
 
   &:hover {
     color: white;
-
   }
 }
 

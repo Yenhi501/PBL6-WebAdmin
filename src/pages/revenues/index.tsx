@@ -14,17 +14,12 @@ export const Revenues: React.FC = () => {
   const dateFormat = 'DD/MM/YYYY';
 
   const [selectedView, setSelectedView] = useState<'Week' | 'Month'>('Week');
-  const [selectedContent, setSelectedContent] = useState<'VIP' | 'ADS'>('VIP');
   const [selectedDateRange, setSelectedDateRange] = useState<
     [dayjs.Dayjs | null, dayjs.Dayjs | null]
   >([dayjs('10/05/2023', dateFormat), dayjs('10/01/2024', dateFormat)]);
 
   const handleViewChange = (view: 'Week' | 'Month') => {
     setSelectedView(view);
-  };
-
-  const handleContentChange = (content: 'VIP' | 'ADS') => {
-    setSelectedContent(content);
   };
 
   const handleDateRangeChange = (
@@ -108,19 +103,8 @@ export const Revenues: React.FC = () => {
                 onDateRangeChange={handleDateRangeChange}
               />
             </div>
-
-            <div>
-              <RevenuesChooseBody
-                selectedContent={selectedContent}
-                handleContentChange={handleContentChange}
-              />
-            </div>
           </div>
-          <RevenuesContent
-            selectedContent={selectedContent}
-            selectedView={selectedView}
-            selectedDateRange={selectedDateRange}
-          />
+          <RevenuesContent selectedDateRange={selectedDateRange} />
           <ChartSection selectedDateRange={selectedDateRange} />
         </div>
       </div>
