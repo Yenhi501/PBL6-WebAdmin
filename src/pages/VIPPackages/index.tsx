@@ -18,6 +18,7 @@ import Search from 'antd/es/input/Search';
 import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
 import { VIPPackageInfo } from '../../model/VIPPackage-info';
+import { useToken } from '../../hooks/useToken';
 
 const urlMap: Record<string, string> = {
   '1': `${endpointServer}/subscription/get-all-subscription-type`,
@@ -33,6 +34,7 @@ export const VIPPackages: React.FC = () => {
   const [activeKey, setActiveKey] = useState<string>('1');
   const [data, setData] = useState<Array<VIPPackageInfo>>([]);
   const [dataVIPUser, setDataVIPUser] = useState<Array<VIPUser>>([]);
+  const { accessToken } = useToken();
 
   const getDataVIPPackage = () => {
     axios({
@@ -55,9 +57,15 @@ export const VIPPackages: React.FC = () => {
   const getVIPUser = () => {
     axios({
       method: 'GET',
-      url: `${endpointServer}/subscription/get-all-subscription-info`,
+      url: `${endpointServer}/user/get-all-users`,
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        page: 1,
+        pageSize: 5,
+        subscriptionType: 0,
       },
     })
       .then((res) => {
@@ -65,14 +73,18 @@ export const VIPPackages: React.FC = () => {
         dataVIPPackage.forEach(
           (item: VIPPackageInfo, index: number) => (item.key = index + 1),
         );
-        setData(dataVIPPackage);
+        setDataVIPUser(dataVIPPackage);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    getDataVIPPackage();
-  }, [resetData]);
+    if (activeKey === '1') {
+      getDataVIPPackage();
+    } else {
+      getVIPUser();
+    }
+  }, [resetData, activeKey]);
 
   return (
     <div className="VIP-container">
@@ -141,6 +153,7 @@ export const VIPPackages: React.FC = () => {
                   ? setIsModalOpen(true)
                   : setIsModalVIPUserOpen(true)
               }
+              isHideCreate={activeKey === '2'}
             />
           </div>
         </div>

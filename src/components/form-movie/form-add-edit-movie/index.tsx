@@ -20,6 +20,7 @@ export type FormAddEditMovie = {
   isOpen: boolean;
   handleCancel: (props: any) => void;
   editItem?: ItemMovieHandled | null;
+  refreshData?: (props?: any) => void;
 };
 
 export const FormAddEditMovie = ({
@@ -27,6 +28,7 @@ export const FormAddEditMovie = ({
   editItem = null,
   handleCancel,
   isEditForm = false,
+  refreshData = () => {},
 }: FormAddEditMovie) => {
   const [urlPostImageList, setUrlPostImageList] = useState<UrlPost[]>([
     { key: '', value: '' },
@@ -78,6 +80,7 @@ export const FormAddEditMovie = ({
       editItem={editItem}
       isEditForm={isEditForm}
       onClose={handleCancel}
+      refreshData={refreshData}
     />
   );
 

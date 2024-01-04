@@ -31,6 +31,7 @@ export interface ItemTable extends TableProps<ItemType> {
   isHideCreate?: boolean;
   onDeleteAll?: (props?: any) => void;
   onDelete?: (props?: any) => void;
+  currPage?: number;
 }
 export const TableResult = ({
   originData,
@@ -45,6 +46,7 @@ export const TableResult = ({
   totalData,
   isHideCreate = false,
   onChange,
+  currPage,
 }: ItemTable) => {
   const [editButtonRefs, setEditButtonRefs] = useState<{
     [key: string]: React.RefObject<HTMLAnchorElement | null>;
@@ -155,6 +157,7 @@ export const TableResult = ({
           total: totalData,
           onChange: (e) => onChangePagination(e),
           pageSize: 5,
+          current: currPage,
         }}
         scroll={{ x: 'max-content' }}
         onChange={onChange}

@@ -24,6 +24,10 @@ export type FormAddEditImageMovies = {
   editItem?: ItemMovieHandled | null;
   urlPostList?: UrlPost[];
   onClose?: (props?: any) => void;
+  isDA?: boolean;
+  DA?: 'actor' | 'director';
+  DAId?: number;
+  avtIndividual?: string;
 };
 
 export const FormAddEditImageMovies = ({
@@ -31,13 +35,19 @@ export const FormAddEditImageMovies = ({
   editItem = null,
   urlPostList = [],
   onClose = () => {},
+  isDA,
+  DA = 'actor',
+  DAId,
+  avtIndividual,
 }: FormAddEditImageMovies) => {
   const [form] = useForm();
   const { isOpen } = React.useContext(MovieContext);
   const { accessToken } = useToken();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [srcImgPoster, setSrcImgPoster] = useState(editItem?.posterURL);
+  const [srcImgPoster, setSrcImgPoster] = useState(
+    isDA === false ? editItem?.posterURL : avtIndividual,
+  );
   const [srcImgBg, setSrcImgBg] = useState(editItem?.backgroundURL);
 
   const handleReset = () => {
@@ -65,12 +75,25 @@ export const FormAddEditImageMovies = ({
         setIsLoading(false);
       });
 
+    console.log(Number(DAId));
+
+    const param =
+      isDA === false
+        ? {
+            movieId: editItem?.movieId,
+          }
+        : {
+            id: Number(DAId),
+          };
+
     await axios
       .post(
-        `${endpointServer}/movies/cloudfront/clear-cache`,
+        `${endpointServer}/${
+          isDA === false ? 'movies' : 'individuals'
+        }/cloudfront/clear-cache`,
         {
-          movieId: editItem?.movieId,
-          option: obj,
+          ...param,
+          option: isDA === false ? obj : DA + 's',
         },
         {
           headers: {
@@ -80,6 +103,7 @@ export const FormAddEditImageMovies = ({
         },
       )
       .then((response) => {
+        setIsLoading(false);
         console.log(response);
         onClose();
       })
@@ -137,16 +161,18 @@ export const FormAddEditImageMovies = ({
         <ItemUpload
           srcImg={srcImgPoster}
           setSrcImg={setSrcImgPoster}
-          label="Poster"
+          label={isDA === false ? 'Ảnh áp phích' : ''}
           name="poster"
           heightImgPreview={200}
+          rounded={isDA}
         />
         <ItemUpload
           srcImg={srcImgBg}
           setSrcImg={setSrcImgBg}
-          label="Background"
+          label="Ảnh bìa"
           name="background"
           widthImgPreview={300}
+          hidden={isDA}
         />
 
         <Row justify={'end'} gutter={16}>

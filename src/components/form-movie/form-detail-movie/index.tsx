@@ -79,7 +79,10 @@ export const FormDetailMovie = ({
   };
 
   useEffect(() => {
-    getDataDetailFilm();
+    if (selectedItem?.movieId != null) {
+      getDataDetailFilm();
+    }
+
   }, [selectedItem, refreshTable]);
 
   useEffect(() => {

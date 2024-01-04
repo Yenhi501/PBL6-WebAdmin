@@ -23,8 +23,8 @@ export const Movies: React.FC = () => {
         handleCancel={() => {
           setIsModalAddOpen(false);
           setEditedItem(null);
-          setResetData((prev) => prev + 1);
         }}
+        refreshData={() => setResetData((prev) => (prev = prev + 1))}
         editItem={editedItem}
         isEditForm={editedItem != null ? true : false}
       />

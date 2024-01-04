@@ -14,7 +14,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { UserInfo } from '../../../userInfo';
 import axios from 'axios';
 import { useForm } from 'antd/es/form/Form';
-import { GenreMovie, ItemMovieHandled } from '../../../../model/movie';
+import {
+  ActorMovie,
+  GenreMovie,
+  ItemMovieHandled,
+} from '../../../../model/movie';
 import { endpointServer } from '../../../../utils/endpoint';
 import { DebounceSelect } from '../../../deboundSelect';
 import {
@@ -38,18 +42,28 @@ export type FormAddEditInfoFilm = {
   onClose?: (props?: any) => void;
   setIsLoading?: (props?: any) => void;
   isLoading?: boolean;
+  refreshData?: (props?: any) => void;
 };
 
 export const FormAddEditInfoFilm = ({
   editItem = null,
   isEditForm,
   onClose = () => {},
+  refreshData = () => {},
 }: FormAddEditInfoFilm) => {
   const [form] = useForm();
   const [dataNations, setDataNations] = useState<SelectProps['options']>([]);
   const [dataGenre, setDataGenre] = useState<SelectProps['options']>([]);
   const { accessToken } = useToken();
   const [isLoading, setIsLoading] = useState(false);
+  const [listRemoveGenre, setListRemoveGenre] = useState<Array<number>>([]);
+  const [listRemoveActor, setListRemoveActor] = useState<Array<number>>([]);
+  const [listRemoveDirector, setListRemoveDirector] = useState<Array<number>>(
+    [],
+  );
+  const [newListGenre, setNewListGenre] = useState<Array<number>>([]);
+  const [newListActor, setNewListActor] = useState<Array<number>>([]);
+  const [newListDirector, setNewListDirector] = useState<Array<number>>([]);
 
   const getDataSelect = () => {
     axios
@@ -81,7 +95,7 @@ export const FormAddEditInfoFilm = ({
     getDataSelect();
   }, []);
 
-  const handleAddEditRequest = (values: MovieInfoField) => {
+  const handleAddEditRequest = async (values: MovieInfoField) => {
     setIsLoading(true);
     values.yearOfManufacturer = dayjs(values.yearOfManufacturer).format(
       'YYYY-MM-DD HH:mm:ss.SSSZ',
@@ -99,7 +113,7 @@ export const FormAddEditInfoFilm = ({
       level: values.level,
     };
 
-    axios({
+    await axios({
       method: editItem != null ? 'PUT' : 'POST',
       url: `${endpointServer}/movies${
         editItem != null ? `/${editItem?.movieId}` : ''
@@ -111,13 +125,90 @@ export const FormAddEditInfoFilm = ({
       },
     })
       .then((response) => {
-        onClose();
         console.log(response);
+        if (editItem === null || editItem === undefined) {
+          onClose();
+          refreshData();
+        }
       })
       .catch((err) => {
         setIsLoading(false);
         console.log(err);
       });
+    if (editItem != null) {
+      const endpoints = [
+        {
+          url: `${endpointServer}/movies/${editItem?.movieId}/movie-genre`,
+          paramsDelete: { genreIds: listRemoveGenre },
+          paramsAdd: { genreIds: newListGenre },
+        },
+        {
+          url: `${endpointServer}/movies/${editItem?.movieId}/movie-actor`,
+          paramsDelete: { actorIds: listRemoveActor },
+          paramsAdd: { actorIds: newListActor },
+        },
+        {
+          url: `${endpointServer}/movies/${editItem?.movieId}/movie-director`,
+          paramsDelete: { directorIds: listRemoveDirector },
+          paramsAdd: { directorIds: newListDirector },
+        },
+      ];
+
+      let isContinue = true;
+
+      await axios
+        .all(
+          endpoints.map((item) =>
+            axios
+              .delete(item.url, {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${accessToken}`,
+                },
+                data: item.paramsDelete,
+              })
+              .catch((err) => {
+                console.log(err);
+                setIsLoading(false);
+                isContinue = false;
+              }),
+          ),
+        )
+        .then((res) => console.log(res))
+        .catch((err) => {
+          console.log(err);
+          isContinue = false;
+        });
+
+      if (isContinue) {
+        await axios
+          .all(
+            endpoints.map((item) =>
+              axios
+                .post(item.url, item.paramsAdd, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setIsLoading(false);
+                  isContinue = false;
+                }),
+            ),
+          )
+          .then((res) => {
+            console.log(res);
+            onClose();
+            refreshData();
+          })
+          .catch((err) => {
+            console.log(err);
+            isContinue = false;
+          });
+      }
+    }
   };
 
   const setEditItemValue = (editItem: ItemMovieHandled) => {
@@ -147,6 +238,11 @@ export const FormAddEditInfoFilm = ({
   useEffect(() => {
     if (editItem != null) {
       setEditItemValue(editItem);
+      setListRemoveGenre(editItem.genres.map((genre) => genre.genre_id));
+      setListRemoveActor(editItem.actors.map((actor) => actor.actor_id));
+      setListRemoveDirector(
+        editItem.directors.map((director) => director.director_id),
+      );
     }
   }, []);
 
@@ -257,6 +353,9 @@ export const FormAddEditInfoFilm = ({
             maxTagCount="responsive"
             placeholder="Nhập tên đạo diễn"
             fetchOptions={getDataDirectorsSelect}
+            onChange={(values) =>
+              setNewListDirector(values.map((object: any) => object.value))
+            }
           />
         </Form.Item>
 
@@ -272,6 +371,9 @@ export const FormAddEditInfoFilm = ({
             maxTagCount="responsive"
             options={dataGenre}
             placeholder="Chọn thể loại"
+            onChange={(values) =>
+              setNewListGenre(values.map((object: any) => object.value))
+            }
           />
         </Form.Item>
         <Form.Item<MovieInfoField>
@@ -294,6 +396,9 @@ export const FormAddEditInfoFilm = ({
             maxTagCount="responsive"
             placeholder="Nhập tên diễn viên"
             fetchOptions={getDataActorsSelect}
+            onChange={(values) =>
+              setNewListActor(values.map((object: any) => object.value))
+            }
           />
         </Form.Item>
         <Form.Item<MovieInfoField>
