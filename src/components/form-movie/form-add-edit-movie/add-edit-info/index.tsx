@@ -375,9 +375,9 @@ export const FormAddEditInfoFilm = ({
             maxTagCount="responsive"
             options={dataGenre}
             placeholder="Chọn thể loại"
-            onChange={(values) =>
-              setNewListGenre(values.map((object: any) => object.value))
-            }
+            onChange={(values) => {
+              setNewListGenre(values);
+            }}
           />
         </Form.Item>
         <Form.Item<MovieInfoField>
