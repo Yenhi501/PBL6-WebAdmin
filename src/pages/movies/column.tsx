@@ -1,4 +1,6 @@
 import { ColumnsType } from 'antd/es/table';
+import { FilterValue } from 'antd/es/table/interface';
+import { ItemType } from '../../components/table';
 import {
   ActorMovie,
   DirectorMovie,
@@ -6,8 +8,6 @@ import {
   ItemMovieHandled,
 } from '../../model/movie';
 import { handleSeparate } from '../../utils/handleSaparate';
-import { ItemType } from '../../components/table';
-import { ColumnFilterItem, FilterValue, Key } from 'antd/es/table/interface';
 
 const levelMap: Record<string, string> = {
   '0': 'Tiêu chuẩn',

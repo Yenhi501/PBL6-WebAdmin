@@ -66,7 +66,7 @@ export const FormAddEditVideoMovies = ({
           params: defaultParams,
         },
       );
-      console.log(response);
+
       const dataUrl = response.data.data[0].value;
       return dataUrl;
     } catch (err) {
@@ -76,7 +76,6 @@ export const FormAddEditVideoMovies = ({
   };
 
   const updateVideoEpisode = async (file: UploadFile, dataUrl: string) => {
-    console.log(file);
 
     await axios
       .put(dataUrl, file, {
@@ -117,7 +116,7 @@ export const FormAddEditVideoMovies = ({
   const handleUploadEpisode = async (values: any) => {
     setIsLoading(true);
     const dataUrl = await getUrlPostEpisode();
-    console.log(dataUrl);
+
     await updateVideoEpisode(values.file, dataUrl);
   };
 

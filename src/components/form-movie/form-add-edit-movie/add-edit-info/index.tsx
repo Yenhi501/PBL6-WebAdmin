@@ -277,7 +277,11 @@ export const FormAddEditInfoFilm = ({
               wrapperCol={{ span: 24 }}
               rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
             >
-              <Select placeholder="Nhập quốc gia" options={dataNations} />
+              <Select
+                placeholder="Nhập quốc gia"
+                options={dataNations}
+                onClear={() => console.log(123)}
+              />
             </Form.Item>
           </Col>
           <Col span={10} offset={4}>

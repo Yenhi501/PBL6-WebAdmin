@@ -1,16 +1,16 @@
+import { Button } from 'antd';
+import Search from 'antd/es/input/Search';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { FormAddEditUser } from '../../components/form-user';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
-import './index.scss';
-import { FormAddEditUser } from '../../components/form-user';
+import { useToken } from '../../hooks/useToken';
 import { User } from '../../model/user';
-import { columnTableUser } from './column-table-user';
-import moment from 'moment';
-import { Button } from 'antd';
-import Search, { SearchProps } from 'antd/es/input/Search';
-import axios from 'axios';
 import { endpointServer } from '../../utils/endpoint';
 import { useToken } from '../../hooks/useToken';
+import { columnTableUser } from './column-table-user';
+import './index.scss';
 
 export const statusCard = [
   {
@@ -76,6 +76,23 @@ export const UserPage: React.FC = () => {
       });
   };
 
+  const deleteUser = (userId: number) => {
+    axios
+      .delete(`${endpointServer}/user/delete-user?userId=${userId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log('response', response);
+        setResetData((prev: number) => prev + 1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     getUser();
   }, [resetData, currPage]);
@@ -121,6 +138,7 @@ export const UserPage: React.FC = () => {
                 setEditedItem(record ? ({ ...record } as User) : null);
                 setIsModalOpen(true);
               }}
+              onDelete={(record) => deleteUser(record.userId)}
               onAdd={() => setIsModalOpen(true)}
               totalData={totalUser}
               onChangePagination={(e) => setCurrentPage(e)}
