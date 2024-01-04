@@ -4,6 +4,7 @@ import { FormAddEditMovie } from '../../components/form-movie/form-add-edit-movi
 import { ItemMovieHandled } from '../../model/movie';
 import './index.scss';
 import { MoviesPageBody } from './movies-body';
+import { ChartSection } from './chart-section';
 
 export const MovieContext = React.createContext({ isOpen: false });
 
@@ -48,7 +49,7 @@ export const Movies: React.FC = () => {
         setResetData={setResetData}
         resetData={resetData}
       />
-      {/* <ChartSection /> */}
+      <ChartSection />
     </MovieContext.Provider>
   );
 };
