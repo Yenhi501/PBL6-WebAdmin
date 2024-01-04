@@ -8,7 +8,6 @@ import { ItemType, TableResult } from '../../components/table/index';
 import { useToken } from '../../hooks/useToken';
 import { User } from '../../model/user';
 import { endpointServer } from '../../utils/endpoint';
-import { useToken } from '../../hooks/useToken';
 import { columnTableUser } from './column-table-user';
 import './index.scss';
 
