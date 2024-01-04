@@ -69,7 +69,7 @@ export const TableResult = ({
       {
         title: 'Tiện ích',
         dataIndex: 'operation',
-        width: '20vh',
+        width: '10vw',
         render: (_: any, record: ItemType) => {
           return (
             <span

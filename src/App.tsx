@@ -12,7 +12,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path="/*" element={<LoginRegisterPage />} />
-      <Route path="/userId/*" element={<Layout />} />
+      <Route path="/admin/*" element={<Layout />} />
     </Routes>
   );
 };

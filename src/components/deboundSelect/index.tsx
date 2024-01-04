@@ -44,8 +44,6 @@ export const DebounceSelect = <
           return;
         }
 
-        console.log(newOptions);
-
         setOptions(newOptions);
         setFetching(false);
       });

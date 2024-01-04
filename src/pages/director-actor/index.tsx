@@ -48,8 +48,6 @@ export const DAPage: React.FC = () => {
       params: params,
     })
       .then((response) => {
-        console.log(response);
-
         const dataRes = response.data.data;
 
         if (activeKey === '1') {
@@ -80,7 +78,6 @@ export const DAPage: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log(response);
         setResetData((prev: number) => prev + 1);
       })
       .catch((error) => {
@@ -97,7 +94,6 @@ export const DAPage: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log(response);
         setResetData((prev: number) => prev + 1);
       })
       .catch((error) => {

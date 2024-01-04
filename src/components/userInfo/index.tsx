@@ -20,7 +20,7 @@ export type Info = {
 };
 
 export type InfoDA = {
-  poster: string;
+  avatar: string;
   name: string;
 };
 
@@ -31,7 +31,7 @@ const defaultUser = {
 };
 
 const defaultDA = {
-  poster: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
+  avatar: 'https://xsgames.co/randomusers/avatar.php?g=pixel&key=1',
   name: 'Default Name',
 };
 
@@ -82,8 +82,13 @@ export const UserInfo = ({
       <Avatar
         src={
           <img
-            // src={avt || people === 'user' ? info.avatarURL : infoDA.poster}
-            src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"
+            src={
+              avt || people === 'user'
+                ? info.avatarURL ||
+                  'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg'
+                : infoDA.avatar ||
+                  'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg'
+            }
             alt="avatar"
           />
         }

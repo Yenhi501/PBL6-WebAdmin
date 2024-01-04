@@ -48,6 +48,7 @@ export const UserPage: React.FC = () => {
       page: currPage,
       pageSize: 5,
     };
+
     const paramsSearch =
       value != null
         ? {
@@ -84,7 +85,6 @@ export const UserPage: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log('response', response);
         setResetData((prev: number) => prev + 1);
       })
       .catch((error) => {

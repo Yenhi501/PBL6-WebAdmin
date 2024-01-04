@@ -70,7 +70,6 @@ export const FormDetailMovie = ({
       .then((res) => {
         setIsLoading(false);
         setDetailInfo(res.data.movie);
-        console.log(res.data.movie.episodes);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -82,7 +81,6 @@ export const FormDetailMovie = ({
     if (selectedItem?.movieId != null) {
       getDataDetailFilm();
     }
-
   }, [selectedItem, refreshTable]);
 
   useEffect(() => {

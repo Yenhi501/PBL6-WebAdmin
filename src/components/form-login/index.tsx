@@ -38,7 +38,7 @@ export const FormLogin = ({ className }: FormLogin) => {
         Cookies.set('refreshToken', refreshToken, { expires: 1 });
 
         navigator({
-          pathname: `/userId/movies`,
+          pathname: `/admin/movies`,
         });
 
         setIsLoading(false);
