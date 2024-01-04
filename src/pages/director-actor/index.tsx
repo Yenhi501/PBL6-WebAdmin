@@ -85,7 +85,11 @@ export const DAPage: React.FC = () => {
         }}
         editItem={editedItem}
         isEditForm={editedItem != null ? true : false}
-        resetDataTable={() => setResetData((prev) => prev + 1)}
+        resetDataTable={() => {
+          setResetData((prev) => prev + 1);
+          setCurrentPage(1);
+        }}
+        people={activeKey === '1' ? 'actor' : 'director'}
       />
 
       <h2 className="movies-header">VIP Packages</h2>
@@ -111,7 +115,12 @@ export const DAPage: React.FC = () => {
             />
             <div className="search-bar">
               <Search placeholder="Nhập tên" onSearch={(e) => getData(e)} />
-              <Button onClick={() => setResetData((prev) => prev + 1)}>
+              <Button
+                onClick={() => {
+                  setResetData((prev) => prev + 1);
+                  setCurrentPage(1);
+                }}
+              >
                 Làm mới
               </Button>
             </div>
@@ -128,6 +137,7 @@ export const DAPage: React.FC = () => {
               onAdd={() => setIsModalAOpen(true)}
               totalData={totalItems}
               onChangePagination={(e) => setCurrentPage(e)}
+              currPage={currPage}
             />
           </div>
         </div>

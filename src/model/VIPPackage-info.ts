@@ -16,3 +16,11 @@ export interface VIPPackageType {
   name: string;
   price: number;
 }
+
+export interface VIPPackageUserInfo {
+  closeAt: string;
+  startedAt: string;
+  subscriptionId: number;
+  subscriptionType: { name: string };
+  subscriptionTypeId: number;
+}

@@ -1,9 +1,12 @@
 import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.scss';
 import { useForm } from 'antd/es/form/Form';
 import { VIPUser } from '../../../model/VIPUser';
 import moment from 'moment';
+import { useToken } from '../../../hooks/useToken';
+import axios from 'axios';
+import { endpointServer } from '../../../utils/endpoint';
 
 export type FormAddEditVIPUser = {
   isEditForm?: boolean;
@@ -12,7 +15,6 @@ export type FormAddEditVIPUser = {
   editItem?: VIPUser | null;
 };
 
-const { Option } = Select;
 const dateFormat = 'YYYY/MM/DD';
 
 type FieldType = {
@@ -29,18 +31,67 @@ export const FormAddEditVIPUser = ({
   handleCancel,
 }: FormAddEditVIPUser) => {
   const [form] = useForm();
+  const { accessToken } = useToken();
+  const [duration, setDuration] = useState<Array<Record<string, any>>>();
+  const [subscription, setSubscription] =
+    useState<Array<Record<string, any>>>();
 
-  const setEditItemValue = (editItem: VIPUser) => {
+  const getAllDuration = () => {
+    axios
+      .get(`${endpointServer}/subscription/get-all-duration`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      })
+      .then((response) => {
+        const dataDuration = response.data.data.map((duration: any) => {
+          return {
+            label:
+              duration.time === 0 ? 'Vô thời hạn' : duration.time + ' tháng',
+            value: duration.durationId,
+          };
+        });
+        setDuration(dataDuration);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getAllSubscriptType = () => {
+    axios
+      .get(`${endpointServer}/subscription/get-all-subscription-type`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      })
+      .then((response) => {
+        const dataSubscriptionType = response.data.data.map(
+          (subscriptionType: any) => {
+            return {
+              label: subscriptionType.name,
+              value: subscriptionType.subscriptionTypeId,
+            };
+          },
+        );
+        setSubscription(dataSubscriptionType);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const setEditItemValue = (editItem: any) => {
     form.setFieldsValue({
-      id: editItem.id,
-      idPackage: editItem.idPackage,
-      dateRegistered: moment(editItem.dateRegistered),
+      id: editItem.account.username,
+      idPackage: editItem.subscription.subscriptionTypeId,
+      dateRegistered: moment(editItem.subscription.startedAt),
       durationPackage: editItem.durationPackage,
     });
   };
 
   useEffect(() => {
     form.resetFields();
+    getAllDuration();
+    getAllSubscriptType();
     if (editItem != null) {
       setEditItemValue(editItem);
     }
@@ -48,7 +99,7 @@ export const FormAddEditVIPUser = ({
 
   return (
     <Modal
-      title={isEditForm === true ? 'Edit VIP Package' : 'Add VIP Package'}
+      title={'Chỉnh sửa thông tin'}
       open={isOpen}
       footer={() => <></>}
       className="modal-VIP-package"
@@ -65,7 +116,7 @@ export const FormAddEditVIPUser = ({
         onFinish={(values: VIPUser) => {}}
       >
         <Form.Item<FieldType>
-          label="Id user"
+          label="Người dùng"
           name="id"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
@@ -75,41 +126,33 @@ export const FormAddEditVIPUser = ({
         <Row>
           <Col span={10}>
             <Form.Item<FieldType>
-              label="Package"
+              label="Gói"
               name="idPackage"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
               wrapperCol={{ span: 24 }}
             >
-              <Select>
-                <Option value="V1">VIP1</Option>
-                <Option value="V2">VIP2</Option>
-                <Option value="V3">VIP3</Option>
-              </Select>
+              <Select options={subscription} />
             </Form.Item>
           </Col>
 
           <Col span={10} offset={4}>
             <Form.Item<FieldType>
-              label="Duration"
+              label="Thời gian"
               name="durationPackage"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
               wrapperCol={{ span: 24 }}
             >
-              <Select>
-                <Option value="30">1 month</Option>
-                <Option value="180">6 months</Option>
-                <Option value="365">1 year</Option>
-              </Select>
+              <Select options={duration} />
             </Form.Item>
           </Col>
         </Row>
 
         <Form.Item<FieldType>
-          label="Date registered"
+          label="Ngày đăng ký"
           name="dateRegistered"
           rules={[{ required: true, message: 'Please input your password!' }]}
           hidden={!isEditForm}
@@ -131,7 +174,7 @@ export const FormAddEditVIPUser = ({
           </Col>
           <Col>
             <Button type="primary" htmlType="submit">
-              {isEditForm === true ? 'Save' : 'Submit'}
+              Cập nhật
             </Button>
           </Col>
         </Row>

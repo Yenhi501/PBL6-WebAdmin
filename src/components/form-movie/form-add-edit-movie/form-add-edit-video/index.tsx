@@ -44,7 +44,7 @@ export const FormAddEditVideoMovies = ({
   const getUrlPostEpisode = async () => {
     const defaultParams: Record<string, any> = {
       movieId: movieId,
-      episodeNum: episodeItem?.episode_no,
+      episodeNo: episodeItem?.episode_no,
     };
 
     if (quality === '720p') {
@@ -66,7 +66,7 @@ export const FormAddEditVideoMovies = ({
           params: defaultParams,
         },
       );
-
+      console.log(response);
       const dataUrl = response.data.data[0].value;
       return dataUrl;
     } catch (err) {
@@ -76,6 +76,8 @@ export const FormAddEditVideoMovies = ({
   };
 
   const updateVideoEpisode = async (file: UploadFile, dataUrl: string) => {
+    console.log(file);
+
     await axios
       .put(dataUrl, file, {
         headers: {
@@ -115,6 +117,7 @@ export const FormAddEditVideoMovies = ({
   const handleUploadEpisode = async (values: any) => {
     setIsLoading(true);
     const dataUrl = await getUrlPostEpisode();
+    console.log(dataUrl);
     await updateVideoEpisode(values.file, dataUrl);
   };
 
@@ -165,7 +168,7 @@ export const FormAddEditVideoMovies = ({
 
   const [fileTrailer, setFileTrailer] = useState<UploadFile[]>([]);
   const [srcVideo, setSrcVideo] = useState(
-    editItem?.trailerURL || episodeItem?.movie_url,
+    type === 'trailer' ? editItem?.trailerURL : episodeItem?.movie_url,
   );
 
   const getBase64 = async (file: RcFile) => {
@@ -183,8 +186,26 @@ export const FormAddEditVideoMovies = ({
     return newFileList;
   };
 
+  const getEpisode = async () => {
+    await axios
+      .get(`${endpointServer}/episode/${episodeItem?.episode_id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setSrcVideo(response.data.episode.movieURL);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     setIsLoading(false);
+    getEpisode();
     if (editItem != null) {
       handleReset();
     }

@@ -13,6 +13,8 @@ export type ItemUpload = {
   name?: 'poster' | 'background';
   widthImgPreview?: number | string;
   heightImgPreview?: number | string;
+  hidden?: boolean;
+  rounded?: boolean;
 };
 export const ItemUpload = ({
   srcImg = '',
@@ -21,6 +23,8 @@ export const ItemUpload = ({
   name,
   widthImgPreview = 150,
   heightImgPreview = 150,
+  hidden = false,
+  rounded,
 }: ItemUpload) => {
   const [fileTrailer, setFileTrailer] = useState<UploadFile[]>([]);
 
@@ -40,7 +44,7 @@ export const ItemUpload = ({
   };
 
   return (
-    <div className="item-upload-container">
+    <div className="item-upload-container" hidden={hidden}>
       <h1>{label}</h1>
       <div className="form-add-edit-img-content">
         <div className="form-add-edit-img-container">
@@ -48,8 +52,9 @@ export const ItemUpload = ({
             src={srcImg}
             fallback={DefaultImg}
             className="form-add-edit-img-img"
-            width={widthImgPreview}
+            width={heightImgPreview}
             height={heightImgPreview}
+            style={rounded === true ? { borderRadius: 900 } : {}}
           />
         </div>
         <div className="upload-btn">
