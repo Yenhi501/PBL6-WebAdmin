@@ -69,7 +69,7 @@ export const UserInfo = ({
   };
 
   useEffect(() => {
-    if (id != null && id !== '0') {
+    if (id != null && id !== '0' && !Number.isNaN(id)) {
       getDataUser();
     } else {
       setInfo(defaultUser);

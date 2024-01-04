@@ -7,6 +7,7 @@ import { RevenuesChooseBody } from '../../components/revenues/revenues-choose-bo
 import { RevenuesContent } from '../../components/revenues/revenues-content';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { StatusCardRevenues } from '../../components/revenues/revenues-card';
+import { ChartSection } from './chart-section';
 
 export const Revenues: React.FC = () => {
   dayjs.extend(customParseFormat);
@@ -16,7 +17,7 @@ export const Revenues: React.FC = () => {
   const [selectedContent, setSelectedContent] = useState<'VIP' | 'ADS'>('VIP');
   const [selectedDateRange, setSelectedDateRange] = useState<
     [dayjs.Dayjs | null, dayjs.Dayjs | null]
-  >([dayjs('10/12/2023', dateFormat), dayjs('31/12/2023', dateFormat)]);
+  >([dayjs('10/05/2023', dateFormat), dayjs('10/01/2024', dateFormat)]);
 
   const handleViewChange = (view: 'Week' | 'Month') => {
     setSelectedView(view);
@@ -120,6 +121,7 @@ export const Revenues: React.FC = () => {
             selectedView={selectedView}
             selectedDateRange={selectedDateRange}
           />
+          <ChartSection selectedDateRange={selectedDateRange} />
         </div>
       </div>
     </div>
