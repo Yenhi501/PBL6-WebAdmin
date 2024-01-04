@@ -35,7 +35,7 @@ export const columns: ColumnsType<ItemType> = [
       let color = '';
       let content = '';
       switch (status.toLowerCase()) {
-        case 'completed':
+        case 'success':
           color = 'green';
           content = 'Hoàn thành';
           break;

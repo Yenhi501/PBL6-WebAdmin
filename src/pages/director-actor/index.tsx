@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusCard } from '../../components/status-card/index';
 import { ItemType, TableResult } from '../../components/table/index';
 import './index.scss';
-import { Button, Tabs } from 'antd';
+import { Button, Spin, Tabs } from 'antd';
 import {
   getColumnTables,
   itemTabs,
@@ -29,8 +29,10 @@ export const DAPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [currPage, setCurrentPage] = useState(1);
   const { accessToken } = useToken();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getData = (nameSearch?: string) => {
+    setIsLoading(true);
     const params =
       nameSearch != null
         ? { name: nameSearch, page: currPage, pageSize: 5 }
@@ -49,6 +51,7 @@ export const DAPage: React.FC = () => {
     })
       .then((response) => {
         const dataRes = response.data.data;
+        setIsLoading(false);
 
         if (activeKey === '1') {
           dataRes.actors.forEach(
@@ -65,6 +68,7 @@ export const DAPage: React.FC = () => {
         }
       })
       .catch((error) => {
+        setIsLoading(false);
         console.log(error);
       });
   };
@@ -164,24 +168,28 @@ export const DAPage: React.FC = () => {
                 Làm mới
               </Button>
             </div>
-            <TableResult
-              originData={data || []}
-              columns={getColumnTables(
-                activeKey === '1' ? 'actor' : 'director',
-              )}
-              needOperationColumn={true}
-              onEdit={(record: ItemType | null) => {
-                setEditedItem(record ? ({ ...record } as ActorDirector) : null);
-                setIsModalAOpen(true);
-              }}
-              onDelete={(record) =>
-                handleDelete(record.actorId || record.directorId)
-              }
-              onAdd={() => setIsModalAOpen(true)}
-              totalData={totalItems}
-              onChangePagination={(e) => setCurrentPage(e)}
-              currPage={currPage}
-            />
+            <Spin spinning={isLoading}>
+              <TableResult
+                originData={data || []}
+                columns={getColumnTables(
+                  activeKey === '1' ? 'actor' : 'director',
+                )}
+                needOperationColumn={true}
+                onEdit={(record: ItemType | null) => {
+                  setEditedItem(
+                    record ? ({ ...record } as ActorDirector) : null,
+                  );
+                  setIsModalAOpen(true);
+                }}
+                onDelete={(record) =>
+                  handleDelete(record.actorId || record.directorId)
+                }
+                onAdd={() => setIsModalAOpen(true)}
+                totalData={totalItems}
+                onChangePagination={(e) => setCurrentPage(e)}
+                currPage={currPage}
+              />
+            </Spin>
           </div>
         </div>
       </div>

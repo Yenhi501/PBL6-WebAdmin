@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import Search from 'antd/es/input/Search';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -16,14 +16,10 @@ dayjs.extend(isSameOrAfter);
 
 dayjs.extend(isSameOrBefore);
 interface RevenuesContentProps {
-  selectedContent: 'VIP' | 'ADS';
-  selectedView: 'Week' | 'Month';
   selectedDateRange: [dayjs.Dayjs | null, dayjs.Dayjs | null];
 }
 
 export const RevenuesContent: React.FC<RevenuesContentProps> = ({
-  selectedContent,
-  selectedView,
   selectedDateRange,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,21 +31,10 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
   const [currPage, setCurrPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const { accessToken } = useToken();
-  const handleOk = () => {
-    if (editedItem) {
-      const updatedData = data.map((item) => {
-        if (item.key === editedItem.key) {
-          return editedItem;
-        }
-        return item;
-      });
-      setData(updatedData);
-      setTableKey((prevKey) => prevKey + 1);
-      setIsModalOpen(false);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataRevenue = (searchValue?: string) => {
+    setIsLoading(true); //
     const defaultParams = {
       page: currPage,
       pageSize: 5,
@@ -73,6 +58,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
         },
       )
       .then((res) => {
+        setIsLoading(false);
         const dataRevenue = res.data.data;
         setTotalItems(res.data.totalCount);
         dataRevenue.forEach((payment: DataRawPayment, index: number) => {
@@ -84,16 +70,16 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
 
         setData(dataRevenue);
       })
-      .catch((err) => console.error(err));
+
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
     getDataRevenue();
   }, [resetData, selectedDateRange[0], selectedDateRange[1], currPage]);
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="content">
@@ -115,7 +101,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           Làm mới
         </Button>
       </div>
-      {selectedContent === 'VIP' && selectedView === 'Week' && (
+      <Spin spinning={isLoading}>
         <TableResult
           key={tableKey}
           originData={data}
@@ -130,7 +116,7 @@ export const RevenuesContent: React.FC<RevenuesContentProps> = ({
           totalData={totalItems}
           isHideCreate={true}
         />
-      )}
+      </Spin>
     </div>
   );
 };
